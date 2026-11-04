@@ -24,6 +24,11 @@
       "name": "explainer-page",
       "source": "./plugins/explainer-page",
       "description": "Builds an interactive HTML explainer page in a fixed house style, and draws its pre-publish checks in a side pane"
+    },
+    {
+      "name": "github-pr-review",
+      "source": "./plugins/github-pr-review",
+      "description": "Reviews a GitHub pull request into a structured, line-referenced report, and draws the review's progress in the /github-pr-review-panel side panel"
     }
   ]
 }
