@@ -28,6 +28,20 @@ The same pane without the numbers:
 Research comes before design, and every claim on the page has to trace to a source read during that research; where the code and the docs disagree, the page says so in its own dated callout.
 The style lives in `skills/explainer-page/reference/scaffold.html`, with the widget patterns in `reference/widgets.md`.
 
+![A page the skill built, in dark mode, with its house-style parts numbered](../../docs/screenshots/explainer-page-skill-annotated.jpg)
+
+1. **Nav rail.**
+   The numbered sections, with the one in view highlighted and a progress line on the rail's right edge; under 880 px it becomes a bar across the top.
+2. **Theme toggle.**
+   Auto, light and dark, remembered per browser, above the date the page was checked.
+3. **Widget.**
+   An interactive part that carries the section's argument; here a stepper replays a session's tool calls and shows the pane's rows after each one.
+
+The page is [a published explainer of this plugin's checks pane](https://claude.ai/artifact/GogCX93SYxyWev5VFS8xCe), built by the skill on 4 Nov 2026.
+The same view without the numbers:
+
+![A page the skill built, in dark mode](../../docs/screenshots/explainer-page-skill.jpg)
+
 ## The checks
 
 The pane follows the last `.html` file the session wrote or edited that holds the scaffold's `data-theme-set` theme toggle, so other HTML files are ignored.
