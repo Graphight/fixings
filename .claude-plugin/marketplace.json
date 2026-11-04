@@ -19,6 +19,11 @@
       "name": "checkpoint-plan",
       "source": "./plugins/checkpoint-plan",
       "description": "Stages work into a checkpointed plan, runs it stage by stage or unattended, and draws its progress in the /plan-timeline pane"
+    },
+    {
+      "name": "explainer-page",
+      "source": "./plugins/explainer-page",
+      "description": "Builds an interactive HTML explainer page in a fixed house style, and draws its pre-publish checks in a side pane"
     }
   ]
 }

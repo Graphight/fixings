@@ -1,0 +1,9 @@
+{
+  "name": "explainer-page",
+  "version": "0.1.0",
+  "description": "Builds an interactive HTML explainer page in a fixed house style, and draws its pre-publish checks in a side pane",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}
