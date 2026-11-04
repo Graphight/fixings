@@ -1,0 +1,8 @@
+{
+  "name": "interview",
+  "version": "0.1.0",
+  "description": "Interviews you in rounds until every decision is settled, and draws a round row above each question",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}

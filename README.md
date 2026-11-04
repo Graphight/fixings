@@ -21,3 +21,4 @@ Then install any plugin from it:
 | Plugin | Kind | What it does |
 | --- | --- | --- |
 | [mission-control](plugins/mission-control/README.md) | mod | lists the other Claude Code sessions in the `/mission-control` side pane |
+| [interview](plugins/interview/README.md) | skill + mod | interviews you in rounds before planning, with a round row above each question |
