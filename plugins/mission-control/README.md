@@ -1,8 +1,35 @@
 # mission-control
 
-`mission-control` lists the other Claude Code sessions on this machine in the `/mission-control` side pane, which requests 90 columns, laid out to option A of the [mock](https://claude.ai/artifact/Apr4UEUGSkTNcxh65aX8vu).
+`mission-control` lists the other Claude Code sessions on this machine in the `/mission-control` side pane, which requests 90 columns.
 The pane opens only on the command.
-`settings.json` loads the mod through `CLAUDE_CODE_PLUGIN_DIRS`.
+Install it with `/plugin install mission-control@fixings`.
+
+## What you're looking at
+
+![The Mission Control pane, with its six parts numbered](../../docs/screenshots/mission-control-annotated.jpg)
+
+1. **Header.**
+   How many other sessions are running, and today's tally of your commits, PRs and finished reviews.
+   See [Header and warnings](#header-and-warnings).
+2. **A session row.**
+   One row per session, grouped by what it is doing: NEEDS YOU (waiting on you, or stuck), CODING, and REVIEWING.
+   The dot's colour is the session's status, followed by its context fill, its task, its plan stage and the time since its transcript last changed.
+   See [Rows](#rows).
+3. **The detail block.**
+   Pressing a row, or its number, opens the task, your last prompt (or the question the session is asking), where it runs and how to jump to it.
+   A session waiting on a question or a permission gets buttons to answer it from here.
+   See [The detail block and its controls](#the-detail-block-and-its-controls).
+4. **A review row.**
+   A session reviewing a PR shows its current step, then its verdict.
+   See [Rows](#rows).
+5. **HIGHLIGHTS.**
+   The moments worth noticing across every session, newest first: questions opened, commits, PRs, test runs with their exit status, and CI turning green or red.
+   See [HIGHLIGHTS and FEED](#highlights-and-feed).
+6. **FEED.**
+   The raw stream of the latest file edits and shell commands across sessions.
+   See [HIGHLIGHTS and FEED](#highlights-and-feed).
+
+The sections below say exactly where each of these comes from.
 
 ## What the pane reads
 
