@@ -19,6 +19,7 @@ Contribution rules are in `CONTRIBUTING.md`.
 | `plugins/<name>/README.md` | the plugin's behaviour, known limits and what was checked in a live session |
 | `plugins/<name>/skills/<skill>/SKILL.md` | a skill the plugin carries |
 | `plugins/<name>/tests/` | the plugin's tests, run by `claude plugin test plugins/<name>` |
+| `tools/` | repo-level helpers that are not plugins, such as the demo recorders under `tools/demo/` |
 | `docs/brief.md` | the vision, the thesis and the non-goals |
 | `docs/README.md` | the proposal and decision convention, and its template |
 | `docs/proposals/` | ideas not yet acted on |
