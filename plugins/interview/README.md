@@ -6,9 +6,14 @@ Install it with `/plugin install interview@fixings`.
 
 ## What you're looking at
 
-![The round row above an interview question](../../docs/screenshots/interview.jpg)
+![The round row above an interview question, with its two parts numbered](../../docs/screenshots/interview-annotated.jpg)
 
-The row above the question reads `Interview · round 2 of ~3 · screenshot ●●○`: the round, the skill's estimate of how many rounds there will be, the topic, and a dot per round, filled up to the current one.
+1. **Round row.**
+   `Interview · round 2 of ~3 · screenshot ●●○`: the round, the skill's estimate of how many rounds there will be, the topic, and a dot per round, filled up to the current one.
+   See [The round row](#the-round-row).
+2. **The question.**
+   Claude Code's own `AskUserQuestion` dialog, which the hook leaves untouched.
+   See [The skill](#the-skill).
 
 ## The skill
 
