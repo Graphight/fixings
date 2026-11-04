@@ -62,9 +62,8 @@ const SIDECAR_ROW = ROW
 const STORE_ROW = ROW
 const BLANK = ELASTIC(' ')
 const MARK = (text: string, props: object) => LINE(text.padEnd(12), props)
-const TOP = (left = 'plan · widgets') => [
-  LINE(left, DIM),
-  LINE('/plan-timeline', DIM),
+const TOP = (left = 'plan · Widgets') => [
+  ELASTIC(left, DIM),
   BLANK,
 ]
 const JOURNEY = (chip?: object) => HEADING('JOURNEY', chip)
@@ -648,7 +647,7 @@ test('draws a scripted run as JOURNEY, STAGES and NOW blocks', async ($, on) => 
   const drawn = await ui.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(),
     ...PREFLIGHT(),
     ...STAGES_ROW.running(LINE('4 of 4'), LINE('38s')),
@@ -697,7 +696,7 @@ test('opens a stage\'s note, counts, edited files and calls on a press of its Bu
   const ui = await $.ui.mount(SIZED(40))
   const drawn = async () => (await ui.findAll({ type: 'Text' })).map(({ text, props }) => ({ text, props }))
   const stages = (third: object[]) => [
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(),
     ...PREFLIGHT(),
     ...STAGES_ROW.running(LINE('4 of 4'), LINE('30s')),
@@ -850,7 +849,7 @@ test('puts sidecar outcomes on the stage rows and skips a line that is not JSON'
   const drawn = await ui.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(),
     ...PREFLIGHT('npm test'),
     ...STAGES_ROW.running(LINE('3 of 4'), LINE('0s'), LEFT('~10m left')),
@@ -879,7 +878,7 @@ const noted = async ($: Parameters<Parameters<typeof test>[1]>[0], on: On, note:
   return (await ui.findAll({ type: 'Text' })).map(({ text, props }) => ({ text, props }))
 }
 const STAGES_AFTER_NOTE = (lines: string[]) => [
-  ...TOP('ship-plan · widgets'),
+  ...TOP('ship-plan · Widgets'),
   ...JOURNEY(),
   ...PREFLIGHT('npm test'),
   ...STAGES_ROW.running(LINE('3 of 4'), LINE('0s'), LEFT('~10m left')),
@@ -974,7 +973,7 @@ test('draws a halt line as the HALTED chip, a halted stages row and the NEEDS YO
   const drawn = await ui.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(HALTED_CHIP),
     ...PREFLIGHT('npm test'),
     ...STAGES_ROW.halted(LINE('halted at 3 of 4'), LINE('0s')),
@@ -1003,7 +1002,7 @@ test('shows STOPPED when the main loop ends its turn mid-run with nothing record
   const drawn = await ui.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(STOPPED_CHIP),
     ...PREFLIGHT(),
     ...STAGES_ROW.halted(LINE('stopped at 3 of 4'), LINE('0s')),
@@ -1268,7 +1267,7 @@ test('colours stage times against the stored p50 and p90 and estimates the time 
   const drawn = await ui.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(),
     ...PREFLIGHT(),
     ...STAGES_ROW.running(LINE('4 of 4'), LINE('2m35s'), LEFT('~2m left')),
@@ -1307,7 +1306,7 @@ test('uses the measured constants until ten runs are stored', async ($, on) => {
   const drawn = await ui.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(),
     ...PREFLIGHT(),
     ...STAGES_ROW.running(LINE('3 of 4'), LINE('1m40s'), LEFT('~9m left')),
@@ -1364,7 +1363,7 @@ test('draws the last runs, stage times and next step of this repo when no run is
   const drawn = await ui.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP(),
+    ...TOP('plan · widgets'),
     ...HEADING('LAST RUNS · this repo'),
     ...RUN_ROW(LOCAL_DAY, '1 stage', '10m00s', 'PR', 'success'),
     ...RUN_ROW(LOCAL_DAY, '1 stage', '10m00s', 'PR', 'success'),
@@ -1413,7 +1412,7 @@ test('leaves LAST RUNS out when the store holds nothing', async ($, on) => {
   const drawn = await ui.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP(),
+    ...TOP('plan · widgets'),
     ...TIMES('1m36s', '5m24s', MEASURED(0)),
     BLANK,
     ...NEXT_IDLE(NO_PLAN),
@@ -1495,7 +1494,7 @@ test('matches the real gate, commit and sidecar write calls of a ship run', asyn
     { kind: 'gate', stage: 3, command: 'claude plugin test /abs/mods/widgets', isError: false, durationMs: 2_000, at: 14_000 },
   ])
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(HALTED_CHIP),
     ...PREFLIGHT('claude plugin test mods/widgets'),
     ...STAGES_ROW.halted(LINE('halted at 3 of 4'), LINE('18s')),
@@ -1539,7 +1538,7 @@ test('keeps a ticked stage running until its commit during a ship run', async ($
   await $.tool.call({ tool: 'Bash', command: 'git commit -m third' })
   const committed = (await ui.findAll({ type: 'Text' })).map(({ text, props }) => ({ text, props }))
   const drawn = (progress: object[], third: object[], fourth: object[]) => [
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(),
     ...PREFLIGHT(),
     ...progress,
@@ -1586,7 +1585,7 @@ test('settles a ticked stage once a later stage starts although its commit was n
   const drawn = await pane.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP('ship-plan · widgets'),
+    ...TOP('ship-plan · Widgets'),
     ...JOURNEY(),
     ...PREFLIGHT(),
     ...STAGES_ROW.running(LINE('2 of 4'), LINE('15s'), LEFT('~16m left')),
@@ -1648,7 +1647,7 @@ test('walks the journey from not started to a PR open', async ($, on) => {
 
   expect({ notStarted, running, halted, again, pushed, opened }).toEqual({
     notStarted: [
-      ...TOP('ship-plan · widgets'),
+      ...TOP('ship-plan · Widgets'),
       ...JOURNEY(),
       ...PREFLIGHT_OFF,
       ...STAGES_ROW.pending(LINE('0 of 4')),
@@ -1657,7 +1656,7 @@ test('walks the journey from not started to a PR open', async ($, on) => {
       ...first(RUNNING('1 First', { time: '0s' })),
     ],
     running: [
-      ...TOP('ship-plan · widgets'),
+      ...TOP('ship-plan · Widgets'),
       ...JOURNEY(),
       ...PREFLIGHT('npm test'),
       ...STAGES_ROW.running(LINE('1 of 4'), LINE('0s'), LEFT('~21m left')),
@@ -1666,7 +1665,7 @@ test('walks the journey from not started to a PR open', async ($, on) => {
       ...first(RUNNING('1 First', { time: '0s' })),
     ],
     halted: [
-      ...TOP('ship-plan · widgets'),
+      ...TOP('ship-plan · Widgets'),
       ...JOURNEY(HALTED_CHIP),
       ...PREFLIGHT('npm test'),
       ...STAGES_ROW.halted(LINE('halted at 1 of 4'), LINE('0s')),
@@ -1679,7 +1678,7 @@ test('walks the journey from not started to a PR open', async ($, on) => {
       ...first(HALTED('1 First', { time: '0s' })),
     ],
     again: [
-      ...TOP('ship-plan · widgets'),
+      ...TOP('ship-plan · Widgets'),
       ...JOURNEY(),
       ...PREFLIGHT('npm test'),
       ...STAGES_ROW.running(LINE('1 of 4'), LINE('0s'), LEFT('~21m left')),
@@ -1688,7 +1687,7 @@ test('walks the journey from not started to a PR open', async ($, on) => {
       ...first([...RUNNING('1 First', { time: '0s' }), ...DETAIL('diverged: fixed')]),
     ],
     pushed: [
-      ...TOP('ship-plan · widgets'),
+      ...TOP('ship-plan · Widgets'),
       ...JOURNEY(),
       ...PREFLIGHT('npm test'),
       ...STAGES_ROW.running(LINE('1 of 4'), LINE('0s'), LEFT('~21m left')),
@@ -1697,7 +1696,7 @@ test('walks the journey from not started to a PR open', async ($, on) => {
       ...first([...RUNNING('1 First', { time: '0s' }), ...DETAIL('diverged: fixed')]),
     ],
     opened: [
-      ...TOP('ship-plan · widgets'),
+      ...TOP('ship-plan · Widgets'),
       ...JOURNEY(OPEN_CHIP),
       ...PREFLIGHT('npm test'),
       ...STAGES_ROW.running(LINE('1 of 4'), LINE('0s')),
@@ -1798,7 +1797,7 @@ const NEEDS_DIVERGED = [
   ...SIDECAR_ROW(LINE('1 stage diverged from the plan', { color: 'permission' }), SEPARATOR, ELASTIC('stage 4', DIM)),
 ]
 const OPENED_TOP = [
-  ...TOP('ship-plan · widgets'),
+  ...TOP('ship-plan · Widgets'),
   ...JOURNEY(OPEN_CHIP),
   ...PREFLIGHT('npm test'),
   ...STAGES_ROW.done(LINE('4 of 4'), LINE('58s')),
@@ -1819,7 +1818,7 @@ test('draws the stages as a spine while a stage runs, at a halt and once the PR 
 
   expect({ running, halted, opened }).toEqual({
     running: [
-      ...TOP('ship-plan · widgets'),
+      ...TOP('ship-plan · Widgets'),
       ...JOURNEY(),
       ...PREFLIGHT('npm test'),
       ...STAGES_ROW.running(LINE('4 of 4'), LINE('35s'), LEFT('~5m left')),
@@ -1833,7 +1832,7 @@ test('draws the stages as a spine while a stage runs, at a halt and once the PR 
       ...AGENT_ROW(CALL('✓ Read', '/src/a.ts', 'success')),
     ],
     halted: [
-      ...TOP('ship-plan · widgets'),
+      ...TOP('ship-plan · Widgets'),
       ...JOURNEY(HALTED_CHIP),
       ...PREFLIGHT('npm test'),
       ...STAGES_ROW.halted(LINE('halted at 4 of 4'), LINE('49s')),
@@ -1968,7 +1967,7 @@ test('draws none of the first plan\'s events once the session follows a second p
   const drawn = await ui.findAll({ type: 'Text' })
 
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
-    ...TOP(),
+    ...TOP('plan · Champion'),
     ...JOURNEY(),
     ...PREFLIGHT(),
     ...STAGES_ROW.running(LINE('2 of 3'), LINE('0s')),
@@ -2083,7 +2082,7 @@ test('ends an open ship run when the session follows a second plan', async ($, o
     sent: [],
     runs: undefined,
     drawn: [
-      ...TOP(),
+      ...TOP('plan · Champion'),
       ...JOURNEY(),
       ...PREFLIGHT(),
       ...STAGES_ROW.running(LINE('2 of 3'), LINE('0s')),
@@ -2218,7 +2217,7 @@ const D_LEGEND = D_BOX(
   D_TEXT('● to p90 (5m24s)', { color: 'warning' }),
   D_TEXT('● over p90', { color: 'error' }),
 )
-const D_TAGLINE = D_BOX({ justifyContent: 'space-between' }, D_TEXT('ship-plan · widgets', DIM))
+const D_TAGLINE = D_BOX({ justifyContent: 'space-between' }, D_TEXT('ship-plan · Widgets', { ...DIM, wrap: 'truncate-end' }))
 const D_PANE = (...sections: object[]) => ({
   ...D_BOX({ flexDirection: 'column', gap: 2, padding: 2 }, D_TAGLINE, ...sections),
   part: { plugin: 'checkpoint-plan' },

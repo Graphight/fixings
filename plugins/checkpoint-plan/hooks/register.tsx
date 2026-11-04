@@ -148,6 +148,7 @@ const parse = (text: string): Plan | null => {
   }
 
   return {
+    title: text.match(/^# (.+)$/m)?.[1] ?? null,
     done: stages.filter(stage => stage[1] === 'x').length,
     total: stages.length,
     next: stages.find(stage => stage[1] === ' ')?.[2] ?? null,
@@ -819,14 +820,9 @@ export const register: Register = on => {
     const { isStored, p50, p90, wall } = thresholds(stored)
     const tagline = (
       <Box justifyContent="space-between">
-        <Text dimColor>
-          {`${isShipping || events.length > 0 ? 'ship-plan' : 'plan'}${name ? ` · ${name}` : ''}`}
+        <Text dimColor wrap="truncate-end">
+          {`${isShipping || events.length > 0 ? 'ship-plan' : 'plan'}${(shown?.title ?? name) ? ` · ${shown?.title ?? name}` : ''}`}
         </Text>
-        {!isDesktop && (
-          <Text dimColor>
-            /plan-timeline
-          </Text>
-        )}
       </Box>
     )
     const blank = (

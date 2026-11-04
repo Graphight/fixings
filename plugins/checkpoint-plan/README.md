@@ -8,7 +8,8 @@ Install it with `/plugin install checkpoint-plan@fixings`.
 ![The plan timeline pane during a ship run, with its parts numbered](../../docs/screenshots/checkpoint-plan-annotated.jpg)
 
 1. **Title row.**
-   `ship-plan · <repo>` while a ship run is active or the session holds run events, `plan · <repo>` otherwise, with `/plan-timeline` at its right edge.
+   The plan file's H1, after `ship-plan` while a ship run is active or the session holds run events and after `plan` otherwise, cut at the pane's width.
+   With no plan followed, the repo name stands in for the H1.
 2. **Journey.**
    A preflight row with the gate command, a stages row with the count, elapsed time and, during a ship run, an estimate, and push and PR rows around a ship run.
    A `HALTED`, `STOPPED` or `PR OPEN` chip sits on the heading.

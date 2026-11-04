@@ -1,4 +1,5 @@
 export type Plan = {
+  title: string | null
   done: number
   total: number
   next: string | null
