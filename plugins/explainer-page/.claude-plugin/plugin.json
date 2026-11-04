@@ -1,0 +1,8 @@
+{
+  "name": "explainer-page",
+  "version": "0.1.0",
+  "description": "Builds a sleek, interactive HTML explainer page in a fixed house style",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}
