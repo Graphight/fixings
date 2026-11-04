@@ -26,6 +26,21 @@ The same pane without the numbers:
 
 ![The plan timeline pane during a ship run](../../docs/screenshots/checkpoint-plan.jpg)
 
+### When a run needs you
+
+![The plan timeline pane after a ship run halted, with its parts numbered](../../docs/screenshots/checkpoint-plan-halted-annotated.jpg)
+
+1. **Halted run.**
+   The `HALTED` chip on `JOURNEY`, and the stage the run stopped at in the stages row.
+2. **Needs you.**
+   The halt's reason in red and what it needs from you, moved up under `JOURNEY`.
+3. **Diverged stage.**
+   A stage whose executor recorded `diverged` gets its note under its title.
+4. **Halted stage.**
+   The stage the run stopped at, marked `■` in red.
+
+This picture is staged: its plan and run sidecar were written by hand, and the pane drew them with its real code.
+
 ## The skills and the agent
 
 - `checkpoint-plan` interviews you, then writes a staged plan to `~/.claude/plans/<repo>-<branch>.md`, with a commit message and a review checkpoint per stage.
@@ -81,4 +96,5 @@ A typed `/ship-plan` opens it at any width; a `Skill` call in a terminal narrowe
 
 `claude plugin test` runs 65 tests in `tests/`, covering the plan parser, the sidecar, the feeds, the terminal and Desktop drawings, the redraw timer, the store and the notifications; all 65 passed.
 The screenshot is this plugin's own `ship-plan` run on 2026-11-03, drawn by the source `plan-progress` mod, whose drawing code this plugin carries with only its plugin name changed.
+The halted picture was staged the same day, from a hand-written plan and sidecar in the tide-table scenario that `tools/demo/ship-plan/` records.
 Whether `execute-stage` forks into `plan-executor` once installed from fixings is still to be checked and recorded here.
