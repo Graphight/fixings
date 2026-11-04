@@ -194,6 +194,7 @@ Spawn one `general-purpose` Agent with `model: "sonnet"` and give it:
 The cap of 10 keeps a PR that adds fifty tests from turning the review into a mutation-testing run; the unchecked list makes the gap visible instead of silent.
 
 Skip this step when the repo is not local, the PR touches no tests, or the change is trivial.
+Also skip it when the `prove-tests` skill is not in the session's skill list: write no `prove` step line, and put `Test coverage: not mutation-checked (prove-tests not installed)` in the report.
 If the agent reports that tests cannot be run locally, put "Tests not mutation-checked: <reason>" in the Test coverage line of the report and move on.
 
 Each test that **survived** its mutation becomes an `IMPORTANT` finding on the test, stating the mutation it let through.
