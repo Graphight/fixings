@@ -20,5 +20,4 @@ Then install any plugin from it:
 
 | Plugin | Kind | What it does |
 | --- | --- | --- |
-
-No plugins are listed yet.
+| [mission-control](plugins/mission-control/README.md) | mod | lists the other Claude Code sessions in the `/mission-control` side pane |

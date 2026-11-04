@@ -1,0 +1,9 @@
+{
+  "name": "mission-control",
+  "version": "0.1.0",
+  "description": "A pane listing the other Claude Code sessions on this machine, their lanes and what needs you",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}
