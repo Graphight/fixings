@@ -8,15 +8,18 @@ Install it with `/plugin install checkpoint-plan@fixings`.
 ![The plan timeline pane during a ship run, with its parts numbered](../../docs/screenshots/checkpoint-plan-annotated.jpg)
 
 1. **Title row.**
-   `ship-plan · <repo>` while a ship run is active or the session holds run events, `plan · <repo>` otherwise.
+   `ship-plan · <repo>` while a ship run is active or the session holds run events, `plan · <repo>` otherwise, with `/plan-timeline` at its right edge.
 2. **Journey.**
    A preflight row with the gate command, a stages row with the count, elapsed time and, during a ship run, an estimate, and push and PR rows around a ship run.
    A `HALTED`, `STOPPED` or `PR OPEN` chip sits on the heading.
 3. **Stages.**
    One row per stage: its start time, a mark, the title, the sub-agent's elapsed time and the commit sha.
+   Stage 4 is open here, with its counts and last calls under its row.
    See [The stages](#the-stages).
-4. **Needs you, now and next.**
-   A halt's reason, the running sub-agent's counts and last calls, and the command that comes next.
+4. **Run totals.**
+   Once a run finishes, the time spent in sub-agents, in gates and in the main loop.
+
+While a run is open or halted, `NEEDS YOU`, `NOW` and `NEXT` follow these; see [Needs you, now and next](#needs-you-now-and-next).
 
 The same pane without the numbers:
 
@@ -75,4 +78,5 @@ A typed `/ship-plan` opens it at any width; a `Skill` call in a terminal narrowe
 ## What was checked
 
 `claude plugin test` runs 65 tests in `tests/`, covering the plan parser, the sidecar, the feeds, the terminal and Desktop drawings, the redraw timer, the store and the notifications; all 65 passed.
-The screenshots above, and whether `execute-stage` forked into `plan-executor` in a live session, are still to be checked and recorded here.
+The screenshot is this plugin's own `ship-plan` run on 2026-11-03, drawn by the source `plan-progress` mod, whose drawing code this plugin carries with only its plugin name changed.
+Whether `execute-stage` forks into `plan-executor` once installed from fixings is still to be checked and recorded here.
