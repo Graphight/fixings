@@ -14,6 +14,11 @@
       "name": "interview",
       "source": "./plugins/interview",
       "description": "Interviews you in rounds until every decision is settled, and draws a round row above each question"
+    },
+    {
+      "name": "checkpoint-plan",
+      "source": "./plugins/checkpoint-plan",
+      "description": "Stages work into a checkpointed plan, runs it stage by stage or unattended, and draws its progress in the /plan-timeline pane"
     }
   ]
 }
