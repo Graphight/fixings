@@ -15,7 +15,7 @@ Install it with `/plugin install checkpoint-plan@fixings`.
    A `HALTED`, `STOPPED` or `PR OPEN` chip sits on the heading.
 3. **Stages.**
    One row per stage: its start time, a mark, the title, the sub-agent's elapsed time and the commit sha.
-   Stage 4 is open here, with its counts and last calls under its row.
+   Stage 2 is open here, with its counts, the file it edited and its last three calls under its row.
    See [The stages](#the-stages).
 4. **Run totals.**
    Once a run finishes, the time spent in sub-agents, in gates and in the main loop.
