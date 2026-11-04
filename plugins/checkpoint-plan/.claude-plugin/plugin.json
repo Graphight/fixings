@@ -1,0 +1,9 @@
+{
+  "name": "checkpoint-plan",
+  "version": "0.1.0",
+  "description": "Stages a piece of work into a checkpointed plan, runs it stage by stage or unattended, and draws its progress in a side pane",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}
