@@ -24,6 +24,7 @@ If it's ambiguous which, ask before going further.
 ## Step 0.5: Interview the user until nothing is assumed
 
 Before staging anything, run the `interview` skill with the Skill tool on the work being planned.
+If `interview` is not installed, interview the user yourself in `AskUserQuestion` rounds until every decision behind the work is settled.
 A plan built on a guessed decision stages the guess, and `/execute-stage` then builds it faithfully on a cheap model that never saw the conversation.
 
 ## Step 1: Present the staged plan, then stop

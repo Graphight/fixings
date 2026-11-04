@@ -28,7 +28,8 @@ The same pane without the numbers:
 
 ## The skills and the agent
 
-- `checkpoint-plan` interviews you (through the `interview` skill), then writes a staged plan to `~/.claude/plans/<repo>-<branch>.md`, with a commit message and a review checkpoint per stage.
+- `checkpoint-plan` interviews you, then writes a staged plan to `~/.claude/plans/<repo>-<branch>.md`, with a commit message and a review checkpoint per stage.
+  It runs the `interview` skill, which is a separate install (`/plugin install interview@fixings`), and asks in plain `AskUserQuestion` rounds when that skill is absent.
 - `execute-stage` builds the first unticked stage by forking into the `plan-executor` agent on a cheap model, ticks the box and stops for your review.
 - `ship-plan` runs every remaining stage unattended: a commit per stage, the gate command after each, then a push and a draft PR.
   It opens the PR with `write-pr-description` when that skill is installed and `gh pr create --draft --fill` when it is not.
