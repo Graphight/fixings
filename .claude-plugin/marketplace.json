@@ -1,7 +1,14 @@
 {
   "name": "fixings",
+  "description": "Mods that reshape the Claude Code terminal interface, and skills that carry a workflow.",
   "owner": {
     "name": "Tom Marsh"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "mission-control",
+      "source": "./plugins/mission-control",
+      "description": "A pane listing the other Claude Code sessions on this machine, their lanes and what needs you"
+    }
+  ]
 }
