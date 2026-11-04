@@ -1,5 +1,5 @@
 import { atom, read, update } from 'claude-code'
-import type { EngineInterface, Register, Timer } from 'claude-code'
+import type { EngineInterface, Register, RenderChildren, Timer } from 'claude-code'
 
 import type { Agent, Check, Pr, ReviewLine } from '../types'
 
@@ -249,7 +249,7 @@ const wrapped = (text: string, width: number): string[] => {
     rest = rest.slice(cut).trimStart()
   }
 
-  return rest ? [...broken.slice(0, -1), `${broken[broken.length - 1].slice(0, Math.max(0, width - 1))}…`] : broken
+  return rest ? [...broken.slice(0, -1), `${broken[broken.length - 1]!.slice(0, Math.max(0, width - 1))}…`] : broken
 }
 
 const findings = (lines: ReviewLine[]) => {
@@ -285,7 +285,7 @@ const timeline = (lines: ReviewLine[], stamped: number[], now: number) => {
     return {
       name,
       state: next ? ('done' as const) : ('running' as const),
-      ms: (next?.stamp ?? now) - at[from].stamp,
+      ms: (next?.stamp ?? now) - at[from]!.stamp,
       raised: lines.slice(from + 1, upto).filter(line => line.kind === 'finding').length,
     }
   })
@@ -425,7 +425,7 @@ export const register: Register = on => {
     const named = await read($, followed)
     const lines = await read($, review)
     const { rows, verdict, total } = timeline(lines, await read($, stamps), named ? await $.clock.now() : 0)
-    const joined = (parts: unknown[], gap: string, props: object = {}) =>
+    const joined = (parts: RenderChildren[], gap: string, props: object = {}) =>
       parts.flatMap((part, at) => (at === 0 ? [part] : [<Text {...props}>{gap}</Text>, part]))
     const { shown: raised, cut: cutCount } = findings(lines)
     const kept = raised.filter(one => one.isKept).length

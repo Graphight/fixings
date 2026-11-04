@@ -34,8 +34,8 @@ const world = (on: On, { view = { exitCode: 0, stdout: JSON.stringify(VIEW) }, c
   mock.env(on, { HOME: '/home/me' })
   on('session.start', ($, e) => ({ cwd: e.cwd }))
   on('session.root', () => ({ value: '/src/widgets' }))
-  on('command.register', () => ({ value: undefined }))
-  on('ui.open', () => ({ value: { isPlaced: placed } }))
+  on('command.register', () => ({ value: { command: 'github-pr-review-panel' } }))
+  on('ui.open', () => ({ value: placed ? { isPlaced: true } : { isPlaced: false, reason: 'no-surface' } }))
   on('fs.read', (_, e) =>
     review !== undefined && e.path.startsWith('/home/me/.claude/reviews/') ? { value: review(e.path) } : { deny: `unexpected read of ${e.path}` },
   )
@@ -54,6 +54,7 @@ const world = (on: On, { view = { exitCode: 0, stdout: JSON.stringify(VIEW) }, c
   return ran
 }
 
+const SPAWN = { tool_use_id: 'toolu_1', description: 'verify', subagentType: 'general-purpose', provider: { plugin: 'engine', tier: 'core' }, parentModel: 'opus', background: false, fork: false } as const
 const COMMAND = { command: 'github-pr-review-panel', args: '', origin: { kind: 'composer' }, presentation: { isFullscreen: true, columns: 60 } } as const
 
 const rowsOf = async ($: Engine) => {
@@ -153,9 +154,9 @@ const created = async ($: Engine, on: On, checks: () => Answer, placed = true) =
   on('ui.notify', (_, e) => {
     seen.notes.push({ text: e.text, title: e.title })
 
-    return { value: { isSent: true } }
+    return { value: { isSent: true, channel: 'kitty' } }
   })
-  on('tool.call', (_, e) => ({ result: '', text: e.command === CREATED.command ? `${VIEW.url}\n` : '' }))
+  on('tool.call', (_, e) => ({ result: '', text: 'command' in e && e.command === CREATED.command ? `${VIEW.url}\n` : '' }))
 
   await $.session.start(START)
   await $.tool.call(CREATED)
@@ -252,7 +253,7 @@ test('polls the checks of a pull request loaded by the command while one is pend
   const clock = mock.clock(on)
   let answer = output(PENDING, 8)
   const ran = world(on, { checks: () => answer })
-  on('ui.notify', () => ({ value: { isSent: true } }))
+  on('ui.notify', () => ({ value: { isSent: true, channel: 'kitty' } }))
   await $.session.start(START)
   await $.command.run(COMMAND)
 
@@ -334,8 +335,8 @@ test('draws a review as a spine from its sidecar, with a skipped step and the ag
   await clock.advance(100_000)
   text += JSONL(STEP('verify'))
   await $.tool.call({ tool: 'Bash', command: `jq >> ${SIDECAR}` })
-  await $.agent.spawn({ prompt: 'one' })
-  await $.agent.spawn({ prompt: 'two' })
+  await $.agent.spawn({ ...SPAWN, prompt: 'one' })
+  await $.agent.spawn({ ...SPAWN, prompt: 'two' })
   await $.turn.complete({ answer: 'ok', durationMs: 1, isAborted: false, turnId: 't1', agentId: 'agent-1', reason: 'answer' })
   await clock.advance(41_000)
 
@@ -441,7 +442,7 @@ test('opens the panel when github-pr-review expands, bare or namespaced, and not
   on('skill.prompt', (_, e) => ({ text: e.text }))
 
   await $.session.start(START)
-  await $.prompt.submit({ text: 'should I run /github-pr-review here?' })
+  await $.prompt.submit({ text: 'should I run /github-pr-review here?', wait: false, origin: { kind: 'composer' } })
   await $.skill.prompt({ skill: 'commit', text: '' })
   const before = [...toasts]
   await $.skill.prompt({ skill: 'github-pr-review', text: '' })
@@ -467,8 +468,8 @@ test('matches each agent spawned during a step to its own turn by id', async ($,
   await reviewing($, on, () => JSONL(PR_LINE, STEP('verify')))
   await $.tool.call({ tool: 'Bash', command: `: > ${SIDECAR}` })
 
-  await $.agent.spawn({ prompt: 'one' })
-  await $.agent.spawn({ prompt: 'two' })
+  await $.agent.spawn({ ...SPAWN, prompt: 'one' })
+  await $.agent.spawn({ ...SPAWN, prompt: 'two' })
   const out = await rowsOf($)
   await $.turn.complete({ answer: 'ok', durationMs: 1, isAborted: false, turnId: 't2', agentId: 'agent-2', reason: 'answer' })
   const second = await rowsOf($)
@@ -748,7 +749,7 @@ test('draws an opened finding on Desktop with its path, claim and tinted why, an
   const lower = async () => {
     const tree = (await ui.drawn()) as { children: { children: object[] }[] }
 
-    return JSON.parse(JSON.stringify(tree.children[0].children.slice(3)), (key, value) => (key === 'press' ? HANDLE : value))
+    return JSON.parse(JSON.stringify(tree.children[0]!.children.slice(3)), (key, value) => (key === 'press' ? HANDLE : value))
   }
   const row = (tier: string, color: string, claim: string, hotkey: string, dim: object) =>
     BOX(
@@ -783,7 +784,7 @@ test('draws an opened finding on Desktop with its path, claim and tinted why, an
     opened: [
       findings(
         folded(
-          closed[0],
+          closed[0]!,
           BOX(
             { flexDirection: 'column', gap: 1, paddingLeft: 2 },
             TEXT('src/a.ts:7', { dimColor: true }),
@@ -791,7 +792,7 @@ test('draws an opened finding on Desktop with its path, claim and tinted why, an
             BOX({ gap: 1, padding: 1, backgroundColor: 'diffAddedDimmed' }, TEXT('✓', { color: 'success' }), TEXT('because')),
           ),
         ),
-        folded(closed[1]),
+        folded(closed[1]!),
       ),
       mutants,
     ],
