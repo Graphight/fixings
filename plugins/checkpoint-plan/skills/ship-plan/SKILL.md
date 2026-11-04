@@ -100,6 +100,8 @@ Then open the PR with what it returns:
 gh pr create --draft --title "<the plan file's H1>" --body-file <the --out path>
 ```
 
+If `write-pr-description` is not available, skip it and open the PR with `gh pr create --draft --fill` instead.
+
 Always open it as a draft — the user runs their own review bot over it before colleagues are invited to comment, and marks it ready themselves.
 
 If a PR already exists for the branch, update its description rather than creating a second one.
