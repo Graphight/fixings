@@ -37,8 +37,8 @@ Do not offer to work around any of the three.
 Then work out how this repo verifies itself, because every commit below is gated on it.
 Look in this order:
 
-1. The repo's `CLAUDE.md` — a build or test command written there is the authoritative one, and it beats anything you would infer.
-2. The toolchain, if `CLAUDE.md` is silent: `pom.xml` → `mvn test`, `package.json` → its `test` script, `pyproject.toml` → `pytest` or the configured runner, and so on.
+1. The repo's `CLAUDE.md` or `AGENTS.md` — a build or test command written there is the authoritative one, and it beats anything you would infer.
+2. The toolchain, if neither says: `pom.xml` → `mvn test`, `package.json` → its `test` script, `pyproject.toml` → `pytest` or the configured runner, and so on.
 3. Nothing found.
 
 Say which command you settled on, in one line, before starting.
