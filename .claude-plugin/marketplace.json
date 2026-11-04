@@ -9,6 +9,11 @@
       "name": "mission-control",
       "source": "./plugins/mission-control",
       "description": "A pane listing the other Claude Code sessions on this machine, their lanes and what needs you"
+    },
+    {
+      "name": "interview",
+      "source": "./plugins/interview",
+      "description": "Interviews you in rounds until every decision is settled, and draws a round row above each question"
     }
   ]
 }

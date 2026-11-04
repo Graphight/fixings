@@ -17,6 +17,7 @@ Contribution rules are in `CONTRIBUTING.md`.
 | `plugins/<name>/` | one installable plugin: a mod, a skill, or a skill with its companion mod |
 | `plugins/<name>/.claude-plugin/plugin.json` | the plugin's manifest and version |
 | `plugins/<name>/README.md` | the plugin's behaviour, known limits and what was checked in a live session |
+| `plugins/<name>/skills/<skill>/SKILL.md` | a skill the plugin carries |
 | `plugins/<name>/tests/` | the plugin's tests, run by `claude plugin test plugins/<name>` |
 | `docs/brief.md` | the vision, the thesis and the non-goals |
 | `docs/README.md` | the proposal and decision convention, and its template |
