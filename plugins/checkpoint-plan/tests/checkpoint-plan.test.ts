@@ -579,6 +579,28 @@ test('takes a sub-agent stage from the first unticked box when its description h
   ])
 })
 
+test('opens the running stage for a plugin-scoped plan-executor', async ($, on) => {
+  world(on, () => PLAN)
+  const atoms = held(on)
+  on('turn.complete', () => ({ text: '' }))
+  on('tool.call', (_, e) =>
+    e.tool === 'Agent'
+      ? { result: { status: 'async_launched', agentId: 'worker' }, text: '' }
+      : { result: '', text: e.command === 'git commit -m third' ? '[feat/bands a41c9e2] third' : '' },
+  )
+
+  await $.session.start(START)
+  await $.tool.call({ tool: 'Agent', description: 'Build the widget', subagent_type: 'checkpoint-plan:plan-executor' })
+  await $.turn.complete({ answer: 'done', durationMs: 1, isAborted: false, turnId: 't1', agentId: 'worker', reason: 'answer' })
+  await $.tool.call({ tool: 'Bash', command: 'npm test' })
+  await $.tool.call({ tool: 'Bash', command: 'git commit -m third' })
+
+  expect(atoms.get('run')).toEqual([
+    { kind: 'gate', stage: 3, command: 'npm test', isError: false, durationMs: 0, at: 0 },
+    { kind: 'commit', stage: 3, sha: 'a41c9e2', at: 0 },
+  ])
+})
+
 test('opens a stage row from a forked execute-stage skill call and attributes the sub-agent call to it', async ($, on) => {
   world(on, () => PLAN)
   const atoms = held(on)

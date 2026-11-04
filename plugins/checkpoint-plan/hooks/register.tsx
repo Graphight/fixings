@@ -23,7 +23,6 @@ const SIDECAR_KINDS = new Set(['gate', 'stage', 'halt'])
 const NAMED = /\/\.claude\/plans\/([\w.-]+\.md)/
 const WRITERS = new Set(['Bash', 'Edit', 'Write'])
 const EDITS = new Set(['Edit', 'Write'])
-const EXECUTOR = 'plan-executor'
 const GIT = String.raw`\bgit(?:\s+-[Cc]\s+\S+|\s+--?[\w-]+(?:=\S+)?)*\s+`
 const COMMIT = new RegExp(`${GIT}commit\\b`)
 const PUSH = new RegExp(`${GIT}push\\b`)
@@ -530,6 +529,7 @@ const wake = ($: EngineInterface) => {
 }
 
 const isShipPlan = (name: string): boolean => name === 'ship-plan' || name.endsWith(':ship-plan')
+const isExecutor = (name: unknown): boolean => name === 'plan-executor' || String(name).endsWith(':plan-executor')
 const isExecuteStage = (name: unknown): boolean => name === 'execute-stage' || String(name).endsWith(':execute-stage')
 
 const startShip = async ($: EngineInterface) => {
@@ -606,7 +606,7 @@ export const register: Register = on => {
 
     if ((e.tool === 'Agent' || forked) && !agentId) {
       const shown = await read($, plan)
-      const number = (forked || (e.tool === 'Agent' && e.subagent_type === EXECUTOR)) && shown && shown.done < shown.total ? shown.done + 1 : null
+      const number = (forked || (e.tool === 'Agent' && isExecutor(e.subagent_type))) && shown && shown.done < shown.total ? shown.done + 1 : null
 
       await update($, stages, kept => [...kept, { ...OPENED, stage: number, start: started }])
     }
