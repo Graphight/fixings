@@ -32,10 +32,10 @@ The style lives in `skills/explainer-page/reference/scaffold.html`, with the wid
 
 1. **Nav rail.**
    The numbered sections, with the one in view highlighted and a progress line on the rail's right edge; under 880 px it becomes a bar across the top.
-2. **Theme toggle.**
-   Auto, light and dark, remembered per browser, above the date the page was checked.
-3. **Widget.**
+2. **Widget.**
    An interactive part that carries the section's argument; here a stepper replays a session's tool calls and shows the pane's rows after each one.
+3. **Theme toggle.**
+   Auto, light and dark, remembered per browser, above the date the page was checked.
 
 The page is [a published explainer of this plugin's checks pane](https://claude.ai/artifact/GogCX93SYxyWev5VFS8xCe), built by the skill on 4 Nov 2026.
 The same view without the numbers:
