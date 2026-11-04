@@ -22,3 +22,4 @@ Contribution rules are in `CONTRIBUTING.md`.
 | `docs/README.md` | the proposal and decision convention, and its template |
 | `docs/proposals/` | ideas not yet acted on |
 | `docs/decisions/` | dated records of what was chosen or rejected, and why |
+| `docs/screenshots/` | JPEG pictures of what a plugin draws, embedded by its README |

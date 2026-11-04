@@ -10,6 +10,8 @@ The rest is two stages, split by directory so a doc's status is obvious from whe
 - **`proposals/`**: an idea, not yet acted on. Mutable. Edit freely, argue in the doc, change your mind.
 - **`decisions/`**: dated, what was chosen or deliberately rejected. Accepted decisions preserve their original reasoning.
 
+`screenshots/` holds the pictures of what a plugin draws, as `<plugin>.jpg` and an annotated `<plugin>-annotated.jpg`, which its README embeds.
+
 A proposal **graduates** into a decision when we act on it: name it with the day's date and its topic, move it to `decisions/`, set its status to `Accepted`, delete the proposal file.
 
 ## What goes here

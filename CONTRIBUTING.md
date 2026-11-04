@@ -72,3 +72,4 @@ The full convention and template are in `docs/README.md`.
 - No employer or workplace names anywhere in the repo, including decision records; example ticket keys are `PROJ-1234`.
 - No unrequested comments; a comment earns its place by saying what a reader needs at that line.
 - Files are copied from elsewhere, never with their git history.
+- Images are JPEG and live in `docs/screenshots/`; an annotation is white text with a black outline.
