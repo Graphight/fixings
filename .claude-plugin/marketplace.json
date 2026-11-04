@@ -23,7 +23,7 @@
     {
       "name": "explainer-page",
       "source": "./plugins/explainer-page",
-      "description": "Builds a sleek, interactive HTML explainer page in a fixed house style, and draws its pre-publish checks in a side pane"
+      "description": "Builds an interactive HTML explainer page in a fixed house style, and draws its pre-publish checks in a side pane"
     }
   ]
 }

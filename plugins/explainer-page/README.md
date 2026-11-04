@@ -1,6 +1,6 @@
 # explainer-page
 
-`explainer-page` is a skill that builds a sleek, interactive HTML page explaining something, published as an Artifact, and a mod that draws the page's pre-publish checks in the `/explainer-page-checks` side pane.
+`explainer-page` is a skill that builds an interactive HTML page explaining something, published as an Artifact, and a mod that draws the page's pre-publish checks in the `/explainer-page-checks` side pane.
 Install it with `/plugin install explainer-page@fixings`.
 
 ## What you're looking at
@@ -14,7 +14,6 @@ Install it with `/plugin install explainer-page@fixings`.
    The passed (`✓`), to-look-at (`!`), failed (`✗`) and not-yet-done (`○`) checks; a count of zero is left off.
 3. **Page checks.**
    One row per check read from the page: a mark, the name and a detail, with up to three note rows under a check that has notes.
-   Here `dated` passes with `checked 4 Nov 2026`, `headings` fails with the 55-character heading under it, and `scaffold` fails with its first placeholders and `+8 more`.
    See [The checks](#the-checks).
 4. **Harness and publish.**
    `harness` and `published` are `○` until the widget harness has run and the page has been published.
@@ -23,12 +22,10 @@ The same pane without the numbers:
 
 ![The explainer checks pane after an edit to a draft page](../../docs/screenshots/explainer-page.jpg)
 
-The picture is a draft in the demo's tide-notes scenario, captured on 4 Nov 2026.
-
 ## The skill
 
 `explainer-page` turns a question into one self-contained HTML page in a fixed house style: a sticky vertical nav rail, an auto, light and dark toggle, interactive widgets that carry the argument, and a short quiz at the end of each section.
-It researches before it designs, and every claim on the page has to trace to a source it read; where the code and the docs disagree, the page says so in its own dated callout.
+Research comes before design, and every claim on the page has to trace to a source read during that research; where the code and the docs disagree, the page says so in its own dated callout.
 The style lives in `skills/explainer-page/reference/scaffold.html`, with the widget patterns in `reference/widgets.md`.
 
 ## The checks
@@ -57,7 +54,7 @@ A `Skill` call in a terminal narrower than the 144 columns the engine needs for 
 
 ## Known limits
 
-- The mod cannot tell whether a claim is sourced; `dated` checks only that the page says when it was checked.
+- No check reads a claim's source; `dated` checks only that the page says when it was checked.
 - The command is `/explainer-page-checks` rather than `/explainer-page:checks`, because a mod's command name allows only letters, digits, `_` and `-`.
 - VS Code is not a target for the pane.
 
