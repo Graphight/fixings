@@ -59,6 +59,11 @@
       "name": "checkout-guard",
       "source": "./plugins/checkout-guard",
       "description": "Denies a commit after HEAD left the session's branch, and a branch switch while another session is in the same checkout"
+    },
+    {
+      "name": "evidence-band",
+      "source": "./plugins/evidence-band",
+      "description": "A band above the prompt showing the last test or build command and the exit status it ended with"
     }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "name": "evidence-band",
+  "version": "0.1.0",
+  "description": "A band above the prompt showing the last test or build command and the exit status it ended with",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}
