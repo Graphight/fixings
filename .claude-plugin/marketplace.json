@@ -71,11 +71,6 @@
       "description": "A band above the prompt listing the images attached to the draft"
     },
     {
-      "name": "turn-tokens",
-      "source": "./plugins/turn-tokens",
-      "description": "Puts the turn's token counts back on the turn footer, which a skin's own footer leaves out"
-    },
-    {
       "name": "prompt-tint",
       "source": "./plugins/prompt-tint",
       "description": "Draws your own prompts on a tinted background with an orange border, so they read apart from the tool rows"

@@ -1,9 +1,0 @@
-{
-  "name": "turn-tokens",
-  "version": "0.1.0",
-  "description": "Puts the turn's token counts back on the turn footer, which a skin's own footer leaves out",
-  "types": "./types/index.d.ts",
-  "author": {
-    "name": "Tom Marsh"
-  }
-}

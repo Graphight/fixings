@@ -33,6 +33,5 @@ Then install any plugin from it:
 | [checkout-guard](plugins/checkout-guard/README.md) | mod | denies a commit after `HEAD` left the session's branch, and a branch switch while another session is in the same checkout |
 | [evidence-band](plugins/evidence-band/README.md) | mod | draws the last test or build command and its exit status in a band above the prompt |
 | [image-thumbnail](plugins/image-thumbnail/README.md) | mod | draws a thumbnail of each image attached to the draft in a band above the prompt |
-| [turn-tokens](plugins/turn-tokens/README.md) | mod | appends the turn's token counts to the turn footer, which a skin's own footer leaves out |
 | [prompt-tint](plugins/prompt-tint/README.md) | mod | draws your typed prompts on a tinted background with an orange border |
 | [copy-visible](plugins/copy-visible/README.md) | mod | draws every code block of a reply in a blue frame, with the skin's Copy button as the first row inside it |
