@@ -54,6 +54,11 @@
       "name": "write-pr-description",
       "source": "./plugins/write-pr-description",
       "description": "Writes a concise, reviewer-focused PR description from session context and git history"
+    },
+    {
+      "name": "checkout-guard",
+      "source": "./plugins/checkout-guard",
+      "description": "Denies a commit after HEAD left the session's branch, and a branch switch while another session is in the same checkout"
     }
   ]
 }
