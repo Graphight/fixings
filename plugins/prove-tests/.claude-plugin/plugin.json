@@ -1,0 +1,8 @@
+{
+  "name": "prove-tests",
+  "version": "0.1.0",
+  "description": "Proves tests are real by breaking the code they guard and checking they fail for the right reason",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}

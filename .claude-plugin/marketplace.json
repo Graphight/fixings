@@ -44,6 +44,11 @@
       "name": "write-proposal",
       "source": "./plugins/write-proposal",
       "description": "Writes a proposal into docs/proposals after reading the code and interviewing you on the behaviour you expect"
+    },
+    {
+      "name": "prove-tests",
+      "source": "./plugins/prove-tests",
+      "description": "Proves tests are real by breaking the code they guard and checking they fail for the right reason"
     }
   ]
 }
