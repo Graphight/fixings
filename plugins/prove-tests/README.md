@@ -16,16 +16,24 @@ Every mutated file is copied to the scratchpad first and restored with a `cmp` c
 The report has one row per test; without `--report-only` it then fixes the weak tests and re-runs the same mutation against each fix.
 
 With `--sidecar <path>`, each result is also appended to that file as a `mutant` line, which the `/github-pr-review-panel` panel counts while the run is going.
+The line is written by the bundled `scripts/sidecar.bash`, which the skill's `allowed-tools` pre-approves, so it lands in a `dontAsk` session too.
 
 The default is the `max_tests` plugin option; change it in `/plugin` → Configure options, or `/config`.
 
 ## Known limits
 
-- In a `dontAsk` permission mode, the `jq ... >>` append that writes the `mutant` lines is denied, so the sidecar stays empty.
 - A repo with no way to run a single test locally gets Step 1 only.
 - `model: opus` and `effort: high` are set in the skill's frontmatter, so a session without that model runs it as the harness resolves it.
 
 ## What was checked
 
-Not run live from this plugin: no session has loaded it from fixings and mutated a real test.
-`claude plugin validate .` covers its manifest and the skill's frontmatter.
+All on 4 Nov 2026.
+`claude plugin validate .` covers its manifest, the `max_tests` option and the skill's frontmatter.
+`scripts/sidecar.bash` fed a test name holding backticks, `$(whoami)` and double quotes wrote it as literal JSON.
+
+One headless run, `claude -p "/prove-tests --report-only --max 1 --sidecar <path> ..." --permission-mode dontAsk`, loaded this plugin with `--plugin-dir` on a scratch copy of `github-pr-review`.
+Its allow list covered the test command, `cp`, `cmp`, `git status`, `git diff`, Read, Edit and Write, but not the sidecar script.
+It mutated `register.tsx:444` (`===` to `!==`), the test "counts mutants by result under the findings and on the prove tests row" was killed as predicted, and the script call wrote `{"kind":"mutant",...,"result":"killed"}` to the sidecar.
+`dontAsk` denied four other Bash calls in the same run, so the mode was in force and the skill's `allowed-tools` line is what let the script through.
+
+Not checked live: the `${user_config.max_tests}` substitution, and a full `/github-pr-review` run that reaches its `prove` step in `dontAsk`.

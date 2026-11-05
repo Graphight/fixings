@@ -98,7 +98,7 @@ A call that names another sidecar, or the start of `github-pr-review`, clears th
 
 - A step's time starts when the panel reads the step's line, so a line appended late gives a short step.
 - The panel has no figure for how many mutants are still to come.
-- `prove-tests` appends its `mutant` lines with `>>` to a file outside the project, so a session in `dontAsk` mode denies them and the `MUTANTS` row stays empty.
+- In `dontAsk` mode the skill's own `git` and `gh` calls are denied unless the session's settings allow them, so the review stops before it fetches the pull request.
 - While the `prove` step has an agent out, its row shows `n of m back` and not the mutant count.
 - The digits are positions in the list, so a digit names a different finding after one above it is cut; findings from the tenth open by click only.
 - A review's sidecar is followed only once a tool call names its path.
@@ -121,5 +121,7 @@ The demo recorder in `tools/demo/github-pr-review/` fills the panel from a hand-
 
 A third live run on #6, with `prove-tests` loaded as a plugin beside this one, mutation-checked the PR's tests, and the report printed `Test coverage: mutation-checked 5 of 5 new or changed tests`.
 `prove-tests` built each `mutant` line in the format the panel reads, but the run's `dontAsk` mode denied its `>>` append to the sidecar, so the `MUTANTS` row drew none of them.
+`prove-tests` now writes those lines through a bundled script its `allowed-tools` pre-approves, and a headless `dontAsk` run of `prove-tests` alone wrote its `mutant` line; its README has the details.
+A fourth run on #6, headless in `dontAsk` with both plugins loaded, did not reach the `prove` step: `dontAsk` denied the skill's first `git remote get-url origin` and `gh pr view 6` calls, and the sidecar gained no lines.
 
 Not checked live: the Desktop layout, and check polling after `gh pr create`.
