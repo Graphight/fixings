@@ -98,6 +98,7 @@ A call that names another sidecar, or the start of `github-pr-review`, clears th
 
 - A step's time starts when the panel reads the step's line, so a line appended late gives a short step.
 - The panel has no figure for how many mutants are still to come.
+- `prove-tests` appends its `mutant` lines with `>>` to a file outside the project, so a session in `dontAsk` mode denies them and the `MUTANTS` row stays empty.
 - While the `prove` step has an agent out, its row shows `n of m back` and not the mutant count.
 - The digits are positions in the list, so a digit names a different finding after one above it is cut; findings from the tenth open by click only.
 - A review's sidecar is followed only once a tool call names its path.
@@ -118,4 +119,7 @@ In the second, fullscreen run the panel opened on the typed command and drew the
 
 The demo recorder in `tools/demo/github-pr-review/` fills the panel from a hand-made sidecar with `mutant` lines, and the panel drew `4 mutants` on the `prove tests` row and `killed 3 · wrong reason 1` on the `MUTANTS` row.
 
-Not checked live: `mutant` lines written by `prove-tests` itself, the Desktop layout, and check polling after `gh pr create`.
+A third live run on #6, with `prove-tests` loaded as a plugin beside this one, mutation-checked the PR's tests, and the report printed `Test coverage: mutation-checked 5 of 5 new or changed tests`.
+`prove-tests` built each `mutant` line in the format the panel reads, but the run's `dontAsk` mode denied its `>>` append to the sidecar, so the `MUTANTS` row drew none of them.
+
+Not checked live: the Desktop layout, and check polling after `gh pr create`.
