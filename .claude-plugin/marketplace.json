@@ -79,6 +79,11 @@
       "name": "prompt-tint",
       "source": "./plugins/prompt-tint",
       "description": "Draws your own prompts on a tinted background with an orange border, so they read apart from the tool rows"
+    },
+    {
+      "name": "copy-visible",
+      "source": "./plugins/copy-visible",
+      "description": "Draws every code block of a reply in a blue frame, with the skin's Copy button as the first row inside it"
     }
   ]
 }

@@ -35,3 +35,4 @@ Then install any plugin from it:
 | [image-thumbnail](plugins/image-thumbnail/README.md) | mod | draws a thumbnail of each image attached to the draft in a band above the prompt |
 | [turn-tokens](plugins/turn-tokens/README.md) | mod | appends the turn's token counts to the turn footer, which a skin's own footer leaves out |
 | [prompt-tint](plugins/prompt-tint/README.md) | mod | draws your typed prompts on a tinted background with an orange border |
+| [copy-visible](plugins/copy-visible/README.md) | mod | draws every code block of a reply in a blue frame, with the skin's Copy button as the first row inside it |
