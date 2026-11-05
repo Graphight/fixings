@@ -1,7 +1,7 @@
 {
   "name": "checkout-guard",
   "version": "0.1.0",
-  "description": "Denies a commit after HEAD left the session's branch, and a branch switch while another session is in the same checkout",
+  "description": "Stops two sessions in one checkout from moving each other's branch",
   "author": {
     "name": "Tom Marsh"
   }

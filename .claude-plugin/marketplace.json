@@ -58,27 +58,27 @@
     {
       "name": "checkout-guard",
       "source": "./plugins/checkout-guard",
-      "description": "Denies a commit after HEAD left the session's branch, and a branch switch while another session is in the same checkout"
+      "description": "Stops two sessions in one checkout from moving each other's branch"
     },
     {
       "name": "evidence-band",
       "source": "./plugins/evidence-band",
-      "description": "A band above the prompt showing the last test or build command and the exit status it ended with"
+      "description": "Shows the last test or build command and whether it passed, in a band above the prompt"
     },
     {
       "name": "image-thumbnail",
       "source": "./plugins/image-thumbnail",
-      "description": "A band above the prompt listing the images attached to the draft"
+      "description": "Shows a thumbnail of each image pasted into the prompt, in a band above it (macOS)"
     },
     {
       "name": "prompt-tint",
       "source": "./plugins/prompt-tint",
-      "description": "Draws your own prompts on a tinted background with an orange border, so they read apart from the tool rows"
+      "description": "Draws the prompts you type in an orange box, so they stand out"
     },
     {
       "name": "copy-visible",
       "source": "./plugins/copy-visible",
-      "description": "Draws every code block of a reply in a blue frame, with the skin's Copy button as the first row inside it"
+      "description": "Makes the skins plugin's Copy buttons easy to see: a blue frame with Copy on the first line"
     }
   ]
 }

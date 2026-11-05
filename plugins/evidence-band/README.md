@@ -1,35 +1,45 @@
 # evidence-band
 
-`evidence-band` draws the last test or build command and its exit status in a band above the prompt.
+`evidence-band` shows the last test or build command Claude ran, and whether it passed, in a band above the prompt.
+When Claude says the tests pass, you can see the run behind it.
 Install it with `/plugin install evidence-band@fixings`.
 
 ## What you're looking at
 
 ![The band above the prompt with the last run, numbered](../../docs/screenshots/evidence-band-annotated.jpg)
 
-1. **The last run and its status.**
-   Here `? exit 0, maybe a later command's`, because the run chained `echo` after `python3 -m unittest`, so the `0` the shell reported is the `echo`'s; see [How it reads a run](#how-it-reads-a-run).
+1. **The last run and its result.**
+   Here it reads `? exit 0, maybe a later command's`.
+   Claude ran `python3 -m unittest; echo "EXIT: $?"`, so the `0` belongs to the `echo`, not to the tests.
 
-## How it reads a run
+## What the band says
 
-A `tool.call` hook on `Bash` matches the command against the runners in `RUNNER` in `hooks/register.tsx`, among them `npm test`, `./gradlew`, `pytest`, `make`, `claude plugin test` and a `test_*` script, wherever one stands in command position.
-A failed call carries no status field, so the status is read from the error text, which starts `Exit code N`; a call that did not fail is `exit 0`.
-A pipe, `;`, `||`, a lone `&` or new line after the runner means the shell reported a later command's status, or none of the runner's, so the band draws that run as `? exit 0, maybe a later command's` and not as a pass; `set -o pipefail` clears the pipe case.
-Quoted text is emptied before matching, so a runner or a separator inside a commit message is not read as one.
-A backgrounded, interrupted or timed-out run, and one whose non-zero status Claude Code read as no error, is drawn as `? no exit status`.
+| Band | Meaning |
+| --- | --- |
+| `✓ exit 0` | the command passed |
+| `✗ exit 2` | the command failed, with that exit code |
+| `? exit 0, maybe a later command's` | something ran after the command (`;`, a pipe, `\|\|`, `&` or a new line), so the exit code may not be its own; `set -o pipefail` fixes the pipe case |
+| `? no exit status` | the run went to the background, was interrupted or timed out, or Claude Code did not count a non-zero exit as a failure |
 
-The row is stacked over the band beneath it, so `evidence-band` and `image-thumbnail` show together.
+## Which commands count
+
+Common test and build runners, such as `npm test`, `pytest`, `go test`, `cargo build`, `make`, `./gradlew`, `claude plugin test` and a `test_*` script.
+The full list is `RUNNER` in `hooks/register.tsx`.
+Text inside quotes does not count, so a commit message that mentions `npm test` is not a run.
+
+The band stacks with other bands, such as `image-thumbnail`'s, so both show at once.
 
 ## Known limits
 
-- The runner list is a regular expression in the module, and a run by a runner not on it is not recorded: the earlier run stays drawn, so a passing `pytest` followed by a failing `uv run pytest` leaves `✓ exit 0  ·  pytest` in the band.
-- A runner inside quoted text, as in `bash -c "npm test"`, is not recorded either.
-- A heredoc body is not quoted text, so a line in it that starts with a runner is read as a run.
-- The band shows main-loop runs only: a Bash call from a sub-agent's loop (`agentId` set on the event) is not recorded.
-- Edits made after the run are not counted, so the band can show a pass older than the code.
+- A runner that is not on the list is not recorded, and the band keeps showing the previous run.
+  A passing `pytest` followed by a failing `uv run pytest` still shows `✓ exit 0 · pytest`.
+- A runner inside quotes, as in `bash -c "npm test"`, is not recorded.
+- A line inside a heredoc that starts with a runner is recorded as a run.
+- Runs by subagents are not shown.
+- The band does not notice edits made after the run, so a pass can be older than the code.
 
 ## What was checked
 
-Before the port, on 11 Oct 2026, with a probe mod in a `claude -p` session: `false` resolved with the text `Exit code 1`, `sh -c 'exit 7'` with `Exit code 7`, `true` with no status field, and a `grep` with no match as a non-error carrying `returnCodeInterpretation`.
-On 12 Oct 2026 the row drew in a live session's band, as `✓ exit 0` and the command.
-On 2026-11-05, installed from this marketplace at local scope in a fullscreen session beside `skins` 0.5.16, the band drew `? exit 0, maybe a later command's · python3 -m unittest; echo "EXIT: $?"` above the `image-thumbnail` row, which is the picture above.
+- `claude plugin test plugins/evidence-band` covers passes, failures, chained and backgrounded runs, and subagent runs.
+- Before the port, in October 2026, a failed command's exit code was read from its error text (`Exit code 7`), and the band drew `✓ exit 0` in a live session.
+- Live on 2026-11-05, beside `skins` 0.5.16: the band drew the run in the picture above.

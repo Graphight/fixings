@@ -1,52 +1,53 @@
 # checkout-guard
 
-`checkout-guard` keeps one session's `git switch` from sending another session's commits to the wrong branch.
+`checkout-guard` stops two Claude sessions in the same checkout from moving each other's branch.
 Install it with `/plugin install checkout-guard@fixings`.
 
-Sessions in one checkout share one `HEAD`, so a `git switch` in one session moves the branch under the others, and their commits land on it.
-`claude -w` gives a session its own worktree; this mod covers the sessions started without it.
+## The problem
 
-## What it denies
+Sessions in one folder share one git branch.
+If one session runs `git switch`, every other session in that folder is now on the new branch, and its next commit lands there.
+`claude -w` avoids this by giving each session its own worktree; `checkout-guard` covers sessions started without it.
 
-- A `git commit` is denied when `HEAD` is no longer on the branch the session last put it on.
-- A `git switch`, `git checkout <branch>` or `gh pr checkout` is denied while another session's entry for the checkout is live.
+## What it blocks
 
-A command is matched one part at a time, split at `;`, `&`, `|` and newlines, with quoted text emptied first, so a commit message that names `git switch` is not read as a switch.
-A sub-agent's command is judged against the sub-agent's own directory unless it names another with `-C`.
+- **A branch switch while another session is here.**
+  `git switch`, `git checkout <branch>` and `gh pr checkout` are blocked while another live session shares the checkout.
+  Claude sees:
 
-## How it knows
+  ```
+  checkout-guard: 1 other session is in this checkout (on main); a switch would move HEAD under it. Use `git worktree add` or start with `claude -w`; to restore a file use `git restore`.
+  ```
 
-Each session writes its branch and a time under `<checkout root>::<session id>` in the mod's store every 30 s, and an entry older than 90 s is treated as gone.
-A `/clear` or a resume gives the process a new session id; the timer keeps running and the session's branch carries over to the new entry.
-
-The session's branch is kept by comparing `HEAD` before and after each `Bash` call: `HEAD` that moved while the session's own command ran is taken as the session's move, and `HEAD` that moved between two of its commands is not.
-After a move from outside, only a switch that moves `HEAD` again, or one that names the branch `HEAD` is already on, sets the session's branch; `git switch <branch>` is how a move you made on purpose is confirmed.
+- **A commit after the branch moved underneath.**
+  `git commit` is blocked when the branch changed between the session's commands, because something outside the session moved it.
+  If you moved it on purpose, `git switch <that branch>` tells the session to carry on there.
 
 ## What you see
 
-The status line shows the count of the others, as `2 other sessions in this checkout`.
-A session that starts in a checkout another live session is using gets a toast, and its first prompt carries a note telling it to call `EnterWorktree` before its first edit or commit, branched from origin's default branch unless you name a base.
-The note is given once, only to a new session that joined, and only when `isInteractive`; a resumed session (one with earlier turns), `-p` and SDK runs are not nudged.
-A slash command leaves the note for the first typed prompt, since a local command such as `/model` does not reach the model.
+- The status line counts the other sessions, as `2 other sessions in this checkout`.
+- A new session that starts in a busy checkout shows a toast, and Claude is told to move into its own worktree before its first edit or commit.
+  This happens once per session, in interactive sessions only, and not when you resume one.
+
+## How it knows
+
+Each session notes its folder and branch every 30 seconds, and a note older than 90 seconds counts as gone.
+It compares the branch before and after each shell command: a change during the session's own command is the session's, and a change between its commands came from outside.
+Text in quotes is ignored, so a commit message that mentions `git switch` is fine.
+A subagent's command is checked against the subagent's own folder, unless the command names another with `-C`.
 
 ## Known limits
 
-- `git checkout <file>` without `--` reads as a switch and is denied while another session is live; `git restore` is not.
-- A switch inside a script is not matched by the switch guard; the commit guard catches its effect in the other sessions.
-- The session's branch is a module variable, so a hot reload of the mod sets it again from the current branch.
-- A `cd` to another repository followed by a commit in one command is judged against the session's directory.
-- A `-C` directory that only the shell can resolve, such as `$R` or `~/repo`, is judged against the session's directory.
-- A heredoc body is not quoted text, so a line in it that starts a `git switch` is read as a switch.
+- `git checkout <file>` without `--` looks like a branch switch, so it is blocked while another session is live; use `git restore <file>`.
+- A `git switch` inside a script is not caught, though the commit check still protects the other sessions.
+- Reloading the plugin resets the session's branch to whatever is checked out at that moment.
+- `cd other-repo && git commit` in one command is checked against the session's own folder, not `other-repo`.
+- So is `git -C "$DIR"` when only the shell knows what `$DIR` is.
+- A heredoc line that starts with `git switch` is treated as a switch.
 
 ## What was checked
 
-Before the port, on 09 Oct 2026, with two live `claude -p` sessions in a scratch repository: the second session's `git switch -c probe` was denied and the branch stayed on `main`, and a commit was denied after `HEAD` was moved from outside between the session's two commands.
-On 10 Oct 2026, with the first session held for 150 s, a switch from the second at 120 s was still denied, so the 30 s timer runs in a live session and the entry does not go stale.
-On 2026-11-05, two `claude -p` sessions loaded this plugin from the checkout with `--plugin-dir plugins/checkout-guard --setting-sources project,local` in a scratch repository; while the first held the checkout with `sleep 60`, the second's `git switch -c probe` was denied with:
-
-```
-checkout-guard: 1 other session is in this checkout (on main); a switch would move HEAD under it. Use `git worktree add` or start with `claude -w`; to restore a file use `git restore`.
-```
-
-The branch stayed on `main`.
-Not checked from a `/plugin install`, and the status-line count and the joining session's note were not looked at.
+- `claude plugin test plugins/checkout-guard` covers both blocks, stale sessions, quoted text, subagents, the status line and the new-session note.
+- Before the port, in October 2026, two `claude -p` sessions in a scratch repo: a switch from the second was blocked and the branch stayed on `main`, a commit was blocked after the branch was moved from outside, and a session held for 150 seconds still counted as live.
+- On 2026-11-05, the same setup with the plugin loaded from this repo by `--plugin-dir`: the second session's `git switch -c probe` was blocked with the message above, and the branch stayed on `main`.
+- Not checked: an install by `/plugin install`, the status-line count and the new-session note.

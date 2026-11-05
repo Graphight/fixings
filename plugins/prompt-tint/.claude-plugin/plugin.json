@@ -1,7 +1,7 @@
 {
   "name": "prompt-tint",
   "version": "0.1.0",
-  "description": "Draws your own prompts on a tinted background with an orange border, so they read apart from the tool rows",
+  "description": "Draws the prompts you type in an orange box, so they stand out",
   "author": {
     "name": "Tom Marsh"
   },

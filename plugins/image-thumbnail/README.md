@@ -1,45 +1,36 @@
 # image-thumbnail
 
-`image-thumbnail` draws a thumbnail of each image attached to the draft in a band above the prompt.
+`image-thumbnail` shows a small picture of each image you paste into your prompt, in a band above it, so you can check it is the right one before you send.
 Install it with `/plugin install image-thumbnail@fixings`.
-
-## How it finds the picture
-
-A `session.start` hook starts a 500 ms `$.clock.every` timer that reads the draft with `$.prompt.read()` and keeps one entry per `[Image #N]` marker.
-Claude Code saves each pasted image as `<root>/<project>/<session id>/images/<n>.png`, where `<root>` is `/tmp/claude-<uid>`, or `<CLAUDE_CODE_TMPDIR>/claude-<uid>` when that variable is set.
-The mod finds that file by listing `<root>` for the project folder that holds it, because the project folder is named for a working directory that can change during a session.
-`sips` reads the picture's pixel size.
-A marker whose file is not there yet is looked up again on each poll, ten polls at most.
-One poll runs at a time.
-The mod writes and removes no files.
+macOS only.
 
 ## What you're looking at
 
 ![The band above the prompt with a pasted image's thumbnail, numbered](../../docs/screenshots/image-thumbnail-annotated.jpg)
 
-1. **The draft's attached image.**
-   The picture behind the draft's `[Image #1]` marker, with the marker's name beneath.
+1. **The pasted image.**
+   A thumbnail of the image behind `[Image #1]` in your draft, with its name underneath.
 
-The band draws the picture eight rows tall, or as many rows as the band's `maxRows` leaves after the name's row, with its width taken from the picture's proportions, and the marker's name beneath.
-Each picture is capped at an equal share of the band's width, and its rows shrink with it, so the pictures of one draft fit side by side.
-An entry with no picture is drawn as a text chip.
-The row is stacked over whatever band is beneath it, so `image-thumbnail` and `evidence-band` show together.
+## How it works
+
+Every half second it reads your draft for `[Image #N]` markers.
+Claude Code saves each pasted image as a file in its temp folder (`/tmp/claude-<uid>/<project>/<session>/images/<n>.png`, or under `CLAUDE_CODE_TMPDIR` if you set it), and the band draws that file.
+A thumbnail is up to eight rows tall, and several images share the band's width side by side.
+If the file is not there, the band shows the image's name as text instead.
+It never writes or deletes files.
+
+The band stacks with other bands, such as `evidence-band`'s, so both show at once.
 
 ## Known limits
 
-- macOS only, because the mod runs `sips`; on another system a picture draws as a chip.
-- A terminal without the kitty graphics protocol draws the `alt` text.
-- The thumbnail appears up to half a second after the paste.
-- A collapsed band draws nothing until `ctrl+x ctrl+a` opens it.
+- macOS only, because it uses `sips` to read the image size; elsewhere you get the name as text.
+- Your terminal needs the kitty graphics protocol, as in Ghostty or kitty; otherwise you get the name as text.
+- The thumbnail can take up to half a second to appear.
+- If the band is collapsed, press `ctrl+x ctrl+a` to open it.
 
 ## What was checked
 
-On 12 Oct 2026 the cache path above was measured as `/private/tmp/claude-501/<project>/<session id>/images/1.png` to `9.png`, with the files still there after the prompt was submitted.
-An image paste raised no `prompt.edit`.
-The thumbnail drew in the band in a fresh session.
-The band hook was called in a fresh session where `evidence-band` had no run to show, 7 times in the first minute, and was never called in a session where it had one.
-The file is written before the prompt is sent: in that session `1.png` to `6.png`, `10.png` and `11.png` belong to images that were pasted and never sent.
-`7.png` and `9.png` were created in the second their prompts were sent, and there is no `8.png`; the cause of neither is known.
-The `CLAUDE_CODE_TMPDIR` layout is taken from the environment variable reference and has been run only under `claude plugin test`.
-Not checked: whether a dragged image file is cached as `<n>.png` the same way, and how many milliseconds after the paste the file exists.
-On 2026-11-05, installed from this marketplace at local scope in a fullscreen Ghostty session beside `skins` 0.5.16, an image pasted into an unsent draft drew as a thumbnail with `Image #1` beneath, under the `evidence-band` row, which is the picture above; so the cache lookup works in a live session.
+- `claude plugin test plugins/image-thumbnail` covers one and several images, sizing, a missing file and `CLAUDE_CODE_TMPDIR`.
+- Before the port, in October 2026, pasted images were saved as `<n>.png` before the prompt was sent, and stayed there after.
+- Live on 2026-11-05 in Ghostty, beside `skins` 0.5.16: an image pasted into an unsent draft showed as in the picture above.
+- Not checked: dragging an image file in instead of pasting, and `CLAUDE_CODE_TMPDIR` outside the tests.

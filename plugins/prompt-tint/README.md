@@ -1,25 +1,21 @@
 # prompt-tint
 
-`prompt-tint` draws your own typed prompts on a `#241a12` background with an orange border, so they read apart from the tool rows.
+`prompt-tint` draws the prompts you type in an orange box on a dark brown background, so they stand out from the rows around them.
 Install it with `/plugin install prompt-tint@fixings`.
-
-## How it works
-
-A `ui.render` hook on the `UserMessage` component replaces the row with the prompt text inside a bordered, tinted box.
-It draws composer, bridge and SDK prompts only, and hands anything else — notifications, teammate messages, a prompt over 4000 characters — back to Claude Code.
 
 ## What you're looking at
 
 ![A typed prompt in its orange box, numbered](../../docs/screenshots/prompt-tint-annotated.jpg)
 
-1. **Your prompt, tinted.**
-   The typed prompt in a box with an orange (`#ff8f40`) border and a `#241a12` background; the rows below it keep their own look.
+1. **Your prompt.**
+   An orange border on a dark brown background.
+   Everything else keeps its usual look.
 
-## Beside skins
+## If you use skins
 
-The `skins` plugin (hellosverre/claude-skins) draws your prompts too, and its hook does not call `next`, so whichever of the two sits outside the other draws the prompt.
-Claude Code nests the hooks in `enabledPlugins` order, the earlier entry outside.
-`/plugin install` adds `prompt-tint@fixings` after the entries already there, so move its line above `"skins@hellosverre-mods": true` in the same settings file:
+The `skins` plugin (hellosverre/claude-skins) draws your prompts too.
+When both are installed, the one listed first in `enabledPlugins` wins.
+`/plugin install` puts `prompt-tint` at the end of the list, below `skins`, so after installing, move its line above the `skins` line in your settings file:
 
 ```json
 "enabledPlugins": {
@@ -28,11 +24,13 @@ Claude Code nests the hooks in `enabledPlugins` order, the earlier entry outside
 }
 ```
 
-Without `skins` there is nothing to move.
+Install it at user scope, the default.
+In the check below, a `--scope local` install lost to a user-scope `skins` and drew nothing.
 
 ## Options
 
-Set these in `/config`; a blank value falls back to the default.
+Change the colours in `/config`.
+Leave one blank to use the default.
 
 | Option | Default | Colours |
 | --- | --- | --- |
@@ -40,15 +38,13 @@ Set these in `/config`; a blank value falls back to the default.
 | `background` | `#241a12` | behind the prompt |
 | `text` | `#d8d4cc` | the prompt text |
 
-## Known limits
+## What it leaves alone
 
-- Beside `skins`, a prompt draws in the skin's grey whenever `prompt-tint@fixings` sits below `skins@hellosverre-mods` in `enabledPlugins`, and also when it is installed at local scope while `skins` is installed at user scope.
+Only prompts you type are tinted.
+Notifications, messages from teammates and prompts over 4,000 characters keep Claude Code's own look.
 
 ## What was checked
 
-`claude plugin test plugins/prompt-tint` covers a tinted typed prompt, the colours set in `/config` and the prompts handed back.
-On 2026-11-05, in a fullscreen session beside `skins` 0.5.16 with the plugin installed from this marketplace (the branch checkout added as a `directory` marketplace):
-
-- installed at local scope, the prompt drew in the skin's grey;
-- enabled at user scope and listed above `skins@hellosverre-mods`, it drew in the orange box, which is the picture above;
-- enabled at user scope and listed below it, it drew in grey again.
+- `claude plugin test plugins/prompt-tint` covers a typed prompt, custom colours and the prompts it leaves alone.
+- Live on 2026-11-05, beside `skins` 0.5.16: listed above `skins`, the prompt drew in the orange box, as in the picture above.
+  Listed below `skins`, or installed with `--scope local`, it drew in the skin's grey.

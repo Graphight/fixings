@@ -1,7 +1,7 @@
 {
   "name": "copy-visible",
   "version": "0.1.0",
-  "description": "Draws every code block of a reply in a blue frame, with the skin's Copy button as the first row inside it",
+  "description": "Makes the skins plugin's Copy buttons easy to see: a blue frame with Copy on the first line",
   "author": {
     "name": "Tom Marsh"
   },
