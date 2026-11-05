@@ -4,6 +4,7 @@ description: Prove that tests are real by breaking the code they guard and watch
 argument-hint: "[tests or files] [--report-only] [--max N] [--sidecar path]"
 model: opus
 effort: high
+allowed-tools: Bash(bash ${CLAUDE_SKILL_DIR}/scripts/sidecar.bash *)
 ---
 
 # Prove Tests
@@ -64,8 +65,7 @@ Shell variables do not survive from one Bash call to the next, and the pane find
 The test name goes in a quoted heredoc, `<<'EOF'`, and never inside a double-quoted argument, where the shell runs backticks and `$(...)`:
 
 ```
-SIDECAR=<the path --sidecar gave>
-jq -Rnc '[inputs] as [$test,$result] | {kind:"mutant",test:$test,result:$result}' >> "$SIDECAR" <<'EOF'
+bash ${CLAUDE_SKILL_DIR}/scripts/sidecar.bash <the path --sidecar gave> mutant <<'EOF'
 <test name>
 <killed|wrong-reason|survived>
 EOF
