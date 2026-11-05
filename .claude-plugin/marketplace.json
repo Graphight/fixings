@@ -69,6 +69,11 @@
       "name": "image-thumbnail",
       "source": "./plugins/image-thumbnail",
       "description": "A band above the prompt listing the images attached to the draft"
+    },
+    {
+      "name": "turn-tokens",
+      "source": "./plugins/turn-tokens",
+      "description": "Puts the turn's token counts back on the turn footer, which a skin's own footer leaves out"
     }
   ]
 }
