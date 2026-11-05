@@ -111,4 +111,6 @@ All on 4 Nov 2026.
 Two live interactive runs of `/github-pr-review` on fixings PR #6, with only this plugin loaded (`--setting-sources project,local --plugin-dir`) and no `prove-tests` skill, wrote every sidecar kind the skill writes (`pr`, `step`, `finding`, `verdict`, `done`) and no `prove` step, and the report printed the not-mutation-checked line.
 In the second, fullscreen run the panel opened on the typed command and drew the spine, the findings and the folded verdict, which are the screenshots above.
 
-Not checked live: the `mutant` row (it needs `prove-tests`), the Desktop layout, and check polling after `gh pr create`.
+The demo recorder in `tools/demo/github-pr-review/` fills the panel from a hand-made sidecar with `mutant` lines, and the panel drew `4 mutants` on the `prove tests` row and `killed 3 · wrong reason 1` on the `MUTANTS` row.
+
+Not checked live: `mutant` lines written by `prove-tests` itself, the Desktop layout, and check polling after `gh pr create`.
