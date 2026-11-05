@@ -36,4 +36,8 @@ Its allow list covered the test command, `cp`, `cmp`, `git status`, `git diff`, 
 It mutated `register.tsx:444` (`===` to `!==`), the test "counts mutants by result under the findings and on the prove tests row" was killed as predicted, and the script call wrote `{"kind":"mutant",...,"result":"killed"}` to the sidecar.
 `dontAsk` denied four other Bash calls in the same run, so the mode was in force and the skill's `allowed-tools` line is what let the script through.
 
-Not checked live: the `${user_config.max_tests}` substitution, and a full `/github-pr-review` run that reaches its `prove` step in `dontAsk`.
+Two one-turn headless `/prove-tests` runs, loaded with `--plugin-dir`, show how `max_tests` reaches the skill.
+With `max_tests` set to 3 through `--settings` `pluginConfigs`, the skill text read `` (default `3`, ``.
+With nothing set, it read the literal `${user_config.max_tests}`, so the declared default of 10 is not substituted and the skill's "or 10 when that is not a number" clause is what supplies it.
+
+Not checked live: a full `/github-pr-review` run that reaches its `prove` step in `dontAsk`.
