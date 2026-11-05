@@ -16,6 +16,10 @@ The same report without the numbers:
 
 ![prove-tests' report on three of github-pr-review's tests](../../docs/screenshots/prove-tests.jpg)
 
+The demo recorder in `tools/demo/prove-tests/` runs the skill for real on a two-test repo, shown at 2× speed: one test is killed as predicted, and the other, which compares `tide_label` to itself, survives its mutation.
+
+![prove-tests killing one test and finding that the other cannot fail](../../docs/screenshots/prove-tests-demo.gif)
+
 ## The skill
 
 `prove-tests` runs when asked "are these tests real?", "can these tests fail?" or to "prove the tests", and after tests are written in a session (model `opus`, effort `high`).
