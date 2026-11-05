@@ -47,7 +47,7 @@ This picture is staged: its plan and run sidecar were written by hand, and the p
   It runs the `interview` skill, which is a separate install (`/plugin install interview@fixings`), and asks in plain `AskUserQuestion` rounds when that skill is absent.
 - `execute-stage` builds the first unticked stage by forking into the `plan-executor` agent on a cheap model, ticks the box and stops for your review.
 - `ship-plan` runs every remaining stage unattended: a commit per stage, the gate command after each, then a push and a draft PR.
-  It opens the PR with `write-pr-description` when that skill is installed and `gh pr create --draft --title "<the plan file's H1>" --fill` when it is not.
+  It opens the PR with `write-pr-description` when that skill is installed (`/plugin install write-pr-description@fixings`) and `gh pr create --draft --title "<the plan file's H1>" --fill` when it is not.
   It looks for the gate command in the repo's `CLAUDE.md` or `AGENTS.md` first.
 - `plan-executor` is the agent `execute-stage` forks into.
   It is not usually invoked directly.
