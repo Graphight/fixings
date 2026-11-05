@@ -27,5 +27,12 @@ Without it, the skill interviews you itself in plain `AskUserQuestion` rounds un
 
 ## What was checked
 
-Not yet run live from this plugin.
+Two live runs on 2026-11-04, each a `claude -p` session loaded with `--setting-sources project,local --plugin-dir` from this checkout, in a scratch repo holding a one-line `hello.py`, fixings' `docs/README.md` and one open proposal for a `--name` flag.
+Both were asked `/write-proposal make hello.py print a localised greeting chosen by a --lang flag`, and a script answered every question with its first, recommended option, so the runs check the flow, not the quality of the answers.
+
+- With only this plugin loaded, the skill interviewed in two plain `AskUserQuestion` rounds, the second holding the build-order question, then wrote `docs/proposals/localised-greeting.md` and added it to the index as entry 2, after the `--name` proposal.
+- With `interview` loaded beside it, the skill ran the `interview` skill, which announced two rounds, asked a scope question in round one and the split and build-order questions in round two, and the skill wrote the same file and index slot.
+- Both proposals carry `Status: Proposed`, the first status in that `docs/README.md` template, and a `Reflects` line naming the files read and the commit.
+
+The interview's round row was not seen, since a `-p` session draws no terminal.
 `claude plugin validate .` covers its manifest and the skill's frontmatter.
