@@ -8,6 +8,7 @@ Claude Code reads this file natively; there is deliberately no `CLAUDE.md`, beca
 `fixings` is a Claude Code plugin marketplace: small mods and skills that improve the terminal experience.
 The vision, the thesis and the non-goals live in `docs/brief.md`; read it before proposing a plugin.
 Contribution rules are in `CONTRIBUTING.md`.
+The plugin list is the Plugins table in `README.md`, kept in step with `.claude-plugin/marketplace.json`.
 
 ## Where things live
 
