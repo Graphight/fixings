@@ -48,6 +48,9 @@ What does **not** go here: devlogs, handoff or scratch notes.
 - Other docs cite a decision by topic alone, as `` decision `topic` ``, so a topic is used once across every date.
   A decision that supersedes another takes a new topic.
 - Status: `Proposed` | `Accepted` | `Superseded by <topic>` | `Withdrawn`; an Accepted decision may also carry `Superseded in part by: <topic>: <the part>` lines.
+- `proposals/README.md` lists what's open, in build order: the only index maintained by hand.
+  Each entry is `N. [Title](topic.md): <the question it answers>? <what it stands on or where it sits in the order>.`
+  Parked entries go under a `Parked` heading.
 - Decisions are not indexed anywhere; `ls docs/decisions/` is the list.
 
 ## Template

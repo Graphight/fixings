@@ -1,0 +1,8 @@
+{
+  "name": "review-proposals",
+  "version": "0.1.0",
+  "description": "Assesses all open proposals in a project's docs/proposals together: conflicts, overlaps, order, size, vision drift and clashes with recorded decisions",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}

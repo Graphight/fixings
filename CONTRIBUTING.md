@@ -53,7 +53,7 @@ A fix bumps the patch, new behaviour the minor.
 
 - [ ] `plugins/<name>/.claude-plugin/plugin.json` with `name`, `version`, `description` and `author`
 - [ ] the plugin's `README.md`: behaviour, known limits, what was checked in a live session
-- [ ] tests under `plugins/<name>/tests/`, passing under `claude plugin test plugins/<name>`
+- [ ] for a mod, tests under `plugins/<name>/tests/`, passing under `claude plugin test plugins/<name>`; a skill-only plugin's README records what was checked live instead
 - [ ] an entry in `.claude-plugin/marketplace.json` and a row in the README's plugin table
 - [ ] `claude plugin validate /path/to/fixings` exits 0
 - [ ] a mod's root `types/index.d.ts` is tracked; `plugins/*/.claude-plugin/types/` is git-ignored

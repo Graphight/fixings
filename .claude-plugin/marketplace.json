@@ -29,6 +29,21 @@
       "name": "github-pr-review",
       "source": "./plugins/github-pr-review",
       "description": "Reviews a GitHub pull request into a structured, line-referenced report, and draws the review's progress in the /github-pr-review-panel side panel"
+    },
+    {
+      "name": "what-next",
+      "source": "./plugins/what-next",
+      "description": "A pane to pick and read what to do next in a project, starting with its docs/proposals, and start a session on one"
+    },
+    {
+      "name": "review-proposals",
+      "source": "./plugins/review-proposals",
+      "description": "Assesses all open proposals in docs/proposals together: conflicts, overlaps, order, size, vision drift and clashes with recorded decisions"
+    },
+    {
+      "name": "write-proposal",
+      "source": "./plugins/write-proposal",
+      "description": "Writes a proposal into docs/proposals after reading the code and interviewing you on the behaviour you expect"
     }
   ]
 }
