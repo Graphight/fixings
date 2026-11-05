@@ -1,0 +1,9 @@
+{
+  "name": "what-next",
+  "version": "0.1.0",
+  "description": "A pane to pick and read what to do next in a project, starting with its docs/proposals, and start a session on one",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}

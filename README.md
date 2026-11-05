@@ -25,3 +25,4 @@ Then install any plugin from it:
 | [checkpoint-plan](plugins/checkpoint-plan/README.md) | skills + mod | stages work into a checkpointed plan, runs it stage by stage or unattended, and draws progress in the `/plan-timeline` side pane |
 | [explainer-page](plugins/explainer-page/README.md) | skill + mod | builds an interactive HTML explainer page in a fixed house style, and draws its pre-publish checks in the `/explainer-page-checks` side pane |
 | [github-pr-review](plugins/github-pr-review/README.md) | skill + mod | reviews a GitHub pull request into a structured, line-referenced report, and draws its progress in the `/github-pr-review-panel` side panel |
+| [what-next](plugins/what-next/README.md) | mod | lists a project's proposals and open issues in the `/next` pane, and starts a session on one |

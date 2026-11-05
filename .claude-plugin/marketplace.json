@@ -29,6 +29,11 @@
       "name": "github-pr-review",
       "source": "./plugins/github-pr-review",
       "description": "Reviews a GitHub pull request into a structured, line-referenced report, and draws the review's progress in the /github-pr-review-panel side panel"
+    },
+    {
+      "name": "what-next",
+      "source": "./plugins/what-next",
+      "description": "A pane to pick and read what to do next in a project, starting with its docs/proposals, and start a session on one"
     }
   ]
 }
