@@ -1,0 +1,17 @@
+{
+  "name": "prove-tests",
+  "version": "0.1.0",
+  "description": "Proves tests are real by breaking the code they guard and checking they fail for the right reason",
+  "author": {
+    "name": "Tom Marsh"
+  },
+  "userConfig": {
+    "max_tests": {
+      "type": "number",
+      "title": "Default test limit",
+      "description": "How many tests prove-tests checks per run when --max is not given",
+      "default": 10,
+      "min": 1
+    }
+  }
+}

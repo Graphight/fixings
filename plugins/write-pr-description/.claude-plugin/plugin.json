@@ -1,0 +1,8 @@
+{
+  "name": "write-pr-description",
+  "version": "0.1.0",
+  "description": "Writes a concise, reviewer-focused PR description from session context and git history",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}
