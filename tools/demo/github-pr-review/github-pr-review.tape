@@ -12,7 +12,7 @@ Set TypingSpeed 40ms
 Hide
 Type "unset $(env | grep -o '^CLAUDE[A-Z_]*'); cd $DEMO_DIR && clear"
 Enter
-Type "claude --plugin-dir $PLUGIN_DIR --model sonnet --permission-mode acceptEdits"
+Type `claude --setting-sources project,local --settings '{"tui":"fullscreen"}' --plugin-dir $PLUGIN_DIR --model sonnet --permission-mode acceptEdits --allowedTools 'Bash(bash fill.bash:*)'`
 Enter
 Sleep 10s
 Down
@@ -24,7 +24,7 @@ Type "/github-pr-review-panel"
 Sleep 500ms
 Enter
 Sleep 3s
-Type "Run `bash $DEMO_DIR/fill.bash $SIDECAR 1`, then wait for it to finish and run it again with 2, then with 3. Run each as its own Bash call and say nothing else."
+Type "Run `bash fill.bash ~/.claude/reviews/demo-tide-notes-7.jsonl 1`, then wait for it to finish and run it again with 2, then with 3. Run each as its own Bash call and say nothing else."
 Sleep 500ms
 Enter
 Wait+Screen@180s /COMMENT/
