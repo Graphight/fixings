@@ -27,6 +27,10 @@ The finished review folds to one row, and the report follows in the chat:
 
 ![The finished review: APPROVED, one kept and two cut, and the report's test-coverage line](../../docs/screenshots/github-pr-review-done.jpg)
 
+The demo recorder in `tools/demo/github-pr-review/` replays a hand-made sidecar into the panel, shown at 2× speed:
+
+![The github-pr-review panel filling from a hand-made sidecar to a COMMENT verdict](../../docs/screenshots/github-pr-review-demo.gif)
+
 ## The skill
 
 `github-pr-review` (model `opus`) fetches a pull request, raises candidate findings, verifies each one against the code, culls what does not hold up, and writes a report of what is left, each finding with a tier (`BLOCKING`, `IMPORTANT`, `SUGGESTION`, `NIT` or `QUESTION`) and a `path:line`.
