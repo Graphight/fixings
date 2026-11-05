@@ -16,8 +16,7 @@ const drawnBy = async (ui: { findAll: (query: { type: 'Box' }) => Promise<readon
 
 const copyButton = { type: 'Button', props: { key: 'copy-1', label: ' Copy ', plain: true }, children: [{ type: 'Text', props: { backgroundColor: BG, color: BORDER, weight: 'semibold' }, children: ['Copy'] }] }
 
-test('tints a framed block in the colours set in config', async ($, on) => {
-  on('config.list', () => ({ value: [{ key: 'copy-visible.border', value: '#112233' }, { key: 'copy-visible.background', value: '#445566' }] }))
+test('tints a framed block in the colours set in config', { options: { border: '#112233', background: '#445566' } }, async ($, on) => {
   on('ui.render', ($, e) => {
     const { Box, Button, Text } = $.ui.resolve(e)
 
@@ -35,7 +34,6 @@ test('tints a framed block in the colours set in config', async ($, on) => {
 })
 
 test('tints a framed block, draws its copy button as the first row inside the frame, and the press still lands', async ($, on) => {
-  on('config.list', () => ({ value: [] }))
   const pressed: string[] = []
 
   // The skin's drawing of a reply: a framed block with its label and Copy on the top
@@ -82,7 +80,6 @@ test('tints a framed block, draws its copy button as the first row inside the fr
 })
 
 test('frames a fence the skin left unframed, one Text a line, with its copy button as the first row', async ($, on: On) => {
-  on('config.list', () => ({ value: [] }))
   // The skin's drawing of a fence with no language tag: Claude Code's own block, and Copy flush right beneath.
   on('ui.render', ($, e) => {
     const { Box, Button, Markdown } = $.ui.resolve(e)

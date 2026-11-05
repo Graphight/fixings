@@ -30,7 +30,6 @@ In the check below, a `--scope local` install lost to a user-scope `skins` and d
 ## Options
 
 Change the colours in `/config`.
-Leave one blank to use the default.
 
 | Option | Default | Colours |
 | --- | --- | --- |

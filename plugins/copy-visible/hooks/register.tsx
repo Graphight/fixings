@@ -1,11 +1,8 @@
 import type { Register, RenderElement, RenderNode } from 'claude-code'
 
-// A cool pair against prompt-tint's orange, so a block to copy reads apart from a typed prompt.
-const DEFAULTS = { border: '#7fb0d0', background: '#141d26' }
-
-// Set from the plugin options just before each synchronous walk of a reply.
-let BORDER = DEFAULTS.border
-let BG = DEFAULTS.background
+// The plugin options' colours, set once per activation by register.
+let BORDER: string
+let BG: string
 
 type Props = Record<string, string | number | boolean>
 type Parent = RenderElement & { children: RenderNode[] }
@@ -77,19 +74,8 @@ const lit = (node: RenderNode): RenderNode => {
   return rows.length === 0 ? ({ ...node, children } as RenderNode) : frame((node as Styled).props, children)
 }
 
-export const register: Register = on => {
-  on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) => {
-    const drawn = await next(e)
-    const rows = await $.config.list()
-    const colour = (field: keyof typeof DEFAULTS) => {
-      const value = rows.find(row => row.key === `copy-visible.${field}`)?.value
+export const register: Register = (on, options) => {
+  ;({ border: BORDER, background: BG } = options as Record<string, string>)
 
-      return typeof value === 'string' && value !== '' ? value : DEFAULTS[field]
-    }
-
-    BORDER = colour('border')
-    BG = colour('background')
-
-    return lit(drawn) as RenderElement
-  })
+  on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) => lit(await next(e)) as RenderElement)
 }
