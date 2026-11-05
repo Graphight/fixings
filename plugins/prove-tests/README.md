@@ -4,6 +4,18 @@
 Install it with `/plugin install prove-tests@fixings`.
 It has no mod, no hooks and no dependencies; the `github-pr-review` plugin calls it to check the tests a pull request adds.
 
+![prove-tests' report on three of github-pr-review's tests, with its parts numbered](../../docs/screenshots/prove-tests-annotated.jpg)
+
+1. Restore check: every mutated file is back byte for byte, and `git status` is as it was.
+2. Summary: how many tests are real, and how many failed somewhere other than predicted.
+3. Mutation: the one line broken for each test.
+4. Prediction: the assertion expected to fail, written down before the run.
+5. Result: killed as predicted, killed for the wrong reason, or survived, with what actually failed.
+
+The same report without the numbers:
+
+![prove-tests' report on three of github-pr-review's tests](../../docs/screenshots/prove-tests.jpg)
+
 ## The skill
 
 `prove-tests` runs when asked "are these tests real?", "can these tests fail?" or to "prove the tests", and after tests are written in a session (model `opus`, effort `high`).
@@ -35,6 +47,8 @@ One headless run, `claude -p "/prove-tests --report-only --max 1 --sidecar <path
 Its allow list covered the test command, `cp`, `cmp`, `git status`, `git diff`, Read, Edit and Write, but not the sidecar script.
 It mutated `register.tsx:444` (`===` to `!==`), the test "counts mutants by result under the findings and on the prove tests row" was killed as predicted, and the script call wrote `{"kind":"mutant",...,"result":"killed"}` to the sidecar.
 `dontAsk` denied four other Bash calls in the same run, so the mode was in force and the skill's `allowed-tools` line is what let the script through.
+
+The screenshot above is a live interactive `/prove-tests --report-only --max 3` on three of `github-pr-review`'s tests, loaded with `--plugin-dir`: one was killed as predicted and two were killed for the wrong reason.
 
 Two one-turn headless `/prove-tests` runs, loaded with `--plugin-dir`, show how `max_tests` reaches the skill.
 With `max_tests` set to 3 through `--settings` `pluginConfigs`, the skill text read `` (default `3`, ``.
