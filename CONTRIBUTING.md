@@ -73,6 +73,7 @@ The full convention and template are in `docs/README.md`.
 - No unrequested comments; a comment earns its place by saying what a reader needs at that line.
 - Files are copied from elsewhere, never with their git history.
 - Images are JPEG and live in `docs/screenshots/`; an annotation is white text with a black outline.
+  The one exception is a demo recording made by a recorder under `tools/demo/`, which is a GIF in the same folder.
 - A screenshot shows the whole terminal window at half its Retina size, so a pane reads as sitting beside its session.
   Its annotated copy brackets each part of the pane with a curly brace on the pane's edge, and puts a numbered label for it in the empty chat area, joined to the brace's tip by a leader line.
   Labels are about 40 px bold so they survive GitHub scaling the image down, and their numbers match the tour in the plugin's README.
