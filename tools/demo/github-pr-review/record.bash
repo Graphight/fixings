@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Records the github-pr-review panel filling from a hand-made sidecar, as ./github-pr-review.gif.
-# The session runs fill.bash in three phases through the plugin's own sidecar.bash, so the panel shows every step, findings, kept and cut verdicts and a done line without a real review.
+# The session runs fill.bash in three phases through the plugin's own sidecar.bash, so the panel shows every step, findings, mutants, kept and cut verdicts and a done line without a real review.
 # Needs vhs, ttyd, ffmpeg and jq, and claude on the PATH; the run loads the plugin from this checkout and uses the signed-in Claude account.
 set -euo pipefail
 
@@ -50,6 +50,11 @@ src/format.ts
 12
 The height helper is named after its unit, not its meaning
 X
+    bash "\$s" "\$f" step prove; sleep 2
+    echo '{"kind":"mutant","test":"tides.test.ts › encodes the station id","result":"killed"}' >> "\$f"
+    echo '{"kind":"mutant","test":"tides.test.ts › reports a failed fetch","result":"killed"}' >> "\$f"
+    echo '{"kind":"mutant","test":"tides.test.ts › parses the feed","result":"killed"}' >> "\$f"
+    echo '{"kind":"mutant","test":"format.test.ts › formats the height","result":"wrong-reason"}' >> "\$f"
     ;;
   2)
     bash "\$s" "\$f" step verify; sleep 2
