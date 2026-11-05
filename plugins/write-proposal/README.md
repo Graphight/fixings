@@ -22,7 +22,7 @@ Without it, the skill interviews you itself in plain `AskUserQuestion` rounds un
 
 ## Known limits
 
-- The skill writes `Status: Draft`; a repo whose template uses another word has to change it by hand.
+- The status word is the first option of the template's `Status:` line, so a template whose first option is not the initial state gives the wrong word.
 - It needs `docs/README.md` to hold the template; the scaffold copy in `reference/docs-readme.md` is the only fallback.
 
 ## What was checked

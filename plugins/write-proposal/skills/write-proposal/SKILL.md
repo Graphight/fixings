@@ -45,7 +45,7 @@ After a split, the rest of the interview settles each piece's decisions in turn,
 
 Write `docs/proposals/<topic>.md` in the repo's template, once for each proposal the interview settled:
 
-- `Status: Draft`, `Created:` today, `Reflects:` the files you read and the commit you read them at.
+- `Status:` the first word of the template's `Status:` options in the repo's `docs/README.md` (`Draft` in the scaffold), `Created:` today, `Reflects:` the files you read and the commit you read them at.
 - **Summary** poses the one question the proposal answers, and names any accepted decision or `AGENTS.md` rule the proposal would break or supersede, so a reader sees the conflict before the Design.
 - **Design** holds the interview's settled decisions, one bullet per decision with the why the user gave, including each option the scope question ticked.
 - **Alternatives considered** holds the options the user turned down, and why.
