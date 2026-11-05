@@ -17,7 +17,7 @@ The job is to break the code each test claims to guard, one small break at a tim
 
 - If the user named tests or files, those are the scope.
 - Otherwise, take the tests added or changed on this branch: `git diff --name-only $(git merge-base HEAD origin/HEAD)` plus uncommitted changes, filtered to test files (if `origin/HEAD` is unset in this clone, run `git remote set-head origin -a`), then the individual test cases within them that were added or changed.
-- If more tests are in scope than `--max` (default 10), rank them and take the top N: tests guarding new production logic first, then tests that lean on mocks or stubs, then tests whose name claims a behaviour that is hard to see in the body.
+- If more tests are in scope than `--max` (default `${user_config.max_tests}`, or 10 when that is not a number), rank them and take the top N: tests guarding new production logic first, then tests that lean on mocks or stubs, then tests whose name claims a behaviour that is hard to see in the body.
   List the rest as unchecked in the report; never sample silently.
 
 If `--sidecar <path>` was passed, each result is also appended to that file (see Step 3); without it, no file is written.

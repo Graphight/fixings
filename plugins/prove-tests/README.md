@@ -8,7 +8,7 @@ It has no mod, no hooks and no dependencies; the `github-pr-review` plugin calls
 
 `prove-tests` runs when asked "are these tests real?", "can these tests fail?" or to "prove the tests", and after tests are written in a session (model `opus`, effort `high`).
 It takes optional test names or files, and the flags `--report-only`, `--max N` and `--sidecar <path>`.
-With no scope named, it takes the tests added or changed on the branch; when more are in scope than `--max` (default 10) it ranks them and lists the rest as unchecked.
+With no scope named, it takes the tests added or changed on the branch; when more are in scope than `--max` (default 10, set by the `max_tests` option) it ranks them and lists the rest as unchecked.
 
 It reads each test for the classic fakes (never runs, never asserts, asserts nothing real, swallows its own failure, async left unawaited), runs each test green and checks the runner's count, then mutates the guarded line and runs only that test.
 Each test is classified as killed as predicted, killed for the wrong reason, or survived.
@@ -16,6 +16,8 @@ Every mutated file is copied to the scratchpad first and restored with a `cmp` c
 The report has one row per test; without `--report-only` it then fixes the weak tests and re-runs the same mutation against each fix.
 
 With `--sidecar <path>`, each result is also appended to that file as a `mutant` line, which the `/github-pr-review-panel` panel counts while the run is going.
+
+The default is the `max_tests` plugin option; change it in `/plugin` → Configure options, or `/config`.
 
 ## Known limits
 
