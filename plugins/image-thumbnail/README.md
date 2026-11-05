@@ -15,6 +15,11 @@ The mod writes and removes no files.
 
 ## What you're looking at
 
+![The band above the prompt with a pasted image's thumbnail, numbered](../../docs/screenshots/image-thumbnail-annotated.jpg)
+
+1. **The draft's attached image.**
+   The picture behind the draft's `[Image #1]` marker, with the marker's name beneath.
+
 The band draws the picture eight rows tall, or as many rows as the band's `maxRows` leaves after the name's row, with its width taken from the picture's proportions, and the marker's name beneath.
 Each picture is capped at an equal share of the band's width, and its rows shrink with it, so the pictures of one draft fit side by side.
 An entry with no picture is drawn as a text chip.
@@ -37,5 +42,4 @@ The file is written before the prompt is sent: in that session `1.png` to `6.png
 `7.png` and `9.png` were created in the second their prompts were sent, and there is no `8.png`; the cause of neither is known.
 The `CLAUDE_CODE_TMPDIR` layout is taken from the environment variable reference and has been run only under `claude plugin test`.
 Not checked: whether a dragged image file is cached as `<n>.png` the same way, and how many milliseconds after the paste the file exists.
-Also not checked: the eight-row thumbnail and the cache lookup in a live session; the live sighting was of the earlier four-row version that read the clipboard.
-Not yet checked in a session loaded from this marketplace.
+On 2026-11-05, installed from this marketplace at local scope in a fullscreen Ghostty session beside `skins` 0.5.16, an image pasted into an unsent draft drew as a thumbnail with `Image #1` beneath, under the `evidence-band` row, which is the picture above; so the cache lookup works in a live session.

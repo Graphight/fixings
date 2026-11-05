@@ -42,4 +42,11 @@ A slash command leaves the note for the first typed prompt, since a local comman
 
 Before the port, on 09 Oct 2026, with two live `claude -p` sessions in a scratch repository: the second session's `git switch -c probe` was denied and the branch stayed on `main`, and a commit was denied after `HEAD` was moved from outside between the session's two commands.
 On 10 Oct 2026, with the first session held for 150 s, a switch from the second at 120 s was still denied, so the 30 s timer runs in a live session and the entry does not go stale.
-Not yet checked in a session loaded from this marketplace.
+On 2026-11-05, two `claude -p` sessions loaded this plugin from the checkout with `--plugin-dir plugins/checkout-guard --setting-sources project,local` in a scratch repository; while the first held the checkout with `sleep 60`, the second's `git switch -c probe` was denied with:
+
+```
+checkout-guard: 1 other session is in this checkout (on main); a switch would move HEAD under it. Use `git worktree add` or start with `claude -w`; to restore a file use `git restore`.
+```
+
+The branch stayed on `main`.
+Not checked from a `/plugin install`, and the status-line count and the joining session's note were not looked at.

@@ -10,8 +10,25 @@ It draws composer, bridge and SDK prompts only, and hands anything else — noti
 
 ## What you're looking at
 
-Your typed prompt in a box with an orange (`#ff8f40`) border and a `#241a12` background.
-The tool rows below it keep their own look.
+![A typed prompt in its orange box, numbered](../../docs/screenshots/prompt-tint-annotated.jpg)
+
+1. **Your prompt, tinted.**
+   The typed prompt in a box with an orange (`#ff8f40`) border and a `#241a12` background; the rows below it keep their own look.
+
+## Beside skins
+
+The `skins` plugin (hellosverre/claude-skins) draws your prompts too, and its hook does not call `next`, so whichever of the two sits outside the other draws the prompt.
+Claude Code nests the hooks in `enabledPlugins` order, the earlier entry outside.
+`/plugin install` adds `prompt-tint@fixings` after the entries already there, so move its line above `"skins@hellosverre-mods": true` in the same settings file:
+
+```json
+"enabledPlugins": {
+  "prompt-tint@fixings": true,
+  "skins@hellosverre-mods": true
+}
+```
+
+Without `skins` there is nothing to move.
 
 ## Options
 
@@ -25,9 +42,13 @@ Set these in `/config`; a blank value falls back to the default.
 
 ## Known limits
 
-- With a skin that bordered tool rows in the same grey as prompts, the tint is what tells them apart.
+- Beside `skins`, a prompt draws in the skin's grey whenever `prompt-tint@fixings` sits below `skins@hellosverre-mods` in `enabledPlugins`, and also when it is installed at local scope while `skins` is installed at user scope.
 
 ## What was checked
 
-`claude plugin test plugins/prompt-tint` covers a tinted typed prompt and the prompts handed back.
-Not yet checked in a session loaded from this marketplace.
+`claude plugin test plugins/prompt-tint` covers a tinted typed prompt, the colours set in `/config` and the prompts handed back.
+On 2026-11-05, in a fullscreen session beside `skins` 0.5.16 with the plugin installed from this marketplace (the branch checkout added as a `directory` marketplace):
+
+- installed at local scope, the prompt drew in the skin's grey;
+- enabled at user scope and listed above `skins@hellosverre-mods`, it drew in the orange box, which is the picture above;
+- enabled at user scope and listed below it, it drew in grey again.

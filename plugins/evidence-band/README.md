@@ -3,6 +3,13 @@
 `evidence-band` draws the last test or build command and its exit status in a band above the prompt.
 Install it with `/plugin install evidence-band@fixings`.
 
+## What you're looking at
+
+![The band above the prompt with the last run, numbered](../../docs/screenshots/evidence-band-annotated.jpg)
+
+1. **The last run and its status.**
+   Here `? exit 0, maybe a later command's`, because the run chained `echo` after `python3 -m unittest`, so the `0` the shell reported is the `echo`'s; see [How it reads a run](#how-it-reads-a-run).
+
 ## How it reads a run
 
 A `tool.call` hook on `Bash` matches the command against the runners in `RUNNER` in `hooks/register.tsx`, among them `npm test`, `./gradlew`, `pytest`, `make`, `claude plugin test` and a `test_*` script, wherever one stands in command position.
@@ -25,4 +32,4 @@ The row is stacked over the band beneath it, so `evidence-band` and `image-thumb
 
 Before the port, on 11 Oct 2026, with a probe mod in a `claude -p` session: `false` resolved with the text `Exit code 1`, `sh -c 'exit 7'` with `Exit code 7`, `true` with no status field, and a `grep` with no match as a non-error carrying `returnCodeInterpretation`.
 On 12 Oct 2026 the row drew in a live session's band, as `✓ exit 0` and the command.
-Not yet checked in a session loaded from this marketplace.
+On 2026-11-05, installed from this marketplace at local scope in a fullscreen session beside `skins` 0.5.16, the band drew `? exit 0, maybe a later command's · python3 -m unittest; echo "EXIT: $?"` above the `image-thumbnail` row, which is the picture above.

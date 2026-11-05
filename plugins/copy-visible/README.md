@@ -5,7 +5,7 @@ Install it with `/plugin install copy-visible@fixings`.
 
 It needs the `skins` plugin (hellosverre/claude-skins), which gives each fenced block, table and diagram in a reply a button that copies that block alone, with no frame characters.
 The skin draws the button dim, in a Box placed `position: "absolute"`, `top: -1`, `right: 1`, which is meant to sit on the right end of the frame's top border.
-This mod's `ui.render` hook has to run above the skin's, or `next(e)` returns Claude Code's own drawing, which has no such buttons.
+This mod's `ui.render` hook has to sit outside the skin's, because the skin's does not call `next`; see [Beside skins](#beside-skins).
 
 The blue pair, `#7fb0d0` on `#141d26`, is the cool counterpart of `prompt-tint`'s orange, so a block to copy reads apart from a typed prompt.
 
@@ -21,8 +21,25 @@ The `copy reply` button under a reply is a different control: it copies the whol
 
 ## What you're looking at
 
-A reply's fenced blocks, tables and diagrams in a blue frame, each with a bold blue Copy button as its first row.
-The skin frames a fence only when it knows the fence's language; a fence with no tag, or with a tag such as `text` or `gdscript`, reaches the mod unframed, and the mod builds the frame itself.
+![A reply with a python fence and an untagged fence, two parts numbered](../../docs/screenshots/copy-visible-annotated.jpg)
+
+1. **Copy on the skin's frame, in blue.**
+   A fence the skin knows the language of (here `python`) keeps the skin's frame with `skins` 0.5.16; only its Copy button turns bold blue.
+   See [Known limits](#known-limits).
+2. **Untagged fence: framed, Copy first.**
+   A fence with no tag, or a tag such as `text` or `gdscript`, reaches the mod unframed, and the mod builds a blue frame on a dark blue background with the Copy button as its first row.
+
+## Beside skins
+
+Claude Code nests the two plugins' hooks in `enabledPlugins` order, the earlier entry outside.
+`/plugin install` adds `copy-visible@fixings` after the entries already there, which puts it inside the skin, where it draws nothing; move its line above `"skins@hellosverre-mods": true` in the same settings file:
+
+```json
+"enabledPlugins": {
+  "copy-visible@fixings": true,
+  "skins@hellosverre-mods": true
+}
+```
 
 ## Options
 
@@ -35,7 +52,8 @@ Set these in `/config`; a blank value falls back to the default.
 
 ## Known limits
 
-- Requires `skins`. The mod matches the key names and the overlay shape of `skins` 0.5.x; after a skin release that changes either, the buttons draw as the skin draws them.
+- Requires `skins`, listed below this plugin in `enabledPlugins`; a local-scope install beside a user-scope `skins` draws nothing.
+- The mod matches the key names and the overlay shape of `skins` 0.5.0. With 0.5.16 a tagged fence's button is still found and turned blue, but it stays on the frame's top border and the frame keeps the skin's colours; the cause has not been looked into.
 - Replies only: the Copy buttons on slash-command output and on shell output cards are left as the skin draws them.
 - A mouse selection dragged over a frame includes the word `Copy`.
 - A frame the mod builds itself has no syntax colours and no fold: a long block is drawn whole, as Claude Code's own drawing drew it.
@@ -44,7 +62,10 @@ Set these in `/config`; a blank value falls back to the default.
 
 ## What was checked
 
-`claude plugin test plugins/copy-visible` covers the frame, the button restyling and the frame built for an untagged fence.
-Earlier, with the mod hot-reloaded in Ghostty, the button drew in blue as the first row inside a `markdown` frame and a click copied the block alone.
-Not yet checked in a session loaded from this marketplace against `skins` 0.5.16, which decides whether the hook runs above the skin's.
-Also not checked: a table's frame, a `diff` fence and a diagram.
+`claude plugin test plugins/copy-visible` covers the frame, the button restyling, the colours set in `/config` and the frame built for an untagged fence.
+On 2026-11-05, in a fullscreen Ghostty session beside `skins` 0.5.16, installed from this marketplace (the branch checkout added as a `directory` marketplace):
+
+- installed at local scope, both fences drew exactly as the skin draws them;
+- enabled at user scope and listed above `skins@hellosverre-mods`, the untagged fence drew in the blue frame with Copy as its first row, and the `python` fence kept the skin's frame with a blue Copy on its border, which is the picture above.
+
+Not checked: a click on the button in this session, a table's frame, a `diff` fence and a diagram.
