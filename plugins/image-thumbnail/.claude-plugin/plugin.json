@@ -1,0 +1,9 @@
+{
+  "name": "image-thumbnail",
+  "version": "0.1.0",
+  "description": "A band above the prompt listing the images attached to the draft",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}

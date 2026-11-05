@@ -32,3 +32,4 @@ Then install any plugin from it:
 | [write-pr-description](plugins/write-pr-description/README.md) | skill | writes a concise, reviewer-focused PR description from the session and the branch's git history |
 | [checkout-guard](plugins/checkout-guard/README.md) | mod | denies a commit after `HEAD` left the session's branch, and a branch switch while another session is in the same checkout |
 | [evidence-band](plugins/evidence-band/README.md) | mod | draws the last test or build command and its exit status in a band above the prompt |
+| [image-thumbnail](plugins/image-thumbnail/README.md) | mod | draws a thumbnail of each image attached to the draft in a band above the prompt |
