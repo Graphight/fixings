@@ -444,6 +444,8 @@ test('opens the panel when github-pr-review expands, bare or namespaced, and not
   await $.session.start(START)
   await $.prompt.submit({ text: 'should I run /github-pr-review here?', wait: false, origin: { kind: 'composer' } })
   await $.skill.prompt({ skill: 'commit', text: '' })
+  await $.skill.prompt({ skill: 'github-pr-review-helper', text: '' })
+  await $.skill.prompt({ skill: 'other:github-pr-review-lite', text: '' })
   const before = [...toasts]
   await $.skill.prompt({ skill: 'github-pr-review', text: '' })
   await $.skill.prompt({ skill: 'github-pr-review:github-pr-review', text: '' })
