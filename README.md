@@ -29,3 +29,4 @@ Then install any plugin from it:
 | [review-proposals](plugins/review-proposals/README.md) | skill | reviews every open proposal in `docs/proposals/` together for conflicts, overlaps, order, size and drift |
 | [write-proposal](plugins/write-proposal/README.md) | skill | writes a proposal into `docs/proposals/` after reading the code and interviewing you on the behaviour you expect |
 | [prove-tests](plugins/prove-tests/README.md) | skill | breaks the code a test guards, one mutation at a time, and checks the test fails for the right reason |
+| [write-pr-description](plugins/write-pr-description/README.md) | skill | writes a concise, reviewer-focused PR description from the session and the branch's git history |

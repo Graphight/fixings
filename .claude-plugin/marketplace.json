@@ -49,6 +49,11 @@
       "name": "prove-tests",
       "source": "./plugins/prove-tests",
       "description": "Proves tests are real by breaking the code they guard and checking they fail for the right reason"
+    },
+    {
+      "name": "write-pr-description",
+      "source": "./plugins/write-pr-description",
+      "description": "Writes a concise, reviewer-focused PR description from session context and git history"
     }
   ]
 }
