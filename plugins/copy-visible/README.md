@@ -24,6 +24,15 @@ The `copy reply` button under a reply is a different control: it copies the whol
 A reply's fenced blocks, tables and diagrams in a blue frame, each with a bold blue Copy button as its first row.
 The skin frames a fence only when it knows the fence's language; a fence with no tag, or with a tag such as `text` or `gdscript`, reaches the mod unframed, and the mod builds the frame itself.
 
+## Options
+
+Set these in `/config`; a blank value falls back to the default.
+
+| Option | Default | Colours |
+| --- | --- | --- |
+| `border` | `#7fb0d0` | the frame and the Copy button |
+| `background` | `#141d26` | behind the framed block |
+
 ## Known limits
 
 - Requires `skins`. The mod matches the key names and the overlay shape of `skins` 0.5.x; after a skin release that changes either, the buttons draw as the skin draws them.

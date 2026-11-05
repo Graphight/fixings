@@ -4,5 +4,25 @@
   "description": "Draws your own prompts on a tinted background with an orange border, so they read apart from the tool rows",
   "author": {
     "name": "Tom Marsh"
+  },
+  "userConfig": {
+    "border": {
+      "type": "string",
+      "title": "Border colour",
+      "description": "Hex colour of the box around a typed prompt",
+      "default": "#ff8f40"
+    },
+    "background": {
+      "type": "string",
+      "title": "Background colour",
+      "description": "Hex colour behind a typed prompt",
+      "default": "#241a12"
+    },
+    "text": {
+      "type": "string",
+      "title": "Text colour",
+      "description": "Hex colour of a typed prompt",
+      "default": "#d8d4cc"
+    }
   }
 }

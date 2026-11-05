@@ -4,5 +4,19 @@
   "description": "Draws every code block of a reply in a blue frame, with the skin's Copy button as the first row inside it",
   "author": {
     "name": "Tom Marsh"
+  },
+  "userConfig": {
+    "border": {
+      "type": "string",
+      "title": "Frame colour",
+      "description": "Hex colour of the frame and the Copy button",
+      "default": "#7fb0d0"
+    },
+    "background": {
+      "type": "string",
+      "title": "Background colour",
+      "description": "Hex colour behind a framed block",
+      "default": "#141d26"
+    }
   }
 }

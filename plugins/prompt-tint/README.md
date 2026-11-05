@@ -13,9 +13,18 @@ It draws composer, bridge and SDK prompts only, and hands anything else — noti
 Your typed prompt in a box with an orange (`#ff8f40`) border and a `#241a12` background.
 The tool rows below it keep their own look.
 
+## Options
+
+Set these in `/config`; a blank value falls back to the default.
+
+| Option | Default | Colours |
+| --- | --- | --- |
+| `border` | `#ff8f40` | the box around the prompt |
+| `background` | `#241a12` | behind the prompt |
+| `text` | `#d8d4cc` | the prompt text |
+
 ## Known limits
 
-- The colours are fixed; the border is `#ff8f40`, the background `#241a12` and the text `#d8d4cc`.
 - With a skin that bordered tool rows in the same grey as prompts, the tint is what tells them apart.
 
 ## What was checked

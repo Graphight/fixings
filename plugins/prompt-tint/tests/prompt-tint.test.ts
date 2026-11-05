@@ -10,7 +10,8 @@ const PROMPT = {
 const BG = '#241a12'
 
 // Claude Code's own drawing of the row, which a tinted prompt replaces.
-const world = (on: On) => {
+const world = (on: On, rows: { key: string; value: string }[] = []) => {
+  on('config.list', () => ({ value: rows }))
   on('ui.render', ($, e) => h($.ui.resolve(e).Text, null, e.props.text))
 }
 
@@ -24,6 +25,19 @@ test('draws a typed prompt tinted and bordered', async ($, on) => {
   expect(drawn.map(({ text, props }) => ({ text, props }))).toEqual([
     { text: 'shade my prompts', props: { color: '#d8d4cc', backgroundColor: BG } },
   ])
+})
+
+test('draws a typed prompt in the colours set in config', async ($, on) => {
+  world(on, [
+    { key: 'prompt-tint.background', value: '#001122' },
+    { key: 'prompt-tint.text', value: '#aabbcc' },
+  ])
+
+  const ui = await $.ui.mount(PROMPT)
+
+  const drawn = await ui.findAll({ type: 'Text' })
+
+  expect(drawn.map(({ props }) => props)).toEqual([{ color: '#aabbcc', backgroundColor: '#001122' }])
 })
 
 test('leaves a notification row to Claude Code', async ($, on) => {
