@@ -39,6 +39,11 @@
       "name": "review-proposals",
       "source": "./plugins/review-proposals",
       "description": "Assesses all open proposals in docs/proposals together: conflicts, overlaps, order, size, vision drift and clashes with recorded decisions"
+    },
+    {
+      "name": "write-proposal",
+      "source": "./plugins/write-proposal",
+      "description": "Writes a proposal into docs/proposals after reading the code and interviewing you on the behaviour you expect"
     }
   ]
 }

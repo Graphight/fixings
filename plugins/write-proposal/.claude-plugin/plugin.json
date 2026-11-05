@@ -1,0 +1,8 @@
+{
+  "name": "write-proposal",
+  "version": "0.1.0",
+  "description": "Writes a proposal into a project's docs/proposals after reading the code and interviewing you on the behaviour you expect",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}
