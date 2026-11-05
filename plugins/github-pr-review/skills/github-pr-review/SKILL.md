@@ -189,7 +189,7 @@ Reading a test is not enough: a test that asserts a mock's own stubbed value rea
 Write the `prove` step line before spawning the agent.
 Spawn one `general-purpose` Agent with `model: "sonnet"` and give it:
 - The repo path, the PR number, and the head SHA.
-- This instruction: *"Run `git fetch origin pull/{number}/head`, then `git worktree add <scratchpad>/pr-{number} <head-sha>`. Inside that worktree, invoke the `prove-tests` skill with `--report-only --max 10 --sidecar <the literal sidecar path>`, scoped to the test cases this PR adds or changes. Return the skill's report table, its unchecked list, and the count of in-scope tests. Remove the worktree with `git worktree remove` when done."*
+- This instruction: *"Run `git fetch origin pull/{number}/head`, then `git worktree add <scratchpad>/pr-{number} <head-sha>`. Inside that worktree, invoke the `prove-tests` skill with `--report-only --sidecar <the literal sidecar path>`, scoped to the test cases this PR adds or changes. Return the skill's report table, its unchecked list, and the count of in-scope tests. Remove the worktree with `git worktree remove` when done."*
 
 The cap of 10 keeps a PR that adds fifty tests from turning the review into a mutation-testing run; the unchecked list makes the gap visible instead of silent.
 

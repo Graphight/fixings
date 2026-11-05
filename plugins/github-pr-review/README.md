@@ -37,7 +37,7 @@ The demo recorder in `tools/demo/github-pr-review/` replays a hand-made sidecar 
 Suggested comments are fenced with the `markdown` tag.
 It writes a sidecar of JSON lines as it goes, which is what the panel draws.
 
-When the PR adds or changes tests, the skill hands them to the `prove-tests` skill for a mutation check.
+When the PR adds or changes tests, the skill hands them to the `prove-tests` skill for a mutation check; install it with `/plugin install prove-tests@fixings`, and its `max_tests` option sets how many tests it checks.
 Without `prove-tests` in the session's skill list the step is skipped, no `prove` line is written, and the report prints `Test coverage: not mutation-checked (prove-tests not installed)`.
 
 ## The panel
