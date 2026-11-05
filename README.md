@@ -34,3 +34,4 @@ Then install any plugin from it:
 | [evidence-band](plugins/evidence-band/README.md) | mod | draws the last test or build command and its exit status in a band above the prompt |
 | [image-thumbnail](plugins/image-thumbnail/README.md) | mod | draws a thumbnail of each image attached to the draft in a band above the prompt |
 | [turn-tokens](plugins/turn-tokens/README.md) | mod | appends the turn's token counts to the turn footer, which a skin's own footer leaves out |
+| [prompt-tint](plugins/prompt-tint/README.md) | mod | draws your typed prompts on a tinted background with an orange border |
