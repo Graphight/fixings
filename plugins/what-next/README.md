@@ -29,6 +29,10 @@ Install it with `/plugin install what-next@fixings`.
 2. **The proposal.**
    The proposal's file drawn as Markdown, or an issue's title and body.
 
+The demo recorder in `tools/demo/what-next/` opens `/next` in a throwaway project with a stub `gh` on the PATH, switches to the issues tab and back, opens a proposal in the reader and goes back with `b`, shown at 2× speed:
+
+![The /next pane switching from proposals to issues and back](../../docs/screenshots/what-next-demo.gif)
+
 ## Rows and tabs
 
 The proposals are the entries of `docs/proposals/README.md` in README order, in either of two shapes: `1. [Title](slug.md): note` or a bullet with the slug in backticks.
@@ -84,6 +88,7 @@ On 2026-11-04 a live session loaded this plugin from the checkout with `--settin
 The pane docked beside the transcript and drew `4 proposals · 1 parked · 2 issues · 0 assigned to you · next: Clickable ticket, PR and issue links`, the tabs, rows 1 to 4 and entry 5 under `Parked`; opening a row drew its proposal in the reader.
 The same session without the `--settings` flag ran on the main screen and drew the pane inline above the prompt.
 The issues tab, `a` and `s` were not exercised in that session.
+The demo recorder then drew the issues tab from a stub `gh` (`2 issues · 1 assigned to you`, rows 3 and 5) and switched back with `p`, then opened row 1 with Enter and returned with `b`.
 
 Before the port, it was checked on 10 Oct 2026 in a live session, except for `/next` with `gh` signed out.
 For that case `GH_TOKEN=x gh issue list` was checked to exit 1 with a 401, and a test covers a non-zero exit leaving the issues source absent.
