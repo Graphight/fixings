@@ -189,14 +189,18 @@ test('focuses an interactive session\'s Ghostty tab by its tty, opens claude att
   EXITS['osascript'] = 1
   await ui.press({ key: 'jump-a3' })
   await flush()
+  await ui.press({ key: 'session-a1' })
+  await ui.press({ key: 'jump-a1' })
+  await flush()
   await ui.unmount()
 
-  expect({
-    ran: ran.filter(([command]) => command === 'ps' || command === 'osascript').map(argv => argv.filter((arg, at) => arg !== '-e' && argv[at - 1] !== '-e')),
-    toasts,
-  }).toEqual({
-    ran: [['ps', '-o', 'tty=', '-p', '4242'], ['osascript', 'ttys005'], ['osascript', 'b3', '/src/d']],
-    toasts: ['No Ghostty tab opened for #0007 repo'],
+  const focus = ['osascript', ...['on run argv', 'tell application "Ghostty"', 'activate', 'focus (first terminal whose tty is "/dev/" & item 1 of argv)', 'end tell', 'end run'].flatMap(line => ['-e', line]), 'ttys005']
+  const attach = ['on run argv', 'tell application "Ghostty"', 'activate', 'set made to new surface configuration', 'set initial working directory of made to item 2 of argv', 'set initial input of made to "claude attach " & item 1 of argv & linefeed', 'new tab with configuration made', 'end tell', 'end run']
+  const ps = ['ps', '-o', 'tty=', '-p', '4242']
+
+  expect({ ran: ran.filter(([command]) => command === 'ps' || command === 'osascript'), toasts }).toEqual({
+    ran: [ps, focus, ['osascript', ...attach.flatMap(line => ['-e', line]), 'b3', '/src/d'], ps, focus],
+    toasts: ['No Ghostty tab opened for #0007 repo', 'No Ghostty tab found for fix-export'],
   })
 })
 
