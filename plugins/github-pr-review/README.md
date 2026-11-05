@@ -99,6 +99,7 @@ A call that names another sidecar, or the start of `github-pr-review`, clears th
 - `/github-pr-review-panel` run during a review replaces the drawn PR with the current branch's, until the next append to the sidecar restores the `pr` line's.
 - A PR's checks are polled only while the panel keeps drawing, and a new PR with no checks reported is polled for four periods.
 - The spine is drawn from the skill's `step` lines, so a review whose skill run writes none shows no progress.
+- Two runs on the same PR can disagree: on fixings #6 one run kept four findings (`COMMENT`, filed as #7) and the other kept one (`APPROVED`) without raising a bug the first had found, so one `APPROVED` does not rule out bugs.
 - Agents are counted only from spawns with no `parentAgentId` made while a step is running.
 - VS Code is not a target for the panel.
 
