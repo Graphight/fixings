@@ -1,0 +1,8 @@
+{
+  "name": "checkout-guard",
+  "version": "0.1.0",
+  "description": "Stops two sessions in one checkout from moving each other's branch",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}

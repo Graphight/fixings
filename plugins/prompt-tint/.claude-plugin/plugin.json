@@ -1,0 +1,28 @@
+{
+  "name": "prompt-tint",
+  "version": "0.1.0",
+  "description": "Draws the prompts you type in an orange box, so they stand out",
+  "author": {
+    "name": "Tom Marsh"
+  },
+  "userConfig": {
+    "border": {
+      "type": "string",
+      "title": "Border colour",
+      "description": "Hex colour of the box around a typed prompt",
+      "default": "#ff8f40"
+    },
+    "background": {
+      "type": "string",
+      "title": "Background colour",
+      "description": "Hex colour behind a typed prompt",
+      "default": "#241a12"
+    },
+    "text": {
+      "type": "string",
+      "title": "Text colour",
+      "description": "Hex colour of a typed prompt",
+      "default": "#d8d4cc"
+    }
+  }
+}

@@ -44,6 +44,10 @@ const MARKS = {
   done: ['✓', 'success'],
 } as const
 
+// the tty, id and cwd arrive as argv so none of them is parsed as script text
+const FOCUS = ['on run argv', 'tell application "Ghostty"', 'activate', 'focus (first terminal whose tty is "/dev/" & item 1 of argv)', 'end tell', 'end run']
+const ATTACH = ['on run argv', 'tell application "Ghostty"', 'activate', 'set made to new surface configuration', 'set initial working directory of made to item 2 of argv', 'set initial input of made to "claude attach " & item 1 of argv & linefeed', 'new tab with configuration made', 'end tell', 'end run']
+
 const isOpen = atom({ plugin: 'mission-control', key: 'isOpen' } as const, false)
 const sessions = atom({ plugin: 'mission-control', key: 'sessions' } as const, [] as Session[])
 const expanded = atom({ plugin: 'mission-control', key: 'expanded' } as const, null as string | null)
@@ -74,7 +78,7 @@ type Message = { mc: string; kind: (typeof KINDS)[number]; text?: string; questi
 type Asked = { question: string; options?: { label: string }[] }
 type Asking = { questions: Asked[]; answers: Record<string, string>; settle: () => void }
 type Call = { tool: string; detail?: string; key?: string; decide: (kind: 'allow' | 'deny') => void }
-type Listed = Pick<Session, 'sessionId' | 'id' | 'name' | 'kind' | 'status' | 'state' | 'cwd' | 'startedAt'>
+type Listed = Pick<Session, 'sessionId' | 'id' | 'pid' | 'name' | 'kind' | 'status' | 'state' | 'cwd' | 'startedAt'>
 type Live = Pick<Session, 'context' | 'window' | 'running' | 'ask' | 'permission'>
 
 const readToken = async ($: EngineInterface): Promise<string> => $.fs.read(tokenPathOf(await homeOf($))).then(text => text.trim(), () => '')
@@ -866,6 +870,16 @@ export const register: Register = on => {
     const answer = (one: Session, text: string) => send(one, { kind: 'answer', text, question: one.ask?.index }, 'Answered', `Sent "${text}".`)
     const prompt = (one: Session, text: string) => send(one, { kind: 'prompt', text }, 'Prompted', `Sent "${text}".`)
 
+    const jump = async (one: Session) => {
+      const script = one.kind === 'background' ? ATTACH : FOCUS
+      const args = one.kind === 'background' ? [one.id ?? one.sessionId, one.cwd] : [(await run($, ['ps', '-o', 'tty=', '-p', String(one.pid)])).trim()]
+      const done = await $.process.run(['osascript', ...script.flatMap(line => ['-e', line]), ...args], { timeoutMs: RUN_TIMEOUT_MS }).catch(() => null)
+
+      if (done?.exitCode !== 0) {
+        $.ui.toast(one.kind === 'background' ? `No Ghostty tab opened for ${shortOf(one)}` : `No Ghostty tab found for ${shortOf(one)}`)
+      }
+    }
+
     if (rows.length === 0 && feed.length === 0) {
       return <Text color={GREY}>no other sessions</Text>
     }
@@ -966,10 +980,10 @@ export const register: Register = on => {
                               ['ci', one.ci ? ciWordsOf(one.ci) : ''],
                               ['shares', sharesOf(one, mates)],
                               ['cwd', cwdOf(one)],
-                              ['jump', reachOf(one)],
                             ]
                               .filter(([, value]) => value)
                               .map(([label = '', value]) => field(label, <Text wrap="wrap">{value}</Text>))}
+                            {field('jump', isMobile ? <Text wrap="wrap">{reachOf(one)}</Text> : <Button key={`jump-${one.sessionId}`} label={reachOf(one)} onPress={() => void jump(one)} />)}
                           </Box>
                         )}
                       </Box>
@@ -1084,10 +1098,15 @@ export const register: Register = on => {
                             ['last', phase === 'waiting' ? one.question || one.prompt : one.prompt],
                             ['shares', sharesOf(one, mates)],
                             ['cwd', cwdOf(one)],
-                            ['jump', reachOf(one)],
                           ]
                             .filter(([, value]) => value)
                             .map(([label = '', value = '']) => field(label, <Text color="text" wrap="truncate-end">{value.replace(/\s+/g, ' ').trim()}</Text>))}
+                          {field(
+                            'jump',
+                            <Button key={`jump-${one.sessionId}`} hotkey="j" onPress={() => void jump(one)}>
+                              <Text>{`[j] ${reachOf(one)}`}</Text>
+                            </Button>,
+                          )}
                           {phase === 'waiting' && one.permission && (
                             <Box flexDirection="column">
                               {field('asks', <Text color="text" wrap="wrap">{one.permission.detail}</Text>)}

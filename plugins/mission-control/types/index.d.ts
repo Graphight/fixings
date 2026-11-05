@@ -3,6 +3,7 @@ export type Ci = { number: number; state: 'pass' | 'fail' | 'run'; failing: stri
 export type Session = {
   sessionId: string
   id?: string
+  pid?: number
   name: string
   kind: string
   status: string

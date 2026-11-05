@@ -54,6 +54,31 @@
       "name": "write-pr-description",
       "source": "./plugins/write-pr-description",
       "description": "Writes a concise, reviewer-focused PR description from session context and git history"
+    },
+    {
+      "name": "checkout-guard",
+      "source": "./plugins/checkout-guard",
+      "description": "Stops two sessions in one checkout from moving each other's branch"
+    },
+    {
+      "name": "evidence-band",
+      "source": "./plugins/evidence-band",
+      "description": "Shows the last test or build command and whether it passed, in a band above the prompt"
+    },
+    {
+      "name": "image-thumbnail",
+      "source": "./plugins/image-thumbnail",
+      "description": "Shows a thumbnail of each image pasted into the prompt, in a band above it (macOS)"
+    },
+    {
+      "name": "prompt-tint",
+      "source": "./plugins/prompt-tint",
+      "description": "Draws the prompts you type in an orange box, so they stand out"
+    },
+    {
+      "name": "copy-visible",
+      "source": "./plugins/copy-visible",
+      "description": "Makes the skins plugin's Copy buttons easy to see: a blue frame with Copy on the first line"
     }
   ]
 }

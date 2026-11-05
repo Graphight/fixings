@@ -67,9 +67,10 @@ const GIT: Record<string, string> = {}
 const FILES: Record<string, string> = {}
 const GH: Record<string, string> = {}
 const STORE: Record<string, unknown> = {}
+const EXITS: Record<string, number> = {}
 
 const world = (on: On, agents: object[] = AGENTS, isClocked = false) => {
-  for (const fixture of [TRANSCRIPTS, SIDECARS, MTIMES, GIT, FILES, GH, STORE]) {
+  for (const fixture of [TRANSCRIPTS, SIDECARS, MTIMES, GIT, FILES, GH, STORE, EXITS]) {
     for (const key of Object.keys(fixture)) {
       delete fixture[key]
     }
@@ -97,9 +98,9 @@ const world = (on: On, agents: object[] = AGENTS, isClocked = false) => {
 
   on('process.run', (_, e) => {
     ran.push([...e.argv])
-    const stdout = e.argv[0] === 'claude' ? JSON.stringify(agents) : e.argv[0] === 'gh' ? (GH[`${e.init?.cwd ?? ''} ${e.argv.slice(1).join(' ')}`] ?? '') : e.argv[0] === 'git' ? (GIT[e.argv.slice(1).join(' ')] ?? GIT[e.argv[2] ?? ''] ?? '') : (e.argv[0] === 'sh' ? (SIDECARS[e.argv.slice(5).join('-')] ?? '') : (TRANSCRIPTS[e.argv[3] ?? ''] ?? ''))
+    const stdout = e.argv[0] === 'ps' ? 'ttys005\n' : e.argv[0] === 'claude' ? JSON.stringify(agents) : e.argv[0] === 'gh' ? (GH[`${e.init?.cwd ?? ''} ${e.argv.slice(1).join(' ')}`] ?? '') : e.argv[0] === 'git' ? (GIT[e.argv.slice(1).join(' ')] ?? GIT[e.argv[2] ?? ''] ?? '') : (e.argv[0] === 'sh' ? (SIDECARS[e.argv.slice(5).join('-')] ?? '') : (TRANSCRIPTS[e.argv[3] ?? ''] ?? ''))
 
-    return { value: { exitCode: 0, stdout, stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
+    return { value: { exitCode: EXITS[e.argv[0] ?? ''] ?? 0, stdout, stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
   })
 
   return ran
@@ -159,14 +160,48 @@ test('opens a session to its detail on a press of its Button, one at a time, and
   ])
 
   await ui.press({ key: 'session-a1' })
-  expect(await texts()).toEqual([...head(3), ...WAITING, ...CODING, 'task    ', 'Fix the export', 'last    ', 'go now', 'cwd     ', '/src/a.b', 'jump    ', 'tab: fix-export', ...REVIEWING, ...EMPTY])
+  expect(await texts()).toEqual([...head(3), ...WAITING, ...CODING, 'task    ', 'Fix the export', 'last    ', 'go now', 'cwd     ', '/src/a.b', 'jump    ', '[j] tab: fix-export', ...REVIEWING, ...EMPTY])
 
   await ui.press({ key: 'session-a3' })
-  expect(await texts()).toEqual([...head(3), ...WAITING, ...CODING, ...REVIEWING, 'cwd     ', '/src/d', 'jump    ', 'claude attach a3', ...EMPTY])
+  expect(await texts()).toEqual([...head(3), ...WAITING, ...CODING, ...REVIEWING, 'cwd     ', '/src/d', 'jump    ', '[j] claude attach a3', ...EMPTY])
 
   await ui.press({ key: 'session-a3' })
   expect(await texts()).toEqual([...head(3), ...WAITING, ...CODING, ...REVIEWING, ...EMPTY])
   await ui.unmount()
+})
+
+test('focuses an interactive session\'s Ghostty tab by its tty, opens claude attach for a background one in a new tab, and toasts when Ghostty fails', async ($, on) => {
+  const ran = world(on, [{ ...AGENTS[1], pid: 4242 }, { ...AGENTS[3], id: 'b3' }])
+  const toasts: string[] = []
+  on('ui.toast', (_, e) => {
+    toasts.push(e.text)
+
+    return { value: undefined }
+  })
+  await $.session.start(START)
+  await $.command.run(COMMAND)
+  const ui = await $.ui.mount(PANE)
+
+  await ui.press({ key: 'session-a1' })
+  await ui.press({ key: 'jump-a1' })
+  await flush()
+  await ui.press({ key: 'session-a3' })
+  EXITS['osascript'] = 1
+  await ui.press({ key: 'jump-a3' })
+  await flush()
+  await ui.press({ key: 'session-a1' })
+  await ui.press({ key: 'jump-a1' })
+  await flush()
+  await ui.unmount()
+
+  const focus = ['osascript', ...['on run argv', 'tell application "Ghostty"', 'activate', 'focus (first terminal whose tty is "/dev/" & item 1 of argv)', 'end tell', 'end run'].flatMap(line => ['-e', line]), 'ttys005']
+  const attach = ['on run argv', 'tell application "Ghostty"', 'activate', 'set made to new surface configuration', 'set initial working directory of made to item 2 of argv', 'set initial input of made to "claude attach " & item 1 of argv & linefeed', 'new tab with configuration made', 'end tell', 'end run']
+  const ps = ['ps', '-o', 'tty=', '-p', '4242']
+
+  expect({ ran: ran.filter(([command]) => command === 'ps' || command === 'osascript'), toasts }).toEqual({
+    ran: [ps, focus, ['osascript', ...attach.flatMap(line => ['-e', line]), 'b3', '/src/d'], ps, focus],
+    toasts: ['No Ghostty tab opened for #0007 repo', 'No Ghostty tab found for fix-export'],
+  })
 })
 
 test('moves a busy session quiet for 10 minutes to NEEDS YOU with its quiet minutes, and not one quiet for less', async ($, on) => {
@@ -379,7 +414,7 @@ test('shows the open question of a waiting session in its highlight and detail, 
 
   const pane = (question: string) => [
     ...head(1), 'NEEDS YOU', '1', ...row('●', 'fix-export', 'Opus 5.5', 'input needed'),
-    'task    ', 'Fix the export', 'last    ', question, 'cwd     ', '/src/a.b', 'jump    ', 'tab: fix-export',
+    'task    ', 'Fix the export', 'last    ', question, 'cwd     ', '/src/a.b', 'jump    ', '[j] tab: fix-export',
     RULE, 'HIGHLIGHTS', ...hl('fix-export', 'question open: Export which flag?', 10, '?'), ...NO_FEED,
   ]
   expect(asked).toEqual(pane('Export which flag?'))
@@ -517,7 +552,7 @@ test('badges sessions sharing a git top level with an amber ×N inside the name 
     ...head(3),
     'CODING', '3',
     '● ', 'fix-export'.padEnd(15) + ' ', '×2  ', 'Opus 5.5   ', '     ', 'Fix the export ', '  0s',
-    'task    ', 'Fix the export', 'last    ', 'go now', 'shares  ', 'widgets with a-rather-long-session-name', 'cwd     ', '/src/a.b', 'jump    ', 'tab: fix-export',
+    'task    ', 'Fix the export', 'last    ', 'go now', 'shares  ', 'widgets with a-rather-long-session-name', 'cwd     ', '/src/a.b', 'jump    ', '[j] tab: fix-export',
     '● ', 'a-rather-long-… ', '×2  ', '           ', '     ', 'a-rather-long… ', '  0s',
     ...row('●', 'alone', '', 'alone'),
     ...EMPTY,
@@ -951,9 +986,10 @@ const drawn = async ($: Engine, surface: 'desktop' | 'mobile', isPressed: boolea
   const texts = (await ui.findAll({ type: 'Text' })).map(({ text }) => text)
   const inputs = (await ui.findAll({ type: 'Input' })).map(({ props }) => props.placeholder)
   const svgs = (await ui.findAll({ type: 'Svg' })).map(({ props }) => props.alt)
+  const labels = (await ui.findAll({ type: 'Button' })).map(({ props }) => props.label)
   await ui.unmount()
 
-  return { texts, inputs, svgs }
+  return { texts, inputs, svgs, labels }
 }
 
 test('draws the desktop and mobile trees from flex boxes and Svg, with the answer controls each surface can take', async ($, on) => {
@@ -966,14 +1002,16 @@ test('draws the desktop and mobile trees from flex boxes and Svg, with the answe
 
   expect({ desktop, mobile }).toEqual({
     desktop: {
-      texts: ['MISSION CONTROL', '2 agents · today 0 commits · 0 PRs · 0 reviews', 'NEEDS YOU', '2', 'fix-export', ' Opus 5.5', 'input needed', '0s', 'ask', 'Which colour?', 'reply', 'ctx', '42% of 1M · Opus 5.5', 'task', 'Fix the export', 'cwd', '/src/a.b', 'jump', 'tab: fix-export', 'plan', ' Sonnet 5.5', 'input needed', '0s', RULE, 'HIGHLIGHTS', 'nothing yet', ...NO_FEED],
+      texts: ['MISSION CONTROL', '2 agents · today 0 commits · 0 PRs · 0 reviews', 'NEEDS YOU', '2', 'fix-export', ' Opus 5.5', 'input needed', '0s', 'ask', 'Which colour?', 'reply', 'ctx', '42% of 1M · Opus 5.5', 'task', 'Fix the export', 'cwd', '/src/a.b', 'jump', 'plan', ' Sonnet 5.5', 'input needed', '0s', RULE, 'HIGHLIGHTS', 'nothing yet', ...NO_FEED],
       inputs: ['Type an answer, Enter to send'],
       svgs: ['waiting', 'context 42%', 'waiting', 'context unknown'],
+      labels: ['fix-export Opus 5.5', 'Red', 'Blue', 'tab: fix-export', 'plan Sonnet 5.5'],
     },
     mobile: {
       texts: ['MISSION CONTROL', '2 agents · today 0 commits · 0 PRs · 0 reviews', 'NEEDS YOU', '2', 'fix-export', 'input needed', '0s', 'ask', 'Which colour?', 'ctx', '42% of 1M · Opus 5.5', 'task', 'Fix the export', 'cwd', '/src/a.b', 'jump', 'tab: fix-export', 'plan', 'input needed', '0s', RULE, 'HIGHLIGHTS', 'nothing yet'],
       inputs: [],
       svgs: ['waiting', 'context 42%', 'waiting', 'context unknown'],
+      labels: ['fix-export', 'Red', 'Blue', 'plan'],
     },
   })
 })

@@ -30,3 +30,8 @@ Then install any plugin from it:
 | [write-proposal](plugins/write-proposal/README.md) | skill | writes a proposal into `docs/proposals/` after reading the code and interviewing you on the behaviour you expect |
 | [prove-tests](plugins/prove-tests/README.md) | skill | breaks the code a test guards, one mutation at a time, and checks the test fails for the right reason |
 | [write-pr-description](plugins/write-pr-description/README.md) | skill | writes a concise, reviewer-focused PR description from the session and the branch's git history |
+| [checkout-guard](plugins/checkout-guard/README.md) | mod | stops two sessions in one checkout from moving each other's branch |
+| [evidence-band](plugins/evidence-band/README.md) | mod | shows the last test or build command and whether it passed, in a band above the prompt |
+| [image-thumbnail](plugins/image-thumbnail/README.md) | mod | shows a thumbnail of each image pasted into the prompt, in a band above it (macOS) |
+| [prompt-tint](plugins/prompt-tint/README.md) | mod | draws the prompts you type in an orange box, so they stand out |
+| [copy-visible](plugins/copy-visible/README.md) | mod | makes the `skins` plugin's Copy buttons easy to see: a blue frame with Copy on the first line |

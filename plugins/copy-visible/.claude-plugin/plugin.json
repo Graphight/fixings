@@ -1,0 +1,22 @@
+{
+  "name": "copy-visible",
+  "version": "0.1.0",
+  "description": "Makes the skins plugin's Copy buttons easy to see: a blue frame with Copy on the first line",
+  "author": {
+    "name": "Tom Marsh"
+  },
+  "userConfig": {
+    "border": {
+      "type": "string",
+      "title": "Frame colour",
+      "description": "Hex colour of the frame and the Copy button",
+      "default": "#7fb0d0"
+    },
+    "background": {
+      "type": "string",
+      "title": "Background colour",
+      "description": "Hex colour behind a framed block",
+      "default": "#141d26"
+    }
+  }
+}

@@ -76,6 +76,10 @@ The first poll after opening records nothing in either section, so the backlog i
 ## The detail block and its controls
 
 Pressing a row, or its digit in the focused terminal pane, opens its detail: `task`, `last` (the last prompt, or the open question while the session waits), `shares` (the checkout and the sessions sharing it), `cwd`, and `jump` (`tab: <name>` or `claude attach <id>`).
+On desktop and in the terminal (`j`), `jump` is a button that takes you to the session in Ghostty.
+For a session in a terminal, it brings that session's Ghostty tab to the front.
+For a background session, it opens a new Ghostty tab running `claude attach <id>`.
+If Ghostty cannot do either, a toast says `No Ghostty tab found for <name>`; on mobile, `jump` is plain text.
 The desktop detail adds `ctx` (`42% of 1M · Opus 5.5`) and `ci` (`PR #25 CI failing: e2e`), and its `task` carries the plan stage.
 
 An open row also carries controls that send a message to that session through `$.session.send`:

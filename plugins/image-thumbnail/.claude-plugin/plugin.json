@@ -1,0 +1,9 @@
+{
+  "name": "image-thumbnail",
+  "version": "0.1.0",
+  "description": "Shows a thumbnail of each image pasted into the prompt, in a band above it (macOS)",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Tom Marsh"
+  }
+}
