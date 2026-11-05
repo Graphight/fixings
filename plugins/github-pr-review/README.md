@@ -2,6 +2,7 @@
 
 `github-pr-review` is a skill that reviews a GitHub pull request into a structured, line-referenced report, and a mod that draws the pull request, its checks and the review's progress in the `/github-pr-review-panel` side panel.
 Install it with `/plugin install github-pr-review@fixings`.
+It needs `gh` and `jq` on the PATH.
 
 ## What you're looking at
 
@@ -98,7 +99,7 @@ A call that names another sidecar, or the start of `github-pr-review`, clears th
 - A review's sidecar is followed only once a tool call names its path.
 - `/github-pr-review-panel` run during a review replaces the drawn PR with the current branch's, until the next append to the sidecar restores the `pr` line's.
 - A PR's checks are polled only while the panel keeps drawing, and a new PR with no checks reported is polled for four periods.
-- The spine is drawn from the skill's `step` lines, so a review whose skill run writes none shows no progress.
+- The spine is drawn from the skill's `step` lines, so a review whose skill run writes none shows no progress; without `jq` on the PATH every append but `init` fails, and the review keeps going with the panel at six pending steps.
 - Two runs on the same PR can disagree: on fixings #6 one run kept four findings (`COMMENT`, filed as #7) and the other kept one (`APPROVED`) without raising a bug the first had found, so one `APPROVED` does not rule out bugs.
 - Agents are counted only from spawns with no `parentAgentId` made while a step is running.
 - VS Code is not a target for the panel.
