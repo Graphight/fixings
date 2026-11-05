@@ -1,6 +1,6 @@
 ---
 name: write-pr-description
-description: Generates a concise, reviewer-focused PR description from session context and git history. Invoke explicitly when wrapping up a card.
+description: Generates a concise, reviewer-focused PR description from session context and git history. Invoke explicitly when wrapping up a piece of work.
 argument-hint: "[--out <path>]"
 model: sonnet
 effort: low
@@ -52,8 +52,8 @@ No implementation detail that belongs in Judgement Calls.
 
 ### ## Out of scope
 
-A brief bulleted list of related work that was explicitly excluded — either per the Jira description or through discussion during this session. 
-If nothing was explicitly scoped out, write: "Nothing explicitly excluded from this card."
+A brief bulleted list of related work that was explicitly excluded — either per the ticket description or through discussion during this session. 
+If nothing was explicitly scoped out, write: "Nothing explicitly excluded from this change."
 
 Only work that was *explicitly* excluded. 
 Everything a PR does not do is infinite; this section is for the exclusions a reviewer would otherwise flag as an omission.
@@ -69,7 +69,7 @@ Call out deliberate choices in a numbered list that reviewers might otherwise qu
 - Trade-offs made due to technical constraints or blockers
 - Anything where a reasonable reviewer might ask "why did you do it this way?"
 
-If the card had no notable judgement calls, write: "No significant departures from standard patterns."
+If the change had no notable judgement calls, write: "No significant departures from standard patterns."
 
 Each item says what you chose, and why. 
 If a choice needs a paragraph to justify, that is a conversation for the review thread, not a monologue in the description.
@@ -93,7 +93,7 @@ Shape:
 
 ### ## Test plan
 
-A checkbox list of concrete testing steps taken during this card. 
+A checkbox list of concrete testing steps taken during this change. 
 Base the tooling on the detected language/framework — do not hardcode Maven unless the project uses it.
 
 Typical entries to consider (adapt to the project):
@@ -116,8 +116,8 @@ Format:
 Apply these consistently throughout:
 
 - Any codebase keyword (service names, modules, CLI tools, config keys, technology names) → wrap in backticks: `evalsctl`, `auth-service`, `FEATURE_FLAG_X`
-- Any Jira ticket reference → bold + italic: **_PROJ-1234_**
-- Only link to PRs, cards, or other resources if they were explicitly discussed during this session or appear in the git context — use standard markdown links: `[PROJ-1234](https://your-jira.atlassian.net/browse/PROJ-1234)`
+- Any ticket reference → bold + italic: **_PROJ-1234_**
+- Only link to PRs, tickets, or other resources if they were explicitly discussed during this session or appear in the git context — use standard markdown links: `[PROJ-1234](<the ticket's URL>)`
 - No filler phrases ("This PR aims to...", "As part of this work...", "It is worth noting...")
 - wrap the entire output in one code block to expose markdown formatting for copy paste
 - try to refrain from using em dashes unless absolutely necessary
@@ -132,7 +132,7 @@ It chose every sentence on purpose, so asked to trim, it will shorten a word and
 So the draft goes to a sub-agent that has no attachment to it.
 
 Spawn **one** `general-purpose` Agent with `model: "haiku"` and `effort: "low"`, and give it the drafted description and nothing else.
-Do not give it the diff, the commit log, the Jira ticket, or any of the session context.
+Do not give it the diff, the commit log, the ticket, or any of the session context.
 That blindness is the whole point: a reviewer opening this PR sees only these words, so only these words get to justify themselves.
 An agent that can see how much work went in will argue for keeping the description of it.
 
