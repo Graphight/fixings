@@ -44,6 +44,19 @@ claude plugin test plugins/<name>
 Check the real exit status: a piped log can look reassuring and still exit non-zero.
 Do not run the whole suite unless asked.
 
+## Trying a change live
+
+An installed plugin is a copy in `~/.claude/plugins/cache/fixings/<name>/<version>/`, taken from GitHub, so edits in this checkout do not reach it.
+To try one, start a session from the checkout that loads the plugin's folder and turns its installed copy off:
+
+```sh
+claude --plugin-dir plugins/<name> \
+       --settings '{"enabledPlugins":{"<name>@fixings":false}}'
+```
+
+Other sessions keep running the installed copy.
+Once the change is merged, `claude plugin marketplace update fixings` and then `claude plugin update <name>@fixings` bring it into the installed copy.
+
 ## Versions
 
 Every change to a plugin bumps `version` in its `.claude-plugin/plugin.json`, so installed copies update.
