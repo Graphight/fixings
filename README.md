@@ -26,3 +26,4 @@ Then install any plugin from it:
 | [explainer-page](plugins/explainer-page/README.md) | skill + mod | builds an interactive HTML explainer page in a fixed house style, and draws its pre-publish checks in the `/explainer-page-checks` side pane |
 | [github-pr-review](plugins/github-pr-review/README.md) | skill + mod | reviews a GitHub pull request into a structured, line-referenced report, and draws its progress in the `/github-pr-review-panel` side panel |
 | [what-next](plugins/what-next/README.md) | mod | lists a project's proposals and open issues in the `/next` pane, and starts a session on one |
+| [review-proposals](plugins/review-proposals/README.md) | skill | reviews every open proposal in `docs/proposals/` together for conflicts, overlaps, order, size and drift |

@@ -34,6 +34,11 @@
       "name": "what-next",
       "source": "./plugins/what-next",
       "description": "A pane to pick and read what to do next in a project, starting with its docs/proposals, and start a session on one"
+    },
+    {
+      "name": "review-proposals",
+      "source": "./plugins/review-proposals",
+      "description": "Assesses all open proposals in docs/proposals together: conflicts, overlaps, order, size, vision drift and clashes with recorded decisions"
     }
   ]
 }
