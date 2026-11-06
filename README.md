@@ -20,18 +20,18 @@ Then install any plugin from it:
 
 | Plugin | Kind | What it does |
 | --- | --- | --- |
-| [mission-control](plugins/mission-control/README.md) | mod | lists the other Claude Code sessions in the `/mission-control` side pane |
-| [interview](plugins/interview/README.md) | skill + mod | interviews you in rounds before planning, with a round row above each question |
+| [checkout-guard](plugins/checkout-guard/README.md) | mod | stops two sessions in one checkout from moving each other's branch |
 | [checkpoint-plan](plugins/checkpoint-plan/README.md) | skills + mod | stages work into a checkpointed plan, runs it stage by stage or unattended, and draws progress in the `/plan-timeline` side pane |
+| [copy-visible](plugins/copy-visible/README.md) | mod | makes the `skins` plugin's Copy buttons easy to see: a blue frame with Copy on the first line |
+| [evidence-band](plugins/evidence-band/README.md) | mod | shows the last test or build command and whether it passed, in a band above the prompt |
 | [explainer-page](plugins/explainer-page/README.md) | skill + mod | builds an interactive HTML explainer page in a fixed house style, and draws its pre-publish checks in the `/explainer-page-checks` side pane |
 | [github-pr-review](plugins/github-pr-review/README.md) | skill + mod | reviews a GitHub pull request into a structured, line-referenced report, and draws its progress in the `/github-pr-review-panel` side panel |
-| [what-next](plugins/what-next/README.md) | mod | lists a project's proposals and open issues in the `/next` pane, and starts a session on one |
-| [review-proposals](plugins/review-proposals/README.md) | skill | reviews every open proposal in `docs/proposals/` together for conflicts, overlaps, order, size and drift |
-| [write-proposal](plugins/write-proposal/README.md) | skill | writes a proposal into `docs/proposals/` after reading the code and interviewing you on the behaviour you expect |
-| [prove-tests](plugins/prove-tests/README.md) | skill | breaks the code a test guards, one mutation at a time, and checks the test fails for the right reason |
-| [write-pr-description](plugins/write-pr-description/README.md) | skill | writes a concise, reviewer-focused PR description from the session and the branch's git history |
-| [checkout-guard](plugins/checkout-guard/README.md) | mod | stops two sessions in one checkout from moving each other's branch |
-| [evidence-band](plugins/evidence-band/README.md) | mod | shows the last test or build command and whether it passed, in a band above the prompt |
 | [image-thumbnail](plugins/image-thumbnail/README.md) | mod | shows a thumbnail of each image pasted into the prompt, in a band above it (macOS) |
+| [interview](plugins/interview/README.md) | skill + mod | interviews you in rounds before planning, with a round row above each question |
+| [mission-control](plugins/mission-control/README.md) | mod | lists the other Claude Code sessions in the `/mission-control` side pane |
 | [prompt-tint](plugins/prompt-tint/README.md) | mod | draws the prompts you type in an orange box, so they stand out |
-| [copy-visible](plugins/copy-visible/README.md) | mod | makes the `skins` plugin's Copy buttons easy to see: a blue frame with Copy on the first line |
+| [prove-tests](plugins/prove-tests/README.md) | skill | breaks the code a test guards, one mutation at a time, and checks the test fails for the right reason |
+| [review-proposals](plugins/review-proposals/README.md) | skill | reviews every open proposal in `docs/proposals/` together for conflicts, overlaps, order, size and drift |
+| [what-next](plugins/what-next/README.md) | mod | lists a project's proposals and open issues in the `/next` pane, and starts a session on one |
+| [write-pr-description](plugins/write-pr-description/README.md) | skill | writes a concise, reviewer-focused PR description from the session and the branch's git history |
+| [write-proposal](plugins/write-proposal/README.md) | skill | writes a proposal into `docs/proposals/` after reading the code and interviewing you on the behaviour you expect |
