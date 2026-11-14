@@ -66,6 +66,18 @@ test('draws bare GitHub PR and issue URLs as repo#N, leaving linked ones alone',
   ])
 })
 
+test('leaves a GitHub URL with a tail, and any other URL, whole', { options: JIRA }, async ($, on) => {
+  const urls = [
+    'https://github.com/a/b/pull/7/files',
+    'https://github.com/a/b/issues/7#issuecomment-99',
+    'https://github.com/a/b/pull/7?w=1',
+    'https://example.atlassian.net/browse/PROJ-1234',
+    'https://example.com/docs/#3',
+  ].join(' ')
+
+  expect(await draw($, on, GH, `${urls} and PROJ-1`)).toEqual([`${urls} and [PROJ-1](https://example.atlassian.net/browse/PROJ-1)`])
+})
+
 const prompt = (text: string, kind: string) =>
   ({ plugin: 'ref-links', surface: 'terminal', component: 'UserMessage', props: { text, origin: { kind }, isFull: true } }) as const
 

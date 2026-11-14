@@ -9,13 +9,15 @@ const REMOTE = /^(?:git@|ssh:\/\/git@|https?:\/\/(?:[^@/]+@)?)github\.com[:/]([\
 const SKIP = String.raw`(?:\x60{3}[\s\S]*?(?:\x60{3}|$)|~{3}[\s\S]*?(?:~{3}|$)|\x60[^\x60\n]*\x60|\[[^\]\n]*\]\([^)\n]*\)|<[^>\s]+>)`
 const SLUG = String.raw`(?<![\w/.-])(?<slug>[\w.-]+\/[\w.-]+)#(?<slugN>\d+)(?!\w)`
 const BARE = String.raw`(?<![\w&])#(?<n>\d+)(?!\w)`
-const URL = String.raw`(?<![\w/])https:\/\/github\.com\/[\w.-]+\/(?<name>[\w.-]+)\/(?:pull|issues)\/(?<urlN>\d+)(?!\w)`
+const URL = String.raw`(?<![\w/])https:\/\/github\.com\/[\w.-]+\/(?<name>[\w.-]+)\/(?:pull|issues)\/(?<urlN>\d+)(?![\w/#?])`
+// Any other URL is matched only to be left whole; it comes after URL so a GitHub link still wins at the same spot.
+const ANY_URL = String.raw`https?:\/\/[^\s<>]+`
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 const refs = ({ jiraUrl, projects }: Ctx) => {
   const keys = jiraUrl && projects.length ? `|(?<![\\w-])(?<project>${projects.map(escape).join('|')})-(?<key>\\d+)(?!\\w)` : ''
 
-  return new RegExp(`${SKIP}|${SLUG}|${BARE}${keys}|${URL}`, 'g')
+  return new RegExp(`${SKIP}|${SLUG}|${BARE}${keys}|${URL}|${ANY_URL}`, 'g')
 }
 
 const find = (text: string, ctx: Ctx): Match[] =>
