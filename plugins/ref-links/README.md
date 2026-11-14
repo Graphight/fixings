@@ -5,14 +5,16 @@ Install it with `/plugin install ref-links@fixings`.
 
 ## What you're looking at
 
-![A prompt and a reply, both carrying links, numbered](../../docs/screenshots/ref-links-annotated.jpg)
+![A reply with four kinds of link, each numbered, and the target of the hovered one](../../docs/screenshots/ref-links-annotated.jpg)
 
-1. **Your prompt**, drawn by `prompt-tint`.
-   `#3`, `Graphight/fixings#11` and `PROJ-1234` are links, and the full pull request URL you typed is drawn as `fixings#12`.
-   They carry no colour of their own, so in Ghostty they show only when you hover with cmd held.
-2. **Claude's reply.**
-   The same four references, drawn as blue links.
-   `OPS-7` is not in `projects`, `UTF-8` is not a ticket, and the `` `#4` `` inside a code span stays as written.
+1. **A pasted PR URL, drawn short.**
+   `https://github.com/Graphight/fixings/pull/12` became `fixings#12`.
+2. **A key from your Jira projects**, linked under your `jiraUrl`.
+   `OPS-7` is not in `projects`, so it stays plain, as do `UTF-8` and the `` `#4` `` in a code span.
+3. **An issue or PR in any repo**, written `owner/repo#N`.
+4. **An issue or PR in this repo**, written `#N`.
+   With cmd held over it, Ghostty underlines it here and in the prompt above, where `prompt-tint` draws it.
+5. **cmd-hover shows where a link goes**, here `https://github.com/Graphight/fixings/issues/3`.
 
 ## What it links
 
