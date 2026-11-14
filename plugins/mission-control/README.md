@@ -110,6 +110,10 @@ A session that can run arbitrary commands can still read the token through a tra
 Every session running the mod has a `mission_status` chat tool that answers one line per lane (`CODING: fix-export (Fix the export, PR #25 CI failing: e2e, ctx 91%, 0s)`) and a `Recent:` line for each of the latest 10 highlights.
 While the pane is closed it refreshes first, and that refresh raises no notifications.
 
+## Known limits
+
+Below 110 columns the pane sits inline above the prompt, 8 rows tall; the prompt can still overflow on very short terminals until Claude Code scrolls it.
+
 ## Desktop and mobile
 
 On desktop the pane is drawn from flex boxes, with an Svg glyph per row and a ring for the context fill.
