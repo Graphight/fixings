@@ -55,3 +55,11 @@ test('needs a non-word character around a reference', async ($, on) => {
 
   expect(await draw($, on, GH, text)).toEqual([text])
 })
+
+test('draws bare GitHub PR and issue URLs as repo#N, leaving linked ones alone', async ($, on) => {
+  const linked = '[x](https://github.com/o/r/pull/9) <https://github.com/o/r/pull/9>'
+
+  expect(await draw($, on, null, `https://github.com/a/b/pull/7 and https://github.com/a/b/issues/8. ${linked}`)).toEqual([
+    `[b#7](https://github.com/a/b/pull/7) and [b#8](https://github.com/a/b/issues/8). ${linked}`,
+  ])
+})

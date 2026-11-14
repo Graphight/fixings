@@ -9,18 +9,23 @@ const REMOTE = /^(?:git@|ssh:\/\/git@|https?:\/\/(?:[^@/]+@)?)github\.com[:/]([\
 const SKIP = String.raw`(?:\x60{3}[\s\S]*?(?:\x60{3}|$)|~{3}[\s\S]*?(?:~{3}|$)|\x60[^\x60\n]*\x60|\[[^\]\n]*\]\([^)\n]*\)|<[^>\s]+>)`
 const SLUG = String.raw`(?<![\w/.-])([\w.-]+\/[\w.-]+)#(\d+)(?!\w)`
 const BARE = String.raw`(?<![\w&])#(\d+)(?!\w)`
+const URL = String.raw`(?<![\w/])https:\/\/github\.com\/[\w.-]+\/(?<name>[\w.-]+)\/(?:pull|issues)\/(?<n>\d+)(?!\w)`
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 const refs = ({ jiraUrl, projects }: Ctx) => {
   const keys = jiraUrl && projects.length ? `|(?<![\\w-])(${projects.map(escape).join('|')})-(\\d+)(?!\\w)` : ''
 
-  return new RegExp(`${SKIP}|${SLUG}|${BARE}${keys}`, 'g')
+  return new RegExp(`${SKIP}|${SLUG}|${BARE}${keys}|${URL}`, 'g')
 }
 
 export const find = (text: string, ctx: Ctx): Match[] =>
-  [...text.matchAll(refs(ctx))].flatMap(({ 0: label, 1: slug, 2: slugNumber, 3: number, 4: project, 5: key, index: start = 0 }) => {
+  [...text.matchAll(refs(ctx))].flatMap(({ 0: label, 1: slug, 2: slugNumber, 3: number, 4: project, 5: key, index: start = 0, groups }) => {
     const { repo, jiraUrl } = ctx
     const end = start + label.length
+
+    if (groups?.name !== undefined) {
+      return [{ start, end, label: `${groups.name}#${groups.n}`, href: label }]
+    }
 
     if (project !== undefined) {
       return [{ start, end, label, href: `${jiraUrl.replace(/\/+$/, '')}/browse/${project}-${key}` }]
