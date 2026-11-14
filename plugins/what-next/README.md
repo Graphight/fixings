@@ -84,7 +84,7 @@ The command is registered where `docs/proposals/README.md` exists or the session
 
 ## Known limits
 
-- Seated inline above the prompt (fullscreen under 110 columns, or the main screen at any width), the pane asks for 8 rows; on a short terminal the prompt can still run past the bottom edge, because Claude Code does not scroll it.
+- Seated inline above the prompt (fullscreen under 110 columns, or the main screen at any width), the pane asks for 8 rows; the prompt scrolls, but its scroll window is sized without those rows, so on a short terminal the line being typed can still sit past the bottom edge.
 - VS Code is not a target for this mod.
 
 ## What was checked
