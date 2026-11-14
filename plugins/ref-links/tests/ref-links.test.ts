@@ -12,6 +12,18 @@ const draw = async ($: Parameters<Parameters<typeof test>[1]>[0], on: On, remote
   return (await (await $.ui.mount(reply(text))).findAll({ type: 'Text' })).map(({ text }) => text)
 }
 
+const JIRA = { jiraUrl: 'https://example.atlassian.net', projects: 'PROJ, OPS' }
+
+test('links Jira keys of the listed projects', { options: JIRA }, async ($, on) => {
+  expect(await draw($, on, null, 'PROJ-12 and OPS-3, not UTF-8, XPROJ-1 or ABC-5')).toEqual([
+    '[PROJ-12](https://example.atlassian.net/browse/PROJ-12) and [OPS-3](https://example.atlassian.net/browse/OPS-3), not UTF-8, XPROJ-1 or ABC-5',
+  ])
+})
+
+test('links no Jira keys with empty config', async ($, on) => {
+  expect(await draw($, on, null, 'PROJ-12')).toEqual(['PROJ-12'])
+})
+
 const GH = 'git@github.com:o/r.git'
 
 for (const remote of [GH, 'https://github.com/o/r', 'https://github.com/o/r.git', 'ssh://git@github.com/o/r.git']) {
