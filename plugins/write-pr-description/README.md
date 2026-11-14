@@ -23,5 +23,9 @@ With `--out <path>`, that version is also written raw to the path.
 
 ## What was checked
 
-Not run live from this plugin: no session has loaded it from fixings and written a real description.
+Run live on 2026-11-13 in a headless `claude -p --plugin-dir plugins/write-pr-description` session, with the installed copy turned off, on the 0.2.0 branch.
+The session printed made-up before/after numbers with `printf`: a time gain, a time regression, a higher-is-better count, a lower-is-better count and a size.
+The description came out with a `speedup ×` table (4.5×, 0.8× (slower), 1.5×) and a `savings %` table (75%, 36%), every value correct, and both tables survived the trim pass.
+That was one run, and model output varies between runs.
+The trim pass deleted the Out of scope section, and the drafting step restored it.
 `claude plugin validate .` covers its manifest and the skill's frontmatter.
