@@ -71,7 +71,7 @@ A `Skill` call in a terminal narrower than the 144 columns the engine needs for 
 - No check reads a claim's source; `dated` checks only that the page says when it was checked.
 - The command is `/explainer-page-checks` rather than `/explainer-page:checks`, because a mod's command name allows only letters, digits, `_` and `-`.
 - VS Code is not a target for the pane.
-- Below 110 columns the pane sits inline above the prompt, 8 rows tall; the prompt can still overflow on very short terminals until Claude Code scrolls it.
+- Seated inline above the prompt (fullscreen under 110 columns, or the main screen at any width), the pane asks for 8 rows; on a short terminal the prompt can still run past the bottom edge, because Claude Code does not scroll it.
 
 ## What was checked
 

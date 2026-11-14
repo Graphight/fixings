@@ -112,7 +112,7 @@ While the pane is closed it refreshes first, and that refresh raises no notifica
 
 ## Known limits
 
-Below 110 columns the pane sits inline above the prompt, 8 rows tall; the prompt can still overflow on very short terminals until Claude Code scrolls it.
+Seated inline above the prompt (fullscreen under 110 columns, or the main screen at any width), the pane asks for 8 rows; on a short terminal the prompt can still run past the bottom edge, because Claude Code does not scroll it.
 
 ## Desktop and mobile
 
