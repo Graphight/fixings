@@ -108,7 +108,7 @@ A call that names another sidecar, or the start of `github-pr-review`, clears th
 - Two runs on the same PR can disagree: on fixings #6 one run kept four findings (`COMMENT`, filed as #7) and the other kept one (`APPROVED`) without raising a bug the first had found, so one `APPROVED` does not rule out bugs.
 - Agents are counted only from spawns with no `parentAgentId` made while a step is running.
 - VS Code is not a target for the panel.
-- Seated inline above the prompt (fullscreen under 110 columns, or the main screen at any width), the panel asks for 8 rows; on a short terminal the prompt can still run past the bottom edge, because Claude Code does not scroll it.
+- Seated inline above the prompt (fullscreen under 110 columns, or the main screen at any width), the panel asks for 8 rows; the prompt scrolls, but its scroll window is sized without those rows, so on a short terminal the line being typed can still sit past the bottom edge.
 
 ## What was checked
 
