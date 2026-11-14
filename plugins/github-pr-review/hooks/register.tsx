@@ -35,7 +35,7 @@ const MARKS = {
   skipped: ['– ', { dimColor: true }],
 } as const
 const NAMES = { done: {}, running: { weight: 'semibold' }, pending: { dimColor: true }, skipped: { dimColor: true } } as const
-const OPEN = { id: PANE, title: 'Pull request', columns: 60 }
+const OPEN = { id: PANE, title: 'Pull request', columns: 60, rows: 8 }
 
 const ROW_HEIGHT = 30
 const VIEW_WIDTH = 400

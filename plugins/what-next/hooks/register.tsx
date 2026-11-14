@@ -129,7 +129,7 @@ export const register: Register = on => {
     await update($, reading, () => null)
     await update($, typed, () => '')
     await update($, tab, () => (found === null ? 'issues' : 'proposals'))
-    await $.ui.open({ id: PANE, title: 'What next', focus: true })
+    await $.ui.open({ id: PANE, title: 'What next', focus: true, rows: 8 })
 
     return { text: `${found?.length ?? 0} proposals and ${open?.length ?? 0} issues in the pane.` }
   })

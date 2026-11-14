@@ -319,10 +319,10 @@ test('toasts a fallback when ship-plan starts and the timeline pane is not place
 })
 
 test('opens the timeline when ship-plan expands, bare or namespaced, and not for another skill or a prompt naming it', async ($, on) => {
-  const opened: string[] = []
+  const opened: unknown[] = []
   world(on, () => PLAN)
   on('ui.open', (_, e) => {
-    opened.push(e.id)
+    opened.push(e)
 
     return { value: { isPlaced: true } }
   })
@@ -336,7 +336,8 @@ test('opens the timeline when ship-plan expands, bare or namespaced, and not for
   await $.skill.prompt({ skill: 'ship-plan', text: '' })
   await $.skill.prompt({ skill: 'dot_files:ship-plan', text: '' })
 
-  expect({ before, opened }).toEqual({ before: [], opened: ['plan-timeline', 'plan-timeline'] })
+  const open = { id: 'plan-timeline', title: 'Plan timeline', columns: 60, rows: 8 }
+  expect({ before, opened }).toEqual({ before: [], opened: [open, open] })
 })
 
 test('records the main loop gate, commit, push and PR calls and not the sub-agent or other calls', async ($, on) => {
@@ -1931,6 +1932,22 @@ test('cuts the drawing once the blank spine rows are gone and it is still taller
 
 test('cuts a docked pane to its bodyRows, not the window\'s rows', async ($, on) => {
   const ship = await flight($, on, { ...SIZED(60), props: { ...PANE.props, scroll: { offset: 0, bodyRows: 16 } } })
+
+  await ship.running()
+  await ship.halted()
+  await ship.opened()
+
+  expect(await ship.drawn()).toEqual([
+    ...OPENED_TOP,
+    ...STAGES,
+    ...TIGHT(...FIRST_TWO, THIRD, FOURTH_DONE),
+    ...OPENED_TOTALS,
+    BLANK,
+  ])
+})
+
+test('cuts an inline pane to its bodyRows, not the window\'s rows', async ($, on) => {
+  const ship = await flight($, on, { ...SIZED(60), props: { ...PANE.props, placement: 'inline', scroll: { offset: 0, bodyRows: 16 } } })
 
   await ship.running()
   await ship.halted()

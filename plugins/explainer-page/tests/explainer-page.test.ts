@@ -56,12 +56,16 @@ const BROKEN =
   "<p>So here's the thing about it.</p><div class=\"rig\"></div>" +
   '<script>var x = ;</script><script src="https://cdn.example/lib.js"></script>'
 
-const world = (on: On, files: Record<string, string>, isPlaced = true) => {
+const world = (on: On, files: Record<string, string>, isPlaced = true, opened: unknown[] = []) => {
   const clock = mock.clock(on)
   on('session.start', ($, e) => ({ cwd: e.cwd }))
   on('session.cwd', () => ({ value: '/src/notes' }))
   on('command.register', (_, e) => ({ value: { command: e.name } }))
-  on('ui.open', () => ({ value: isPlaced ? { isPlaced } : { isPlaced, reason: 'terminal too narrow' } }))
+  on('ui.open', (_, e) => {
+    opened.push(e)
+
+    return { value: isPlaced ? { isPlaced } : { isPlaced, reason: 'terminal too narrow' } }
+  })
   on('fs.read', (_, e) => {
     const text = files[e.path]
 
@@ -175,7 +179,8 @@ test('flags the harness and the publish as stale after the page changes', async 
 
 test('opens the pane when explainer-page expands, bare or namespaced, and not for another skill', async ($, on) => {
   const toasts: string[] = []
-  world(on, {}, false)
+  const opened: unknown[] = []
+  world(on, {}, false, opened)
   on('ui.toast', (_, e) => {
     toasts.push(e.text)
 
@@ -189,5 +194,10 @@ test('opens the pane when explainer-page expands, bare or namespaced, and not fo
   await $.skill.prompt({ skill: 'explainer-page', text: '' })
   await $.skill.prompt({ skill: 'explainer-page:explainer-page', text: '' })
 
-  expect({ before, toasts }).toEqual({ before: [], toasts: ['Widen the terminal or run /explainer-page-checks', 'Widen the terminal or run /explainer-page-checks'] })
+  const open = { id: 'explainer-page-checks', title: 'Explainer checks', columns: 60, rows: 8 }
+  expect({ before, opened, toasts }).toEqual({
+    before: [],
+    opened: [open, open],
+    toasts: ['Widen the terminal or run /explainer-page-checks', 'Widen the terminal or run /explainer-page-checks'],
+  })
 })

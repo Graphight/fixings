@@ -91,6 +91,7 @@ A typed `/ship-plan` opens it at any width; a `Skill` call in a terminal narrowe
 - `execute-stage` names `agent: plan-executor`, a bare name; if a live run does not fork into the agent, the field must become `checkpoint-plan:plan-executor`.
 - The plan must follow the `- [ ] N. Title` checkbox shape that `checkpoint-plan` writes; other plan files draw no stages.
 - VS Code is not a target for the pane.
+- Seated inline above the prompt (fullscreen under 110 columns, or the main screen at any width), the pane asks for 8 rows; on a short terminal the prompt can still run past the bottom edge, because Claude Code does not scroll it.
 
 ## What was checked
 

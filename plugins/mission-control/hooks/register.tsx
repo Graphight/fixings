@@ -4,7 +4,7 @@ import type { EngineInterface, Register, RenderChildren, Timer, ToolCallArgs } f
 import type { Ci, Highlight, Session } from '../types'
 
 const PANE = 'mission-control'
-const OPEN = { id: PANE, title: 'Mission Control', columns: 90 }
+const OPEN = { id: PANE, title: 'Mission Control', columns: 90, rows: 8 }
 const PERIOD_MS = 5000
 const RUN_TIMEOUT_MS = 10000
 const TAIL_BYTES = '262144'

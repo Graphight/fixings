@@ -68,6 +68,7 @@ const FILES: Record<string, string> = {}
 const GH: Record<string, string> = {}
 const STORE: Record<string, unknown> = {}
 const EXITS: Record<string, number> = {}
+const OPENED: unknown[] = []
 
 const world = (on: On, agents: object[] = AGENTS, isClocked = false) => {
   for (const fixture of [TRANSCRIPTS, SIDECARS, MTIMES, GIT, FILES, GH, STORE, EXITS]) {
@@ -77,6 +78,7 @@ const world = (on: On, agents: object[] = AGENTS, isClocked = false) => {
   }
 
   Object.assign(TRANSCRIPTS, TAILS)
+  OPENED.length = 0
   const ran: string[][] = []
   mock.env(on, { HOME: '/home/me', CLAUDE_CODE_PLUGIN_DIRS: '~/m/one:~/m/two:/o/three' })
   on('session.start', ($, e) => ({ cwd: e.cwd }))
@@ -91,7 +93,11 @@ const world = (on: On, agents: object[] = AGENTS, isClocked = false) => {
   })
   on('command.register', (_, e) => ({ value: { command: e.name } }))
   on('tool.register', (_, e) => ({ value: { tool: `mcp__mission-control__${e.name}` } }))
-  on('ui.open', () => ({ value: { isPlaced: true } }))
+  on('ui.open', (_, e) => {
+    OPENED.push(e)
+
+    return { value: { isPlaced: true } }
+  })
   if (!isClocked) {
     on('clock.now', () => ({ value: NOW }))
   }
@@ -134,6 +140,14 @@ test('lists the other sessions in their lanes with model, age and task', async (
   await $.command.run(COMMAND)
 
   expect(await textsOf($)).toEqual([...head(3), ...WAITING, ...CODING, ...REVIEWING, ...EMPTY])
+})
+
+test('asks for an 8-row pane when it opens', async ($, on) => {
+  world(on, [AGENTS[0]])
+  await $.session.start(START)
+  await $.command.run(COMMAND)
+
+  expect(OPENED).toEqual([{ id: 'mission-control', title: 'Mission Control', columns: 90, rows: 8 }])
 })
 
 test('polls again every 5 seconds', async ($, on) => {
