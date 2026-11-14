@@ -47,7 +47,7 @@ const MARKS = {
   skipped: ['– ', { dimColor: true }],
 } as const
 const NAMES = { pass: {}, warn: { weight: 'semibold' }, fail: { weight: 'semibold' }, pending: { dimColor: true }, skipped: { dimColor: true } } as const
-const OPEN = { id: PANE, title: 'Explainer checks', columns: 60 }
+const OPEN = { id: PANE, title: 'Explainer checks', columns: 60, rows: 8 }
 
 const page = atom({ plugin: 'explainer-page', key: 'page' } as const, null as Page | null)
 const harness = atom({ plugin: 'explainer-page', key: 'harness' } as const, null as Harness | null)
