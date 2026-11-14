@@ -55,6 +55,7 @@ If links are missing after installing, move its line above the `skins` and `prom
 
 - Anything inside an inline code span or a fenced block.
 - Text already inside a markdown link or an autolink.
+- Any other URL, including a GitHub PR or issue URL with more after the number (`/files`, `#issuecomment-…`, `?w=1`).
 - A reference with a word character right before or after it: `abc#3`, `foo.md#3a` and `XPROJ-1` stay plain.
 - Notifications and messages from teammates; only prompts you type are linked.
 - Tool output and slash-command output.
@@ -64,6 +65,8 @@ If links are missing after installing, move its line above the `skins` and `prom
 - Prompts link only when `prompt-tint` draws them, because Claude Code's own prompt row cannot be split into links.
   Those links carry no colour of their own, so Ghostty shows them only on cmd-hover.
 - An all-digit colour such as `#000000` written outside code links as an issue.
+- Under `skins`, a reply's `copy reply` button copies the links as markdown, `[#3](https://github.com/…)` rather than `#3`, because `skins` builds it from the rewritten text.
+  A code block's own Copy button is unaffected.
 
 ## What was checked
 
