@@ -76,6 +76,11 @@
       "description": "Draws the prompts you type in an orange box, so they stand out"
     },
     {
+      "name": "ref-links",
+      "source": "./plugins/ref-links",
+      "description": "Turns #N, owner/repo#N, listed Jira keys and GitHub PR URLs in replies and typed prompts into links you can click"
+    },
+    {
       "name": "copy-visible",
       "source": "./plugins/copy-visible",
       "description": "Makes the skins plugin's Copy buttons easy to see: a blue frame with Copy on the first line"
