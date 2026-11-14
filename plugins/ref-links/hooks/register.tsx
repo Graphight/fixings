@@ -7,35 +7,35 @@ const REMOTE = /^(?:git@|ssh:\/\/git@|https?:\/\/(?:[^@/]+@)?)github\.com[:/]([\
 
 // Spans left as written, then the references; the skips come first so they win at the same spot.
 const SKIP = String.raw`(?:\x60{3}[\s\S]*?(?:\x60{3}|$)|~{3}[\s\S]*?(?:~{3}|$)|\x60[^\x60\n]*\x60|\[[^\]\n]*\]\([^)\n]*\)|<[^>\s]+>)`
-const SLUG = String.raw`(?<![\w/.-])([\w.-]+\/[\w.-]+)#(\d+)(?!\w)`
-const BARE = String.raw`(?<![\w&])#(\d+)(?!\w)`
-const URL = String.raw`(?<![\w/])https:\/\/github\.com\/[\w.-]+\/(?<name>[\w.-]+)\/(?:pull|issues)\/(?<n>\d+)(?!\w)`
+const SLUG = String.raw`(?<![\w/.-])(?<slug>[\w.-]+\/[\w.-]+)#(?<slugN>\d+)(?!\w)`
+const BARE = String.raw`(?<![\w&])#(?<n>\d+)(?!\w)`
+const URL = String.raw`(?<![\w/])https:\/\/github\.com\/[\w.-]+\/(?<name>[\w.-]+)\/(?:pull|issues)\/(?<urlN>\d+)(?!\w)`
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 const refs = ({ jiraUrl, projects }: Ctx) => {
-  const keys = jiraUrl && projects.length ? `|(?<![\\w-])(${projects.map(escape).join('|')})-(\\d+)(?!\\w)` : ''
+  const keys = jiraUrl && projects.length ? `|(?<![\\w-])(?<project>${projects.map(escape).join('|')})-(?<key>\\d+)(?!\\w)` : ''
 
   return new RegExp(`${SKIP}|${SLUG}|${BARE}${keys}|${URL}`, 'g')
 }
 
-export const find = (text: string, ctx: Ctx): Match[] =>
-  [...text.matchAll(refs(ctx))].flatMap(({ 0: label, 1: slug, 2: slugNumber, 3: number, 4: project, 5: key, index: start = 0, groups }) => {
-    const { repo, jiraUrl } = ctx
+const find = (text: string, ctx: Ctx): Match[] =>
+  [...text.matchAll(refs(ctx))].flatMap(({ 0: label, index: start = 0, groups = {} }) => {
+    const { slug, slugN, n, project, key, name, urlN } = groups
     const end = start + label.length
 
-    if (groups?.name !== undefined) {
-      return [{ start, end, label: `${groups.name}#${groups.n}`, href: label }]
+    if (name !== undefined) {
+      return [{ start, end, label: `${name}#${urlN}`, href: label }]
     }
 
     if (project !== undefined) {
-      return [{ start, end, label, href: `${jiraUrl.replace(/\/+$/, '')}/browse/${project}-${key}` }]
+      return [{ start, end, label, href: `${ctx.jiraUrl}/browse/${project}-${key}` }]
     }
 
     if (slug !== undefined) {
-      return [{ start, end, label, href: `https://github.com/${slug}/issues/${slugNumber}` }]
+      return [{ start, end, label, href: `https://github.com/${slug}/issues/${slugN}` }]
     }
 
-    return number !== undefined && repo !== null ? [{ start, end, label, href: `https://github.com/${repo}/issues/${number}` }] : []
+    return n !== undefined && ctx.repo !== null ? [{ start, end, label, href: `https://github.com/${ctx.repo}/issues/${n}` }] : []
   })
 
 const link = (text: string, ctx: Ctx) =>
@@ -69,23 +69,18 @@ const linkText = (node: RenderNode, ctx: Ctx): RenderNode => {
   return { ...node, children } as RenderNode
 }
 
-const ctx = (projects: string[], jiraUrl: string, remote?: string | null): Ctx => ({
-  repo: (remote && REMOTE.exec(remote)?.[1]) || null,
-  jiraUrl,
-  projects,
-})
-
 export const register: Register = (on, options) => {
   const { jiraUrl = '', projects = '' } = options as Record<string, string>
-  const keys = projects.split(',').map(p => p.trim()).filter(Boolean)
+  const base = { jiraUrl: jiraUrl.replace(/\/+$/, ''), projects: projects.split(',').map(p => p.trim()).filter(Boolean) }
+  const ctx = (remote?: string | null): Ctx => ({ ...base, repo: (remote && REMOTE.exec(remote)?.[1]) || null })
 
   on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) =>
-    next({ ...e, props: { ...e.props, text: link(e.props.text, ctx(keys, jiraUrl, (await $.session.repo())?.remote)) } }),
+    next({ ...e, props: { ...e.props, text: link(e.props.text, ctx((await $.session.repo())?.remote)) } }),
   )
 
   on('ui.render', { component: 'UserMessage' }, async ($, e, next) => {
     const drawn = await next(e)
 
-    return TYPED.has(e.props.origin.kind) ? (linkText(drawn, ctx(keys, jiraUrl, (await $.session.repo())?.remote)) as RenderElement) : drawn
+    return TYPED.has(e.props.origin.kind) ? (linkText(drawn, ctx((await $.session.repo())?.remote)) as RenderElement) : drawn
   })
 }

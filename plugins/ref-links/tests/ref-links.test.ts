@@ -1,11 +1,13 @@
 import type { On } from 'claude-code'
 import { expect, test } from 'claude-code/testing'
 
+type Engine = Parameters<Parameters<typeof test>[1]>[0]
+
 const reply = (text: string) =>
   ({ plugin: 'ref-links', surface: 'terminal', component: 'AssistantMessage', props: { text, isFirstOfReply: true } }) as const
 
 // The session's repo, and Claude Code's own drawing of the reply, which shows the text it was given.
-const draw = async ($: Parameters<Parameters<typeof test>[1]>[0], on: On, remote: string | null, text: string) => {
+const draw = async ($: Engine, on: On, remote: string | null, text: string) => {
   on('session.repo', () => ({ value: remote === null ? null : { root: '/src/game', remote, internal: false, name: null } }))
   on('ui.render', ($, e) => h($.ui.resolve(e).Text, null, e.props.text))
 
@@ -67,7 +69,7 @@ test('draws bare GitHub PR and issue URLs as repo#N, leaving linked ones alone',
 const prompt = (text: string, kind: string) =>
   ({ plugin: 'ref-links', surface: 'terminal', component: 'UserMessage', props: { text, origin: { kind }, isFull: true } }) as const
 
-const links = async ($: Parameters<Parameters<typeof test>[1]>[0], on: On, kind: string, nested: boolean) => {
+const links = async ($: Engine, on: On, kind: string, nested: boolean) => {
   on('session.repo', () => ({ value: { root: '/src/game', remote: GH, internal: false, name: null } }))
   on('ui.render', ($, e) => {
     const { Box, Text } = $.ui.resolve(e)
@@ -95,5 +97,5 @@ test('links references in a prompt drawn as nested boxes', async ($, on) => {
 })
 
 test('leaves a notification row alone', async ($, on) => {
-  expect(await links($, on, 'notification', false)).toEqual([])
+  expect(await links($, on, 'task-notification', false)).toEqual([])
 })
