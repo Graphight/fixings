@@ -87,6 +87,20 @@ Shape:
 - One line on what was run, against what, and the date or commit of the inputs, then one line on the headline a reviewer should take away.
 - A table or a short verbatim terminal block, trimmed to what the reviewer needs. Never paste raw verbose output such as full JSON dumps.
 - Fold anything longer than about 10 lines under `<details><summary>...</summary>`.
+- When the Evidence compares before and after, add a derived column computed from the measured numbers in the same table; never estimate one. No measured before/after pair, no column. A before/after comparison that would be a verbatim terminal block becomes a table so it can carry the column.
+  - Times and rates: `speedup ×`, before ÷ after (after ÷ before for rates, where higher is better), 1 decimal place, e.g. `3.2×`.
+  - Sizes, counts and costs: `savings %`, positive means saved, whole percent, e.g. `41%`.
+  - A regression keeps the column with the honest value and a marker: `0.8× (slower)`, `-12% (larger)`.
+
+  | run | before | after | speedup × |
+  | --- | --- | --- | --- |
+  | `npm test` | 48s | 15s | 3.2× |
+  | cold start | 1.0s | 1.25s | 0.8× (slower) |
+
+  | artifact | before | after | savings % |
+  | --- | --- | --- | --- |
+  | bundle | 1.2 MB | 0.7 MB | 42% |
+
 - Only output actually produced this session. If the run has not happened, omit the section and leave an unchecked Test plan box for it; never reconstruct or predict output.
 
 ---
@@ -138,7 +152,7 @@ An agent that can see how much work went in will argue for keeping the descripti
 
 Give it this instruction:
 
-> *"Below is a draft pull request description. Cut it down. Default to deleting any sentence unless it changes what a reviewer would do — what they look at, what they question, what they run. Delete: anything restating the diff, any sentence explaining why a choice was reasonable rather than what the choice was, any preamble, any sentence that would survive unchanged on a different PR, and any adjective doing no work. Enforce these limits, cutting whole items rather than shortening every line: Summary 3 sentences, Out of scope 4 bullets, Judgement calls 4 items of 2 sentences, Evidence (if present) at most two lines of prose around one table or block with anything longer folded, Test plan one line per checkbox with no prose. Preserve all markdown formatting, backticks, links, and section headings exactly. Return the trimmed description only, with no commentary."*
+> *"Below is a draft pull request description. Cut it down. Default to deleting any sentence unless it changes what a reviewer would do — what they look at, what they question, what they run. Delete: anything restating the diff, any sentence explaining why a choice was reasonable rather than what the choice was, any preamble, any sentence that would survive unchanged on a different PR, and any adjective doing no work. Enforce these limits, cutting whole items rather than shortening every line: Summary 3 sentences, Out of scope 4 bullets, Judgement calls 4 items of 2 sentences, Evidence (if present) at most two lines of prose around one table or block with anything longer folded (a derived speedup or savings column is part of that one table and must survive), Test plan one line per checkbox with no prose. Preserve all markdown formatting, backticks, links, and section headings exactly. Return the trimmed description only, with no commentary."*
 
 Post the returned version, not your draft.
 If the agent cut something you believe a reviewer genuinely needs, put that one thing back and say which, rather than restoring the draft wholesale.
