@@ -82,6 +82,11 @@ The first is the whole pane, and so is either of the others when its source is t
 When both sources are present, the line is drawn under the strip, with the summary and the ask Button above it only when the other source has entries.
 The command is registered where `docs/proposals/README.md` exists or the session's repository has an `origin` remote.
 
+## Known limits
+
+- Below 110 columns the pane sits inline above the prompt, 8 rows tall; the prompt can still overflow on very short terminals until Claude Code scrolls it.
+- VS Code is not a target for this mod.
+
 ## What was checked
 
 On 2026-11-04 a live session loaded this plugin from the checkout with `--setting-sources project,local --settings '{"tui":"fullscreen"}' --plugin-dir plugins/what-next` and ran `/next` in fixings, which is the pair of screenshots above.
@@ -93,5 +98,3 @@ The demo recorder then drew the issues tab from a stub `gh` (`2 issues · 1 assi
 Before the port, it was checked on 10 Oct 2026 in a live session, except for `/next` with `gh` signed out.
 For that case `GH_TOKEN=x gh issue list` was checked to exit 1 with a 401, and a test covers a non-zero exit leaving the issues source absent.
 The prompt text for issues was changed after the live check and has been run only under `claude plugin test`.
-
-VS Code is not a target for this mod.

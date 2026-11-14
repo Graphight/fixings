@@ -54,12 +54,14 @@ const BOTH_ABSENT = 'No docs/proposals/README.md, and gh issue list gave no issu
 const START = { cwd: '/src/game', surface: 'terminal', isInteractive: true } as const
 
 type Host = { remote?: string | null; gh?: { exitCode: number; stdout: string } | 'throws'; assigned?: unknown[]; ran?: unknown[] }
+const OPENED: unknown[] = []
 const GH_FAILS = { exitCode: 1, stdout: '' }
 const gh = (issues: unknown): Host => ({ gh: { exitCode: 0, stdout: JSON.stringify(issues) } })
 
 // A project's files, and a record of what the mod asked the engine to do.
 const world = (on: On, files: Record<string, string>, paths: string[] = [], { remote = null, gh: out = GH_FAILS, assigned, ran = [] }: Host = {}) => {
   const asked: string[] = []
+  OPENED.length = 0
   const found = (path: string) => Object.keys(files).find(name => path.endsWith(name))
   on('session.start', ($, e) => ({ cwd: e.cwd }))
   on('session.root', () => ({ value: '/src/game' }))
@@ -93,6 +95,7 @@ const world = (on: On, files: Record<string, string>, paths: string[] = [], { re
   })
   on('ui.open', ($, e) => {
     asked.push(`open ${e.id}`)
+    OPENED.push(e)
 
     return { value: { isPlaced: true } }
   })
@@ -337,6 +340,12 @@ test('Start fills the prompt with the proposal and closes the pane', async ($, o
   await ui.press({ key: 'start' })
 
   expect(asked).toEqual(['open what-next', 'fill This session we are doing the "Minimap" proposal, please /checkpoint-plan', 'close what-next'])
+})
+
+test('opens the pane with its whole open args, 8 rows tall for the inline placement', async ($, on) => {
+  await opened($, on, FILES)
+
+  expect(OPENED).toEqual([{ id: 'what-next', title: 'What next', focus: true, rows: 8 }])
 })
 
 test('registers the command with a remote and no README', async ($, on) => {
