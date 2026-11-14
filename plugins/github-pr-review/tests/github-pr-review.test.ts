@@ -25,17 +25,21 @@ const TOP = [DIM('pr · widgets'), DIM('/github-pr-review-panel'), LINE(' ')]
 const PR = [LINE('#214', { color: 'permission' }), LINE(' Retry with backoff on 429', { weight: 'semibold', wrap: 'truncate-end' })]
 
 type Answer = { exitCode: number; stdout: string }
-type Host = { view?: Answer; checks?: Answer | (() => Answer) | 'throws'; placed?: boolean; review?: (path: string) => string }
+type Host = { view?: Answer; checks?: Answer | (() => Answer) | 'throws'; placed?: boolean; review?: (path: string) => string; opened?: unknown[] }
 const NO_PR = { exitCode: 1, stdout: '' }
 
 // The repository's root, and the answers `gh` gives, and a record of the argv it was run with.
-const world = (on: On, { view = { exitCode: 0, stdout: JSON.stringify(VIEW) }, checks = NO_PR, placed = true, review }: Host = {}) => {
+const world = (on: On, { view = { exitCode: 0, stdout: JSON.stringify(VIEW) }, checks = NO_PR, placed = true, review, opened = [] }: Host = {}) => {
   const ran: string[][] = []
   mock.env(on, { HOME: '/home/me' })
   on('session.start', ($, e) => ({ cwd: e.cwd }))
   on('session.root', () => ({ value: '/src/widgets' }))
   on('command.register', () => ({ value: { command: 'github-pr-review-panel' } }))
-  on('ui.open', () => ({ value: placed ? { isPlaced: true } : { isPlaced: false, reason: 'no-surface' } }))
+  on('ui.open', (_, e) => {
+    opened.push(e)
+
+    return { value: placed ? { isPlaced: true } : { isPlaced: false, reason: 'no-surface' } }
+  })
   on('fs.read', (_, e) =>
     review !== undefined && e.path.startsWith('/home/me/.claude/reviews/') ? { value: review(e.path) } : { deny: `unexpected read of ${e.path}` },
   )
@@ -432,7 +436,8 @@ test('toasts a fallback when a review starts and the panel is not placed', async
 
 test('opens the panel when github-pr-review expands, bare or namespaced, and not for another skill or a prompt naming it', async ($, on) => {
   const toasts: string[] = []
-  world(on, { placed: false })
+  const opened: unknown[] = []
+  world(on, { placed: false, opened })
   on('ui.toast', (_, e) => {
     toasts.push(e.text)
 
@@ -450,7 +455,12 @@ test('opens the panel when github-pr-review expands, bare or namespaced, and not
   await $.skill.prompt({ skill: 'github-pr-review', text: '' })
   await $.skill.prompt({ skill: 'github-pr-review:github-pr-review', text: '' })
 
-  expect({ before, toasts }).toEqual({ before: [], toasts: ['Widen the terminal or run /github-pr-review-panel', 'Widen the terminal or run /github-pr-review-panel'] })
+  const open = { id: 'github-pr-review', title: 'Pull request', columns: 60, rows: 8 }
+  expect({ before, opened, toasts }).toEqual({
+    before: [],
+    opened: [open, open],
+    toasts: ['Widen the terminal or run /github-pr-review-panel', 'Widen the terminal or run /github-pr-review-panel'],
+  })
 })
 
 test('matches each agent spawned during a step to its own turn by id', async ($, on) => {
