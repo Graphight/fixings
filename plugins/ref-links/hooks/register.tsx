@@ -1,4 +1,4 @@
-import type { Register } from 'claude-code'
+import type { Register, RenderElement, RenderNode } from 'claude-code'
 
 type Match = { start: number; end: number; label: string; href: string }
 type Ctx = { repo: string | null; jiraUrl: string; projects: string[] }
@@ -41,14 +41,51 @@ export const find = (text: string, ctx: Ctx): Match[] =>
 const link = (text: string, ctx: Ctx) =>
   find(text, ctx).reduceRight((out, { start, end, label, href }) => `${out.slice(0, start)}[${label}](${href})${out.slice(end)}`, text)
 
+type Parent = RenderElement & { children: RenderNode[] }
+
+const TYPED = new Set(['composer', 'bridge', 'sdk'])
+
+const hasChildren = (node: RenderNode): node is Parent => typeof node !== 'string' && 'children' in node && node.children !== undefined
+
+const split = (text: string, ctx: Ctx): RenderNode[] => {
+  const parts: RenderNode[] = []
+  let at = 0
+
+  for (const { start, end, label, href } of find(text, ctx)) {
+    parts.push(text.slice(at, start), { type: 'Link', props: { href }, children: [label] } as RenderNode)
+    at = end
+  }
+
+  return [...parts, text.slice(at)].filter(part => part !== '')
+}
+
+const linkText = (node: RenderNode, ctx: Ctx): RenderNode => {
+  if (typeof node === 'string' || !hasChildren(node)) {
+    return node
+  }
+
+  const children = node.children.flatMap(child => (node.type === 'Text' && typeof child === 'string' ? split(child, ctx) : [linkText(child, ctx)]))
+
+  return { ...node, children } as RenderNode
+}
+
+const ctx = (projects: string[], jiraUrl: string, remote?: string | null): Ctx => ({
+  repo: (remote && REMOTE.exec(remote)?.[1]) || null,
+  jiraUrl,
+  projects,
+})
+
 export const register: Register = (on, options) => {
   const { jiraUrl = '', projects = '' } = options as Record<string, string>
   const keys = projects.split(',').map(p => p.trim()).filter(Boolean)
 
-  on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) => {
-    const remote = (await $.session.repo())?.remote
-    const repo = (remote && REMOTE.exec(remote)?.[1]) || null
+  on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) =>
+    next({ ...e, props: { ...e.props, text: link(e.props.text, ctx(keys, jiraUrl, (await $.session.repo())?.remote)) } }),
+  )
 
-    return next({ ...e, props: { ...e.props, text: link(e.props.text, { repo, jiraUrl, projects: keys }) } })
+  on('ui.render', { component: 'UserMessage' }, async ($, e, next) => {
+    const drawn = await next(e)
+
+    return TYPED.has(e.props.origin.kind) ? (linkText(drawn, ctx(keys, jiraUrl, (await $.session.repo())?.remote)) as RenderElement) : drawn
   })
 }

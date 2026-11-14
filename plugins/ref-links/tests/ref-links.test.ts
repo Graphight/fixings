@@ -63,3 +63,37 @@ test('draws bare GitHub PR and issue URLs as repo#N, leaving linked ones alone',
     `[b#7](https://github.com/a/b/pull/7) and [b#8](https://github.com/a/b/issues/8). ${linked}`,
   ])
 })
+
+const prompt = (text: string, kind: string) =>
+  ({ plugin: 'ref-links', surface: 'terminal', component: 'UserMessage', props: { text, origin: { kind }, isFull: true } }) as const
+
+const links = async ($: Parameters<Parameters<typeof test>[1]>[0], on: On, kind: string, nested: boolean) => {
+  on('session.repo', () => ({ value: { root: '/src/game', remote: GH, internal: false, name: null } }))
+  on('ui.render', ($, e) => {
+    const { Box, Text } = $.ui.resolve(e)
+    const text = h(Text, null, e.props.text)
+
+    return nested ? h(Box, null, h(Box, null, text)) : text
+  })
+
+  const ui = await $.ui.mount(prompt('fix #3 and a/b#4 now', kind))
+
+  return (await ui.findAll({ type: 'Link' })).map(({ text, props }) => [text.slice(props.href.length), props.href])
+}
+
+const LINKS = [
+  ['#3', 'https://github.com/o/r/issues/3'],
+  ['a/b#4', 'https://github.com/a/b/issues/4'],
+]
+
+test('links references in a typed prompt', async ($, on) => {
+  expect(await links($, on, 'composer', false)).toEqual(LINKS)
+})
+
+test('links references in a prompt drawn as nested boxes', async ($, on) => {
+  expect(await links($, on, 'composer', true)).toEqual(LINKS)
+})
+
+test('leaves a notification row alone', async ($, on) => {
+  expect(await links($, on, 'notification', false)).toEqual([])
+})
