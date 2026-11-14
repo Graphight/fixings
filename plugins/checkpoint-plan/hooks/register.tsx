@@ -743,7 +743,7 @@ export const register: Register = on => {
     const Svg = isDesktop ? $.ui.resolve(e).Svg : undefined
     const shown = await read($, plan)
     const name = await read($, repo)
-    const rows = Math.max(1, e.props.placement === 'dock' ? e.props.scroll.bodyRows : (e.viewport?.rows ?? 24) - 4)
+    const rows = Math.max(1, e.props.scroll.bodyRows)
     const timed = await read($, times)
     // state outlives a reload, so a record written before a field was added takes that field's opened value
     const ran = (await read($, stages)).map(stage => ({ ...OPENED, ...stage }))

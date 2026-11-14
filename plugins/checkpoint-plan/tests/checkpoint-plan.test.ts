@@ -1946,6 +1946,22 @@ test('cuts a docked pane to its bodyRows, not the window\'s rows', async ($, on)
   ])
 })
 
+test('cuts an inline pane to its bodyRows, not the window\'s rows', async ($, on) => {
+  const ship = await flight($, on, { ...SIZED(60), props: { ...PANE.props, placement: 'inline', scroll: { offset: 0, bodyRows: 16 } } })
+
+  await ship.running()
+  await ship.halted()
+  await ship.opened()
+
+  expect(await ship.drawn()).toEqual([
+    ...OPENED_TOP,
+    ...STAGES,
+    ...TIGHT(...FIRST_TWO, THIRD, FOURTH_DONE),
+    ...OPENED_TOTALS,
+    BLANK,
+  ])
+})
+
 test('draws none of the first plan\'s events once the session follows a second plan', async ($, on) => {
   world(on, () => PLAN, ELSEWHERE)
   on('prompt.submit', (_, e) => ({ text: e.text }))
