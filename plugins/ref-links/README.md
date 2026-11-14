@@ -61,16 +61,13 @@ If links are missing after installing, move its line above the `skins` and `prom
 
 ## Known limits
 
-- Prompts link only when `prompt-tint` draws them.
-  Claude Code's own prompt row does not come back as a tree `ref-links` can split, so without `prompt-tint` only replies link.
-- A link in a prompt has no colour or underline of its own; Ghostty shows it on cmd-hover.
-- A number after `#` outside code links as an issue, so an all-digit colour such as `#000000` written in prose links to issue 0.
-- A non-GitHub remote links nothing but `owner/repo#N`, Jira keys and GitHub URLs.
-- There is no hover preview of a linked ticket.
+- Prompts link only when `prompt-tint` draws them, because Claude Code's own prompt row cannot be split into links.
+  Those links carry no colour of their own, so Ghostty shows them only on cmd-hover.
+- An all-digit colour such as `#000000` written outside code links as an issue.
 
 ## What was checked
 
-- `claude plugin test plugins/ref-links` covers each reference form, the three remote spellings, a non-GitHub remote and no repository, code spans and fences, existing links, the word boundaries, Jira with and without config, and typed, plain and notification prompts.
+- `claude plugin test plugins/ref-links` covers every form above, each remote spelling, what it leaves alone, and typed and notification prompts.
 - Live on 2026-11-13, Claude Code 2.1.325, loaded with `--plugin-dir` and `jiraUrl` `https://example.atlassian.net`, `projects` `PROJ`, the raw terminal output was grepped for OSC 8 links:
   - alone: the reply carried the four links and the prompt none;
   - beside `prompt-tint`, and beside the full set of `skins` 0.5.16, `prompt-tint` and `copy-visible`: the prompt and the reply each carried all four.

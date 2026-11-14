@@ -78,7 +78,7 @@
     {
       "name": "ref-links",
       "source": "./plugins/ref-links",
-      "description": "Turns #N, owner/repo#N, listed Jira keys and GitHub PR URLs in replies and typed prompts into links you can click"
+      "description": "Turns ticket, PR and issue references in replies into links you can click"
     },
     {
       "name": "copy-visible",
