@@ -14,7 +14,7 @@ A `Markdown` element with `onLinkPress` raises `ui.press` with the link's `href`
 Clicks are reported in the fullscreen terminal only.
 GitHub first: `github-pr-review` already has the `gh` JSON helper and draws a pull request in a pane, so a clicked link can hand it a PR number.
 Jira needs an API token: neither `jira` nor `acli` is installed.
-Overlaps with the clickable links proposal, which hooks the same `AssistantMessage` component.
+Overlaps with decision `ref-links`, which hooks the same `AssistantMessage` component.
 Not checked: whether an `AssistantMessage` hook that returns its own `Markdown` of the reply's text draws the same as the engine's own.
 
 ## Design

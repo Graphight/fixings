@@ -1,0 +1,22 @@
+{
+  "name": "ref-links",
+  "version": "0.1.0",
+  "description": "Turns ticket, PR and issue references in replies into links you can click",
+  "author": {
+    "name": "Tom Marsh"
+  },
+  "userConfig": {
+    "jiraUrl": {
+      "type": "string",
+      "title": "Jira URL",
+      "description": "Base URL of your Jira, such as https://example.atlassian.net; empty leaves Jira keys plain",
+      "default": ""
+    },
+    "projects": {
+      "type": "string",
+      "title": "Jira projects",
+      "description": "Comma-separated project keys to link, such as PROJ,OPS; empty leaves Jira keys plain",
+      "default": ""
+    }
+  }
+}

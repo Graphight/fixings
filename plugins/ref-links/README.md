@@ -1,0 +1,80 @@
+# ref-links
+
+`ref-links` turns ticket, PR and issue references in Claude's replies and in the prompts you type into links you can cmd-click.
+Install it with `/plugin install ref-links@fixings`.
+
+## What you're looking at
+
+![A reply with four kinds of link, each numbered, and the target of the hovered one](../../docs/screenshots/ref-links-annotated.jpg)
+
+1. **A pasted PR URL, drawn short.**
+   `https://github.com/Graphight/fixings/pull/12` became `fixings#12`.
+2. **A key from your Jira projects**, linked under your `jiraUrl`.
+   `OPS-7` is not in `projects`, so it stays plain, as do `UTF-8` and the `` `#4` `` in a code span.
+3. **An issue or PR in any repo**, written `owner/repo#N`.
+4. **An issue or PR in this repo**, written `#N`.
+   With cmd held over it, Ghostty underlines it here and in the prompt above, where `prompt-tint` draws it.
+5. **cmd-hover shows where a link goes**, here `https://github.com/Graphight/fixings/issues/3`.
+
+## What it links
+
+| Written as | Links to |
+| --- | --- |
+| `#3` | `https://github.com/<owner>/<repo>/issues/3` for the session's repository; GitHub redirects an issue URL to the pull request when `3` is one |
+| `owner/repo#3` | `https://github.com/owner/repo/issues/3`, whatever the session's repository is |
+| `PROJ-1234` | `<jiraUrl>/browse/PROJ-1234`, only for a project listed in `projects` |
+| `https://github.com/owner/repo/pull/3` | the same URL, drawn as `repo#3` |
+
+The session's repository comes from its remote.
+`git@github.com:o/r.git`, `https://github.com/o/r` and `ssh://git@github.com/o/r` are read; any other remote, or no repository, leaves a bare `#3` plain.
+
+## Options
+
+Set them in `/config`.
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `jiraUrl` | empty | base URL of your Jira, such as `https://example.atlassian.net` |
+| `projects` | empty | comma-separated project keys to link, such as `PROJ,OPS` |
+
+Jira keys link only when both are set, so `UTF-8` and `SHA-256` never link.
+
+## If you use skins or prompt-tint
+
+`ref-links` rewrites a reply before the next mod draws it, and walks a prompt after the next mod has drawn it.
+A copy loaded with `--plugin-dir` linked both beside `skins` 0.5.16, `prompt-tint` and `copy-visible`; an installed copy at the end of `enabledPlugins` has not been checked.
+If links are missing after installing, move its line above the `skins` and `prompt-tint` lines in your settings file:
+
+```json
+"enabledPlugins": {
+  "ref-links@fixings": true,
+  "prompt-tint@fixings": true,
+  "skins@hellosverre-mods": true
+}
+```
+
+## What it leaves alone
+
+- Anything inside an inline code span or a fenced block.
+- Text already inside a markdown link or an autolink.
+- Any other URL, including a GitHub PR or issue URL with more after the number (`/files`, `#issuecomment-…`, `?w=1`).
+- A reference with a word character right before or after it: `abc#3`, `foo.md#3a` and `XPROJ-1` stay plain.
+- Notifications and messages from teammates; only prompts you type are linked.
+- Tool output and slash-command output.
+
+## Known limits
+
+- Prompts link only when `prompt-tint` draws them, because Claude Code's own prompt row cannot be split into links.
+  Those links carry no colour of their own, so Ghostty shows them only on cmd-hover.
+- An all-digit colour such as `#000000` written outside code links as an issue.
+- Under `skins`, a reply's `copy reply` button copies the links as markdown, `[#3](https://github.com/…)` rather than `#3`, because `skins` builds it from the rewritten text.
+  A code block's own Copy button is unaffected.
+
+## What was checked
+
+- `claude plugin test plugins/ref-links` covers every form above, each remote spelling, what it leaves alone, and typed and notification prompts.
+- Live on 2026-11-13, Claude Code 2.1.325, loaded with `--plugin-dir` and `jiraUrl` `https://example.atlassian.net`, `projects` `PROJ`, the raw terminal output was grepped for OSC 8 links:
+  - alone: the reply carried the four links and the prompt none;
+  - beside `prompt-tint`, and beside the full set of `skins` 0.5.16, `prompt-tint` and `copy-visible`: the prompt and the reply each carried all four.
+- In Ghostty, a cmd-click on `#3` opened issue 3 and on `PROJ-1234` opened `https://example.atlassian.net/browse/PROJ-1234`.
+- Not checked: an installed copy, a fenced block or table in a live reply, and terminals other than Ghostty.

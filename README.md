@@ -31,6 +31,7 @@ Then install any plugin from it:
 | [mission-control](plugins/mission-control/README.md) | mod | lists the other Claude Code sessions in the `/mission-control` side pane |
 | [prompt-tint](plugins/prompt-tint/README.md) | mod | draws the prompts you type in an orange box, so they stand out |
 | [prove-tests](plugins/prove-tests/README.md) | skill | breaks the code a test guards, one mutation at a time, and checks the test fails for the right reason |
+| [ref-links](plugins/ref-links/README.md) | mod | turns ticket, PR and issue references in replies into links you can click |
 | [review-proposals](plugins/review-proposals/README.md) | skill | reviews every open proposal in `docs/proposals/` together for conflicts, overlaps, order, size and drift |
 | [what-next](plugins/what-next/README.md) | mod | lists a project's proposals and open issues in the `/next` pane, and starts a session on one |
 | [write-pr-description](plugins/write-pr-description/README.md) | skill | writes a concise, reviewer-focused PR description from the session and the branch's git history |
