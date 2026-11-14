@@ -12,6 +12,7 @@ It takes an optional `--out <path>`.
 It collects `git log` and `git diff --stat` against `origin/HEAD`, detects the language and build toolchain, and resolves the ticket from the session, then from the head of the branch name, then to no ticket.
 It only asks the user when none of those answer and the session is interactive; under `ship-plan` it never asks.
 The description has four sections, Summary, Out of scope, Judgement calls worth flagging and Test plan, plus an optional Evidence section when a visual shows something the diff and the tests cannot.
+A before/after Evidence table gets a derived column computed from its own measured numbers: `speedup ×` for times and rates, `savings %` for sizes, counts and costs, with a marker on a regression.
 A `haiku` sub-agent that sees only the draft then trims it, and the trimmed version is the output, wrapped in one code block.
 With `--out <path>`, that version is also written raw to the path.
 
