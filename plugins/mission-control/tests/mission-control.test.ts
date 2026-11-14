@@ -142,7 +142,7 @@ test('lists the other sessions in their lanes with model, age and task', async (
   expect(await textsOf($)).toEqual([...head(3), ...WAITING, ...CODING, ...REVIEWING, ...EMPTY])
 })
 
-test('opens the pane with its whole open args, 8 rows tall for the inline placement', async ($, on) => {
+test('asks for an 8-row pane when it opens', async ($, on) => {
   world(on, [AGENTS[0]])
   await $.session.start(START)
   await $.command.run(COMMAND)
