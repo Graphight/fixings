@@ -87,10 +87,12 @@ Shape:
 - One line on what was run, against what, and the date or commit of the inputs, then one line on the headline a reviewer should take away.
 - A table or a short verbatim terminal block, trimmed to what the reviewer needs. Never paste raw verbose output such as full JSON dumps.
 - Fold anything longer than about 10 lines under `<details><summary>...</summary>`.
-- When the Evidence compares before and after, add a derived column computed from the measured numbers in the same table; never estimate one. No measured before/after pair, no column. A before/after comparison that would be a verbatim terminal block becomes a table so it can carry the column.
+- When the Evidence compares a measured before and after, add a derived column computed from those numbers, never estimated. A before/after comparison that would be a verbatim terminal block becomes a table so it can carry the column.
   - Times and rates: `speedup ×`, before ÷ after (after ÷ before for rates, where higher is better), 1 decimal place, e.g. `3.2×`.
-  - Sizes, counts and costs: `savings %`, positive means saved, whole percent, e.g. `41%`.
-  - A regression keeps the column with the honest value and a marker: `0.8× (slower)`, `-12% (larger)`.
+  - Sizes, counts and costs: `savings %`, (before − after) ÷ before, whole percent, e.g. `41%`.
+  - A regression keeps the column and adds a marker: `0.8× (slower)`, `-12% (larger)`.
+
+  Example shape, with made-up numbers:
 
   | run | before | after | speedup × |
   | --- | --- | --- | --- |
