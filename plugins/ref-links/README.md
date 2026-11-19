@@ -25,8 +25,9 @@ Install it with `/plugin install ref-links@fixings`.
 | `PROJ-1234` | `<jiraUrl>/browse/PROJ-1234`, only for a project listed in `projects` |
 | `https://github.com/owner/repo/pull/3` | the same URL, drawn as `repo#3` |
 
-The session's repository comes from its remote.
+The session's repository comes from its `upstream` remote when that is on GitHub, as in a fork, and otherwise from `origin`.
 `git@github.com:o/r.git`, `https://github.com/o/r` and `ssh://git@github.com/o/r` are read; any other remote, or no repository, leaves a bare `#3` plain.
+The `upstream` remote is read once per repository in a session, so one added later links after a restart.
 
 ## Options
 

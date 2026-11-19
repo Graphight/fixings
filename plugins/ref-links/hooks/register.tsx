@@ -1,9 +1,10 @@
-import type { Register, RenderElement, RenderNode } from 'claude-code'
+import type { EngineInterface, Register, RenderElement, RenderNode } from 'claude-code'
 
 type Match = { start: number; end: number; label: string; href: string }
 type Ctx = { repo: string | null; jiraUrl: string; projects: string[] }
 
 const REMOTE = /^(?:git@|ssh:\/\/git@|https?:\/\/(?:[^@/]+@)?)github\.com[:/]([\w.-]+\/[\w.-]+?)(?:\.git)?\/?$/
+const slug = (remote?: string | null) => (remote && REMOTE.exec(remote)?.[1]) || null
 
 // Spans left as written, then the references; the skips come first so they win at the same spot.
 const SKIP = String.raw`(?:\x60{3}[\s\S]*?(?:\x60{3}|$)|~{3}[\s\S]*?(?:~{3}|$)|\x60[^\x60\n]*\x60|\[[^\]\n]*\]\([^)\n]*\)|<[^>\s]+>)`
@@ -71,18 +72,37 @@ const linkText = (node: RenderNode, ctx: Ctx): RenderNode => {
   return { ...node, children } as RenderNode
 }
 
+const upstreams = new Map<string, Promise<string | null>>()
+
+// A fork's issues and PRs live in its upstream, so a GitHub `upstream` remote wins over `origin`.
+const sessionRepo = async ($: EngineInterface): Promise<string | null> => {
+  const repo = await $.session.repo()
+
+  if (repo === null) {
+    return null
+  }
+
+  if (!upstreams.has(repo.root)) {
+    const run = $.process.run(['git', 'remote', 'get-url', 'upstream'], { cwd: repo.root })
+
+    upstreams.set(repo.root, run.then(({ exitCode, stdout }) => (exitCode === 0 ? slug(stdout.trim()) : null), () => null))
+  }
+
+  return (await upstreams.get(repo.root)) ?? slug(repo.remote)
+}
+
 export const register: Register = (on, options) => {
   const { jiraUrl = '', projects = '' } = options as Record<string, string>
   const base = { jiraUrl: jiraUrl.replace(/\/+$/, ''), projects: projects.split(',').map(p => p.trim()).filter(Boolean) }
-  const ctx = (remote?: string | null): Ctx => ({ ...base, repo: (remote && REMOTE.exec(remote)?.[1]) || null })
+  const ctx = (repo: string | null): Ctx => ({ ...base, repo })
 
   on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) =>
-    next({ ...e, props: { ...e.props, text: link(e.props.text, ctx((await $.session.repo())?.remote)) } }),
+    next({ ...e, props: { ...e.props, text: link(e.props.text, ctx(await sessionRepo($))) } }),
   )
 
   on('ui.render', { component: 'UserMessage' }, async ($, e, next) => {
     const drawn = await next(e)
 
-    return TYPED.has(e.props.origin.kind) ? (linkText(drawn, ctx((await $.session.repo())?.remote)) as RenderElement) : drawn
+    return TYPED.has(e.props.origin.kind) ? (linkText(drawn, ctx(await sessionRepo($))) as RenderElement) : drawn
   })
 }

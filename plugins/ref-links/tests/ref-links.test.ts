@@ -6,9 +6,10 @@ type Engine = Parameters<Parameters<typeof test>[1]>[0]
 const reply = (text: string) =>
   ({ plugin: 'ref-links', surface: 'terminal', component: 'AssistantMessage', props: { text, isFirstOfReply: true } }) as const
 
-// The session's repo, and Claude Code's own drawing of the reply, which shows the text it was given.
-const draw = async ($: Engine, on: On, remote: string | null, text: string) => {
+// The session's repo and its `upstream` remote, and Claude Code's own drawing of the reply, which shows the text it was given.
+const draw = async ($: Engine, on: On, remote: string | null, text: string, upstream: string | null = null) => {
   on('session.repo', () => ({ value: remote === null ? null : { root: '/src/game', remote, internal: false, name: null } }))
+  on('process.run', () => ({ value: upstream === null ? { exitCode: 2, stdout: '', stderr: "error: No such remote 'upstream'\n", isStdoutTruncated: false, isStderrTruncated: false } : { exitCode: 0, stdout: `${upstream}\n`, stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }))
   on('ui.render', ($, e) => h($.ui.resolve(e).Text, null, e.props.text))
 
   return (await (await $.ui.mount(reply(text))).findAll({ type: 'Text' })).map(({ text }) => text)
@@ -33,6 +34,18 @@ for (const remote of [GH, 'https://github.com/o/r', 'https://github.com/o/r.git'
     expect(await draw($, on, remote, 'see #3 now')).toEqual(['see [#3](https://github.com/o/r/issues/3) now'])
   })
 }
+
+test('links #N to a fork\'s GitHub upstream', async ($, on) => {
+  expect(await draw($, on, 'git@github.com:me/r.git', 'see #3', GH)).toEqual(['see [#3](https://github.com/o/r/issues/3)'])
+})
+
+test('links #N to origin when the upstream remote is not GitHub', async ($, on) => {
+  expect(await draw($, on, GH, 'see #3', 'git@gitlab.com:x/y.git')).toEqual(['see [#3](https://github.com/o/r/issues/3)'])
+})
+
+test('links #N to a GitHub upstream when origin is not GitHub', async ($, on) => {
+  expect(await draw($, on, 'git@gitlab.com:me/r.git', 'see #3', GH)).toEqual(['see [#3](https://github.com/o/r/issues/3)'])
+})
 
 test('leaves #N plain for a non-GitHub remote', async ($, on) => {
   expect(await draw($, on, 'git@gitlab.com:o/r.git', 'see #3')).toEqual(['see #3'])
@@ -83,6 +96,7 @@ const prompt = (text: string, kind: string) =>
 
 const links = async ($: Engine, on: On, kind: string, nested: boolean) => {
   on('session.repo', () => ({ value: { root: '/src/game', remote: GH, internal: false, name: null } }))
+  on('process.run', () => ({ value: { exitCode: 2, stdout: '', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }))
   on('ui.render', ($, e) => {
     const { Box, Text } = $.ui.resolve(e)
     const text = h(Text, null, e.props.text)
