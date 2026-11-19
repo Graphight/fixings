@@ -1,6 +1,6 @@
 {
   "name": "ref-links",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Turns ticket, PR and issue references in replies into links you can click",
   "author": {
     "name": "Tom Marsh"
