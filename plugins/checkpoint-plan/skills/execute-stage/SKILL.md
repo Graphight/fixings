@@ -1,6 +1,6 @@
 ---
 name: execute-stage
-description: Execute the next unfinished stage of an approved checkpoint plan, on a cheap model, then stop for review. Invoke explicitly, e.g. "/execute-stage", "run the next stage", "execute the next step of the plan".
+description: Execute the next unfinished stage of an approved checkpoint plan, then stop for review. Invoke explicitly, e.g. "/execute-stage", "run the next stage", "execute the next step of the plan".
 agent: plan-executor
 context: fork
 background: false

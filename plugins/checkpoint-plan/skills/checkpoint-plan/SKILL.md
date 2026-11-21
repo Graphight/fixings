@@ -25,7 +25,7 @@ If it's ambiguous which, ask before going further.
 
 Before staging anything, run the `interview` skill with the Skill tool on the work being planned.
 If `interview` is not installed, interview the user yourself in `AskUserQuestion` rounds until every decision behind the work is settled.
-A plan built on a guessed decision stages the guess, and `/execute-stage` then builds it faithfully on a cheap model that never saw the conversation.
+A plan built on a guessed decision stages the guess, and `/execute-stage` then builds it faithfully in a sub-agent that never saw the conversation.
 
 ## Step 1: Present the staged plan, then stop
 
@@ -99,5 +99,5 @@ Stop after writing the plan; the user runs `/execute-stage` or `/ship-plan`.
 ## Notes
 
 - The user commits, not you — your job is the message, not the commit.
-- Execution is `/execute-stage` (one stage on a cheap model in a sub-agent) or `/ship-plan` (every stage) — the plan file is what makes that possible.
+- Execution is `/execute-stage` (one stage in a sub-agent) or `/ship-plan` (every stage) — the plan file is what makes that possible.
 - Keep the staging honest: if partway through it becomes clear the original breakdown was wrong, say so and re-stage rather than forcing the plan.

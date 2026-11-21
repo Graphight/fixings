@@ -1,8 +1,6 @@
 ---
 name: ship-plan
 description: Run an approved checkpoint plan to completion unattended — every remaining stage, a commit per stage, then push and open the PR. Invoke explicitly, e.g. "/ship-plan", "ship the plan", "run the rest of the plan and open the PR".
-model: sonnet
-effort: medium
 ---
 
 # Ship Plan
