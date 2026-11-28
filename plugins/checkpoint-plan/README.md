@@ -59,6 +59,7 @@ Each stage appends a line to the run sidecar, `~/.claude/plans/<repo>-<branch>.r
 `/plan-timeline` opens a side pane that requests 60 columns; the engine may grant fewer, and a width you have dragged wins.
 It follows the plan file the session last touched, and falls back to the plan of the branch the session was launched on.
 The pane sets no background, so it follows the terminal's theme.
+A plan taller than the pane first drops the blank rows between stages, then draws whole and scrolls: the wheel over the pane, or the arrow and page keys once a click or ctrl+x tab gives it the keyboard.
 
 ### The stages
 
@@ -95,7 +96,7 @@ A typed `/ship-plan` opens it at any width; a `Skill` call in a terminal narrowe
 
 ## What was checked
 
-`claude plugin test` runs 65 tests in `tests/`, covering the plan parser, the sidecar, the feeds, the terminal and Desktop drawings, the redraw timer, the store and the notifications; all 65 passed.
+`claude plugin test` runs 66 tests in `tests/`, covering the plan parser, the sidecar, the feeds, the terminal and Desktop drawings, the redraw timer, the store and the notifications; all 66 passed.
 The screenshot is this plugin's own `ship-plan` run on 2026-11-03, drawn by the source `plan-progress` mod, whose drawing code this plugin carries with only its plugin name changed.
 The halted picture was staged the same day, from a hand-written plan and sidecar in the tide-table scenario that `tools/demo/ship-plan/` records.
 Whether `execute-stage` forks into `plan-executor` once installed from fixings is still to be checked and recorded here.
