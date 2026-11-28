@@ -830,7 +830,8 @@ export const register: Register = on => {
         {' '}
       </Text>
     )
-    const headed = (parts: unknown[]) => [tagline, blank, ...parts].slice(0, rows)
+    // left whole: the engine scrolls the body's window over a tree taller than bodyRows
+    const headed = (parts: unknown[]) => [tagline, blank, ...parts]
 
     if (shown === null || (shown.done === shown.total && events.length === 0 && ran.length === 0)) {
       const recent = stored.filter(summary => summary.repo === name).slice(-RECENT_RUNS).reverse()

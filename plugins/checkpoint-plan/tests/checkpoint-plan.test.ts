@@ -1914,7 +1914,7 @@ test('removes every blank spine row together when the drawing is taller than the
   ])
 })
 
-test('cuts the drawing once the blank spine rows are gone and it is still taller than the pane', async ($, on) => {
+test('keeps every row past the pane\'s height for the engine to scroll to', async ($, on) => {
   const ship = await flight($, on, SIZED(20))
 
   await ship.running()
@@ -1926,11 +1926,11 @@ test('cuts the drawing once the blank spine rows are gone and it is still taller
     ...STAGES,
     ...TIGHT(...FIRST_TWO, THIRD, FOURTH_DONE),
     ...OPENED_TOTALS,
-    BLANK,
+    ...NEEDS_DIVERGED,
   ])
 })
 
-test('cuts a docked pane to its bodyRows, not the window\'s rows', async ($, on) => {
+test('tightens a docked pane by its bodyRows, not the window\'s rows', async ($, on) => {
   const ship = await flight($, on, { ...SIZED(60), props: { ...PANE.props, scroll: { offset: 0, bodyRows: 16 } } })
 
   await ship.running()
@@ -1942,11 +1942,11 @@ test('cuts a docked pane to its bodyRows, not the window\'s rows', async ($, on)
     ...STAGES,
     ...TIGHT(...FIRST_TWO, THIRD, FOURTH_DONE),
     ...OPENED_TOTALS,
-    BLANK,
+    ...NEEDS_DIVERGED,
   ])
 })
 
-test('cuts an inline pane to its bodyRows, not the window\'s rows', async ($, on) => {
+test('tightens an inline pane by its bodyRows, not the window\'s rows', async ($, on) => {
   const ship = await flight($, on, { ...SIZED(60), props: { ...PANE.props, placement: 'inline', scroll: { offset: 0, bodyRows: 16 } } })
 
   await ship.running()
@@ -1958,7 +1958,7 @@ test('cuts an inline pane to its bodyRows, not the window\'s rows', async ($, on
     ...STAGES,
     ...TIGHT(...FIRST_TWO, THIRD, FOURTH_DONE),
     ...OPENED_TOTALS,
-    BLANK,
+    ...NEEDS_DIVERGED,
   ])
 })
 
